@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juice Shop 🍹</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #061a10;
+  --bg-mid:  #0a2617;
+  --surface: rgba(255,255,255,0.05);
+  --surface-hover: rgba(255,255,255,0.09);
+  --border: rgba(255,255,255,0.08);
+  --green: #22c55e;
+  --green-soft: #4ade80;
+  --lime: #a3e635;
+  --text: #e8f5ee;
+  --muted: rgba(255,255,255,0.45);
+  --ease: cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+.bg-layer {
+  position: fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(34,197,94,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 10% 80%, rgba(163,230,53,0.08) 0%, transparent 55%),
+    linear-gradient(160deg, #061a10 0%, #0a2617 50%, #061a10 100%);
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index:1;
+  padding: 48px 6% 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.header-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.2);
+  padding: 5px 14px; border-radius: 40px;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.2px;
+  color: var(--green-soft); text-transform: uppercase;
+}
+.pulse { width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)} 50%{box-shadow:0 0 0 5px transparent} }
+
+header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem,5vw,3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  text-align: center;
+}
+header h1 em { font-style: italic; color: var(--green-soft); }
+header p {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+/* ── SEARCH / FILTER BAR ── */
+.toolbar {
+  position: relative; z-index:1;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 6% 28px;
+  max-width: 1400px; margin: 0 auto; width: 100%;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  position: relative; flex: 1; min-width: 200px;
+}
+.search-wrap svg {
+  position: absolute; left:14px; top:50%; transform:translateY(-50%);
+  color: var(--muted); pointer-events:none;
+}
+#searchInput {
+  width: 100%; height: 44px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; color: var(--text);
+  padding: 0 14px 0 40px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+}
+#searchInput::placeholder { color: var(--muted); }
+#searchInput:focus { border-color: rgba(34,197,94,0.4); box-shadow: 0 0 0 3px rgba(34,197,94,0.08); }
+
+.sort-select {
+  height: 44px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; color: var(--text);
+  padding: 0 14px; font-family:'DM Sans',sans-serif; font-size:13px;
+  outline:none; cursor:pointer; min-width:140px;
+  transition: border-color 0.2s;
+}
+.sort-select:focus { border-color: rgba(34,197,94,0.4); }
+
+.count-label {
+  font-size: 13px; color: var(--muted); white-space: nowrap;
+  margin-left: auto;
+}
+.count-label span { color: var(--green-soft); font-weight: 500; }
+
+/* ── GRID ── */
+.grid-wrap {
+  position: relative; z-index:1;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 14px;
+  padding: 0 6% 60px;
+  max-width: 1400px; margin: 0 auto;
+}
+@media(min-width:640px)  { .grid-wrap { grid-template-columns: repeat(3,1fr); } }
+@media(min-width:900px)  { .grid-wrap { grid-template-columns: repeat(4,1fr); } }
+@media(min-width:1200px) { .grid-wrap { grid-template-columns: repeat(5,1fr); } }
+
+/* ── CARD ── */
+.card {
+  position: relative;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
+  animation: fadeUp 0.4s var(--ease) both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  border-color: rgba(34,197,94,0.25);
+}
+.card:hover .card-img-wrap::after { opacity:1; }
+
+/* Image */
+.card-img-wrap {
+  position: relative; overflow: hidden;
+  height: 150px;
+}
+.card-img-wrap::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(to top, rgba(6,26,16,0.7) 0%, transparent 50%);
+  opacity:0; transition:opacity 0.3s;
+}
+.card img {
+  width:100%; height:100%; object-fit:cover;
+  transition: transform 0.5s var(--ease);
+}
+.card:hover img { transform: scale(1.06); }
+
+/* Quick-add fab */
+.quick-add {
+  position: absolute; bottom:10px; right:10px; z-index:2;
+  width:30px; height:30px; border-radius:50%;
+  background: var(--green); border:none; color:#fff;
+  font-size:18px; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:scale(0.7);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 12px rgba(34,197,94,0.4);
+}
+.card:hover .quick-add { opacity:1; transform:scale(1); }
+.quick-add:hover { transform:scale(1.15) !important; }
+
+/* Content */
+.card-content { padding: 12px 13px 14px; }
+.card-content h3 {
+  font-size: 14px; font-weight: 500; line-height:1.3;
+  white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.card-bottom {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:8px;
+}
+.price {
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px; font-weight:600; color:var(--green-soft);
+  letter-spacing:-0.3px;
+}
+.rating {
+  font-size:11px; color:var(--muted); display:flex; align-items:center; gap:3px;
+}
+.star { color:#fbbf24; font-size:11px; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center; padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-state svg { margin-bottom:16px; opacity:0.4; }
+.empty-state p { font-size:15px; }
+
+/* ── SKELETON ── */
+.skeleton {
+  border-radius: 20px; overflow:hidden;
+  background: var(--surface); border:1px solid var(--border);
+}
+.skel-img { height:150px; background:rgba(255,255,255,0.05); animation:shimmer 1.4s infinite; }
+.skel-body { padding:12px 13px 14px; display:flex; flex-direction:column; gap:8px; }
+.skel-line { height:12px; border-radius:6px; background:rgba(255,255,255,0.05); animation:shimmer 1.4s infinite; }
+.skel-line.short { width:55%; }
+@keyframes shimmer {
+  0%,100% { opacity:0.5; } 50% { opacity:1; }
+}
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:var(--green); color:#000; padding:10px 22px;
+  border-radius:40px; font-size:13px; font-weight:500;
+  z-index:9999; transition:transform 0.3s var(--ease);
+  box-shadow:0 8px 24px rgba(34,197,94,0.4);
+  pointer-events:none; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  text-align:center; padding:20px;
+  font-size:12px; color:var(--muted);
+  border-top:1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+
+<header>
+  <div class="header-badge"><div class="pulse"></div>Fresh Today</div>
+  <h1>Pure <em>Juice</em>, Pure Life.</h1>
+  <p>Cold-pressed • Organic • Delivered fresh daily</p>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search juices…"/>
+  </div>
+  <select class="sort-select" id="sortSelect">
+    <option value="default">Sort: Default</option>
+    <option value="price-asc">Price: Low → High</option>
+    <option value="price-desc">Price: High → Low</option>
+    <option value="name-az">Name A → Z</option>
+  </select>
+  <div class="count-label">Showing <span id="countLabel">—</span> items</div>
+</div>
+
+<div class="grid-wrap" id="productContainer">
+  <!-- skeletons -->
+  ${[...Array(8)].map(()=>`
+  <div class="skeleton">
+    <div class="skel-img"></div>
+    <div class="skel-body">
+      <div class="skel-line"></div>
+      <div class="skel-line short"></div>
+    </div>
+  </div>`).join('')}
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>© 2026 FreshMart · All rights reserved</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
+  authDomain: "myproject-fdb4c.firebaseapp.com",
+  databaseURL: "https://myproject-fdb4c-default-rtdb.firebaseio.com",
+  projectId: "myproject-fdb4c",
+  storageBucket: "myproject-fdb4c.firebasestorage.app",
+  messagingSenderId: "600134367178",
+  appId: "1:600134367178:web:ea8b0daa3928c7791c8133"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const container = document.getElementById("productContainer");
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+const countLabel = document.getElementById("countLabel");
+
+let allProducts = [];
+
+function randomRating() {
+  return (3.8 + Math.random() * 1.2).toFixed(1);
+}
+
+function renderCards(products) {
+  container.innerHTML = "";
+  countLabel.textContent = products.length;
+
+  if (!products.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <p>No items match your search.</p>
+      </div>`;
+    return;
+  }
+
+  products.forEach((p, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = `${i * 0.05}s`;
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${p.a}" alt="${p.b}" loading="lazy"/>
+        <button class="quick-add" title="Quick add">+</button>
+      </div>
+      <div class="card-content">
+        <h3>${p.b}</h3>
+        <div class="card-bottom">
+          <div class="price">₹${p.c}</div>
+          <div class="rating"><span class="star">★</span>${p._rating}</div>
+        </div>
+      </div>`;
+
+    card.querySelector(".quick-add").addEventListener("click", e => {
+      e.stopPropagation();
+      showToast(`${p.b} added to cart 🛒`);
+    });
+
+   card.addEventListener("click", () => {
+  sessionStorage.setItem("selectedProduct", JSON.stringify(p));
+  window.location.href = `final.html`;
+});
+
+    container.appendChild(card);
+  });
+}
+
+function getFiltered() {
+  const q = searchInput.value.trim().toLowerCase();
+  let list = allProducts.filter(p => p.b.toLowerCase().includes(q));
+  const sort = sortSelect.value;
+  if (sort === "price-asc")  list.sort((a,b) => +a.c - +b.c);
+  if (sort === "price-desc") list.sort((a,b) => +b.c - +a.c);
+  if (sort === "name-az")    list.sort((a,b) => a.b.localeCompare(b.b));
+  return list;
+}
+
+searchInput.addEventListener("input", () => renderCards(getFiltered()));
+sortSelect.addEventListener("change", () => renderCards(getFiltered()));
+
+onValue(ref(db, 'user'), snapshot => {
+  allProducts = [];
+  snapshot.forEach(child => {
+    const p = child.val();
+    p._rating = randomRating();
+    allProducts.push(p);
+  });
+  renderCards(getFiltered());
+});
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+</script>
+</body>
+</html>

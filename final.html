@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #060f0a;
+  --surface: rgba(255,255,255,0.05);
+  --glass:   rgba(255,255,255,0.08);
+  --border:  rgba(255,255,255,0.1);
+  --green:   #22c55e;
+  --green2:  #4ade80;
+  --gold:    #fbbf24;
+  --text:    #e8f5ee;
+  --muted:   rgba(255,255,255,0.4);
+  --danger:  #f87171;
+  --ease:    cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 55% at 15% 20%, rgba(34,197,94,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 85% 80%, rgba(74,222,128,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 70% 10%, rgba(251,191,36,0.06) 0%, transparent 50%);
+}
+
+/* ── CARD ── */
+.card {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 460px;
+  background: var(--glass);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 48px 96px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.12);
+  animation: rise 0.65s var(--ease) both;
+}
+@keyframes rise {
+  from { opacity:0; transform: translateY(28px) scale(0.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+@media(min-width:860px) {
+  .card {
+    max-width: 820px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .img-col { grid-column:1; grid-row:1/5; }
+  .meta-col, .divider, .qty-row, .form-col { grid-column:2; }
+}
+
+/* ── IMAGE COLUMN ── */
+.img-col {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+}
+@media(min-width:860px) { .img-col { height: auto; min-height: 460px; } }
+
+.img-col img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition: transform 0.7s var(--ease);
+}
+.img-col:hover img { transform: scale(1.06); }
+
+/* Gradient overlay on image */
+.img-col::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(to top, rgba(6,15,10,0.55) 0%, transparent 55%);
+  pointer-events:none;
+}
+
+/* Badge on image */
+.img-badge {
+  position: absolute; bottom:16px; left:16px; z-index:1;
+  background: rgba(6,15,10,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 40px;
+  padding: 6px 14px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.8px;
+  color: var(--green2); text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+}
+.badge-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* ── META ── */
+.meta-col { padding: 28px 28px 0; }
+
+.product-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--green);
+  margin-bottom: 10px; display: flex; align-items:center; gap:7px;
+}
+.product-label::after {
+  content:''; flex:1; height:1px; background:rgba(34,197,94,0.2);
+}
+
+.product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px,4.5vw,34px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.price-wrap { display: flex; align-items: baseline; gap: 6px; }
+.price-sym { font-size:18px; font-weight:300; color:var(--muted); }
+.price-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px,6vw,52px);
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: -1px;
+  transition: color 0.25s;
+}
+.price-per { font-size:12px; color:var(--muted); margin-bottom:2px; align-self:flex-end; }
+
+/* Trust strip */
+.trust-strip {
+  display: flex; gap: 16px; margin-top: 18px;
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items:center; gap:6px;
+  font-size: 11px; color: var(--muted); font-weight: 400;
+}
+.trust-item svg { color: var(--green2); flex-shrink:0; }
+
+/* ── DIVIDER ── */
+.divider { height:1px; background:var(--border); margin: 20px 28px 0; }
+
+/* ── QUANTITY ── */
+.qty-row {
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 16px 28px;
+}
+.qty-label { font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+.qty-control {
+  display:flex; align-items:center; gap:0;
+  background: var(--surface); border:1px solid var(--border);
+  border-radius:50px; padding:4px;
+}
+.qty-btn {
+  width:34px; height:34px; border-radius:50%; border:none;
+  background:transparent; color:rgba(255,255,255,0.6);
+  font-size:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.qty-btn:hover { background:var(--green); color:#fff; transform:scale(1.12); }
+.qty-btn:active { transform:scale(0.9); }
+.qty-num {
+  min-width:38px; text-align:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:700; color:var(--text);
+}
+
+/* ── FORM ── */
+.form-col { padding: 0 28px 28px; }
+
+.field {
+  position: relative; margin-bottom: 12px;
+}
+.field-label {
+  font-size:10px; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:6px; display:block;
+}
+.field svg {
+  position:absolute; left:14px; top:38px;
+  transform:translateY(-50%);
+  opacity:0.38; pointer-events:none;
+}
+.field input {
+  width:100%; height:46px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; color:var(--text);
+  padding:0 14px 0 42px;
+  font-family:'DM Sans',sans-serif; font-size:14px;
+  outline:none; transition:border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.field input::placeholder { color:var(--muted); }
+.field input:focus {
+  border-color:rgba(34,197,94,0.5);
+  background:rgba(34,197,94,0.04);
+  box-shadow:0 0 0 3px rgba(34,197,94,0.1);
+}
+.field input.error { border-color:rgba(248,113,113,0.5); box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
+
+/* Msg */
+.msg { font-size:12px; font-weight:500; color:var(--danger); min-height:16px; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
+.msg.success { color:var(--green2); }
+
+/* ── ORDER BTN ── */
+.order-btn {
+  width:100%; height:52px; border:none; border-radius:16px;
+  background:linear-gradient(135deg, #22c55e, #16a34a);
+  color:#fff; font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:500; letter-spacing:0.04em;
+  cursor:pointer; position:relative; overflow:hidden;
+  transition:transform 0.2s, box-shadow 0.2s;
+  box-shadow:0 6px 24px rgba(34,197,94,0.35);
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.order-btn::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent);
+  opacity:0; transition:opacity 0.2s;
+}
+.order-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 14px 36px rgba(34,197,94,0.45); }
+.order-btn:hover::before { opacity:1; }
+.order-btn:active:not(:disabled) { transform:translateY(0); }
+.order-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+/* Spinner */
+.spinner {
+  width:16px; height:16px; border-radius:50%;
+  border:2px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* Steps indicator */
+.step-indicator {
+  display: flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--muted); margin-top:12px;
+  justify-content:center;
+}
+.step { display:flex; align-items:center; gap:5px; }
+.step-num {
+  width:18px; height:18px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:600; color:var(--muted);
+  transition:background 0.3s, color 0.3s;
+}
+.step.active .step-num { background:var(--green); border-color:var(--green); color:#fff; }
+.step.done .step-num { background:rgba(34,197,94,0.2); border-color:rgba(34,197,94,0.3); color:var(--green2); }
+.step-line { width:24px; height:1px; background:var(--border); }
+
+@media(max-width:480px) {
+  .meta-col, .form-col { padding-left:20px; padding-right:20px; }
+  .qty-row { padding:14px 20px; }
+  .divider { margin:16px 20px 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="card">
+  <!-- IMAGE -->
+  <div class="img-col">
+    <img id="img" src="" alt="Product"/>
+    <div class="img-badge"><div class="badge-dot"></div>Fresh Today</div>
+  </div>
+
+  <!-- META -->
+  <div class="meta-col">
+    <div class="product-label">Premium Pick</div>
+    <h2 class="product-name" id="productName">Loading…</h2>
+    <div class="price-wrap">
+      <span class="price-sym">₹</span>
+      <span class="price-val" id="price">0</span>
+      <span class="price-per">total</span>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Secure order
+      </div>
+      <div class="trust-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Fast delivery
+      </div>
+      <div class="trust-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        100% organic
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- QUANTITY -->
+  <div class="qty-row">
+    <span class="qty-label">Quantity</span>
+    <div class="qty-control">
+      <button class="qty-btn" id="decrease" aria-label="Decrease">−</button>
+      <div class="qty-num" id="qty">1</div>
+      <button class="qty-btn" id="increase" aria-label="Increase">+</button>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-col">
+
+    <div class="field">
+      <label class="field-label" for="customerName">Full name</label>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <input type="text" id="customerName" placeholder="Enter your name" autocomplete="name"/>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="phone">Phone number</label>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 12 19.79 19.79 0 0 1 .93 3.18a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel"/>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="referralCode">Referral code</label>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1.5 15h-3m3-4h-3"/></svg>
+      <input type="text" id="referralCode" placeholder="Optional referral code" autocomplete="name"/>
+    </div>
+
+    <div class="msg" id="messages"></div>
+
+    <button class="order-btn" id="orderNow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Place Order
+    </button>
+
+    <div class="step-indicator" id="steps">
+      <div class="step active" id="s1"><div class="step-num">1</div><span>Details</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="s2"><div class="step-num">2</div><span>Location</span></div>
+      <div class="step-line"></div>
+      <div class="step" id="s3"><div class="step-num">3</div><span>Confirm</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
+  authDomain: "myproject-fdb4c.firebaseapp.com",
+  databaseURL: "https://myproject-fdb4c-default-rtdb.firebaseio.com",
+  projectId: "myproject-fdb4c",
+  storageBucket: "myproject-fdb4c.firebasestorage.app",
+  messagingSenderId: "600134367178",
+  appId: "1:600134367178:web:ea8b0daa3928c7791c8133"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const p = JSON.parse(sessionStorage.getItem("selectedProduct"));
+let qty = 1;
+const name= p ? p.b : "Unknown Product";
+const price = p ? p.c : 0;
+const img = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
+
+
+document.getElementById("img").src = img;
+document.getElementById("productName").textContent = name;
+
+function updatePrice() {
+  document.getElementById("price").textContent = (price * qty).toLocaleString('en-IN');
+  document.getElementById("qty").textContent = qty;
+}
+
+document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
+document.getElementById("decrease").addEventListener("click", () => { if(qty > 1){ qty--; updatePrice(); } });
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById("s"+i);
+    el.classList.remove("active","done");
+    if(i < n) el.classList.add("done");
+    if(i === n) el.classList.add("active");
+  });
+}
+
+function showMsg(text, isSuccess=false) {
+  const el = document.getElementById("messages");
+  el.textContent = text;
+  el.className = "msg" + (isSuccess ? " success" : "");
+}
+
+function generatePassword() {
+      return Math.random().toString(36).substr(2, 6);
+    }
+document.getElementById("orderNow").addEventListener("click", function() {
+  const referral = document.getElementById("referralCode").value.trim();
+  const customer = document.getElementById("customerName").value.trim();
+  const phone    = document.getElementById("phone").value.trim();
+  const btn      = this;
+
+  document.getElementById("customerName").classList.remove("error");
+  document.getElementById("phone").classList.remove("error");
+  document.getElementById("referralCode").classList.remove("error");
+  showMsg("");
+
+  if (!customer) {
+    document.getElementById("customerName").classList.add("error");
+    showMsg("Please enter your full name.");
+    return;
+  }
+  
+  if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
+    document.getElementById("phone").classList.add("error");
+    showMsg("Enter a valid phone number.");
+    return;
+  }
+
+  if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
+    document.getElementById("referralCode").classList.add("error");
+    showMsg("Referral code must be 6 alphanumeric characters.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Getting location…`;
+  setStep(2);
+
+  let bestAccuracy = Infinity;
+  let bestPosition = null;
+  let placed = false;
+
+  const watchId = navigator.geolocation.watchPosition(pos => {
+    if(pos.coords.accuracy < bestAccuracy) {
+      bestAccuracy = pos.coords.accuracy;
+      bestPosition = pos;
+    }
+    if(pos.coords.accuracy < 30 && !placed) {
+      placed = true;
+      navigator.geolocation.clearWatch(watchId);
+      btn.innerHTML = `<div class="spinner"></div> Saving order…`;
+      setStep(3);
+
+      const lat = bestPosition.coords.latitude;
+      const lng = bestPosition.coords.longitude;
+
+      push(ref(db,"submit")).then(r => {
+        set(r, {a:customer, b:phone, c1:lat, c2:lng, d:referral})
+          .then(() => {
+            showMsg("Order placed! Redirecting to WhatsApp…", true);
+            btn.innerHTML = `✓ Done`;
+            generatePassword(); // To ensure referral code is not reused
+            const msg =
+              `🛒 *New Order*\n` +
+              `👤 Name: ${customer}\n` +
+              `📞 Phone: ${phone}\n` +
+              `🧩 Referral: ${referral || "None"}\n` +
+              `🍹 Product: ${name}\n` +
+              `🔢 Qty: ${qty}\n` +
+              `💰 Total: ₹${price*qty}`;
+            setTimeout(() => {
+              window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
+            }, 800);
+          })
+          .catch(() => {
+            showMsg("Failed to save. Please try again.");
+            btn.disabled=false;
+            btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+            placed=false; setStep(1);
+          });
+      });
+    }
+  }, err => {
+    showMsg("Location error: " + err.message);
+    btn.disabled=false;
+    btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+    setStep(1);
+  }, {enableHighAccuracy:true, timeout:30000, maximumAge:0});
+});
+
+updatePrice();
+</script>
+</body>
+</html>
