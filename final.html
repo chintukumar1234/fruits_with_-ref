@@ -459,21 +459,20 @@ document.getElementById("orderNow").addEventListener("click", function() {
       navigator.geolocation.clearWatch(watchId);
       btn.innerHTML = `<div class="spinner"></div> Saving order…`;
       setStep(3);
-
+      const referral_code = generatePassword();
       const lat = bestPosition.coords.latitude;
       const lng = bestPosition.coords.longitude;
 
       push(ref(db,"submit")).then(r => {
-        set(r, {a:customer, b:phone, c1:lat, c2:lng, d:referral})
+        set(r, {a:customer, b:phone, c1:lat, c2:lng, d:referral_code})
           .then(() => {
             showMsg("Order placed! Redirecting to WhatsApp…", true);
             btn.innerHTML = `✓ Done`;
-            generatePassword(); // To ensure referral code is not reused
             const msg =
               `🛒 *New Order*\n` +
               `👤 Name: ${customer}\n` +
               `📞 Phone: ${phone}\n` +
-              `🧩 Referral: ${referral || "None"}\n` +
+              `🧩 Referral: ${referral_code || "None"}\n` +
               `🍹 Product: ${name}\n` +
               `🔢 Qty: ${qty}\n` +
               `💰 Total: ₹${price*qty}`;
