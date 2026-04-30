@@ -412,6 +412,24 @@ function showMsg(text, isSuccess=false) {
 function generatePassword() {
       return Math.random().toString(36).substr(2, 6);
     }
+     //cheak if passowrd is exist then new referral code will be left or if left added then new referral code will be right if bothe are exist then print message already tow members exist with this referral code
+    async function checkReferralCode(code) {
+      const snapshot = await get(ref(db, "submit"));
+      const users = snapshot.val() || {};
+      for (const key in users) {
+        if (users[key].d === code) {
+          if (!users[key].left) {
+            return { position: "left", parentKey: key };
+          } else if (!users[key].right) {
+            return { position: "right", parentKey: key };
+          } else {
+            return { error: "Referral code already has 2 members." };
+          }
+        }
+      }
+      return { error: "Invalid referral code." };
+    }
+
 document.getElementById("orderNow").addEventListener("click", function() {
   const referral = document.getElementById("referralCode").value.trim();
   const customer = document.getElementById("customerName").value.trim();
@@ -439,8 +457,18 @@ document.getElementById("orderNow").addEventListener("click", function() {
     document.getElementById("referralCode").classList.add("error");
     showMsg("Referral code must be 6 alphanumeric characters.");
     return;
+  }else if(referral) {
+    checkReferralCode(referral).then(result => {
+      if(result.error) {
+        document.getElementById("referralCode").classList.add("error");
+        showMsg(result.error);
+      } else {
+        placeOrder(customer, phone, referral);
+      }
+    });
+  } else {
+    placeOrder(customer, phone, null);
   }
-
   
   btn.disabled = true;
   btn.innerHTML = `<div class="spinner"></div> Getting location…`;
