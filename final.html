@@ -433,6 +433,21 @@ function generatePassword() {
       return { error: "Invalid referral code." };
     }
 
+    // Update parent's record with child's referral code
+    async function updateParentReferral(parentCode, childCode, position) {
+      const snapshot = await get(ref(db, "submit"));
+      const users = snapshot.val() || {};
+      for (const key in users) {
+        if (users[key].d === parentCode) {
+          // Update parent's left or right with child's referral code
+          const updates = {};
+          updates[position] = childCode;
+          await set(ref(db, "submit/" + key), { ...users[key], ...updates });
+          break;
+        }
+      }
+    }
+
 document.getElementById("orderNow").addEventListener("click", function() {
   const referral = document.getElementById("referralCode").value.trim();
   const customer = document.getElementById("customerName").value.trim();
@@ -501,9 +516,12 @@ document.getElementById("orderNow").addEventListener("click", function() {
 
       push(ref(db,"submit")).then(r => {
         const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code};
-        // Store left/right position if referral was used
+        // If referral was used, link parent to child
         if (referral && position) {
-          orderData[position] = referral_code;
+          orderData.parent = referral; // Store parent's referral code
+          orderData.position = position; // Store position (left/right)
+          // Update parent's record to link to this child
+          updateParentReferral(referral, referral_code, position);
         }
         set(r, orderData)
           .then(() => {
