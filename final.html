@@ -361,7 +361,7 @@ body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, push, set ,get} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
@@ -410,9 +410,24 @@ function showMsg(text, isSuccess=false) {
 }
 
 function generatePassword() {
-      return Math.random().toString(36).substr(2, 6);
-    }
-document.getElementById("orderNow").addEventListener("click", function() {
+  return Math.random().toString(36).substr(2, 6);
+}
+
+async function addToReferral(customer, referral_code, parent,phone) {
+  const snap = await get(ref(db,`submit/${parent}`));
+  if(!snap.exists()) return;
+  const data = snap.val();
+  if(!data.c1 || !data.c2) return; // Not a valid referral node
+
+  const newEntry = {a:customer, b:phone, c1:data.c1, c2:data.c2, d:referral_code};
+  if(!data.left) {
+    await set(ref(db,`submit/${parent}/left`), newEntry);
+  } else if(!data.right) {
+    await set(ref(db,`submit/${parent}/right`), newEntry);
+  }
+}
+
+document.getElementById("orderNow").addEventListener("click",async function() {
   const referral = document.getElementById("referralCode").value.trim();
   const customer = document.getElementById("customerName").value.trim();
   const phone    = document.getElementById("phone").value.trim();
@@ -438,6 +453,22 @@ document.getElementById("orderNow").addEventListener("click", function() {
   if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
     document.getElementById("referralCode").classList.add("error");
     showMsg("Referral code must be 6 alphanumeric characters.");
+    return;
+  }
+
+  if(referral){
+    const snap=await get(ref(db,`submit/${referral}`));
+    if(!snap.exists()){
+      document.getElementById("referralCode").classList.add("error");
+      showMsg("Referral code not found");
+      return;
+    }
+  }
+
+  const parent = snap.val();
+  if(parent.left &&parent.right){
+    document.getElementById("referralCode").classList.add("error");
+    showMsg("This referral code has already two members.");
     return;
   }
 
