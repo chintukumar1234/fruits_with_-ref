@@ -1545,7 +1545,7 @@ function renderTree() {
         </div>
 
         <div class="card-actions">
-          <button class="action-btn primary" onclick="openMap('${lName}','${lCode}')">
+          <button class="action-btn primary" onclick="openMap('${lName}','${lCode}','${u.c1||''}','${u.c2||''}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
             Track
           </button>
@@ -1693,7 +1693,7 @@ function openDetail(key) {
           <span class="reward-amount">${isGold?'₹500':'—'}</span>
         </div>
       </div>
-      <button class="action-btn primary" style="width:100%" onclick="closeDetail();openMap('${(u.a||'').replace(/'/g,"\\'")}','${(u.d||'').replace(/'/g,"\\'")}')">
+      <button class="action-btn primary" style="width:100%" onclick="closeDetail();openMap('${(u.a||'').replace(/'/g,"\\'")}','${(u.d||'').replace(/'/g,"\\'")}','${u.c1||''}','${u.c2||''}')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         Open Live Tracker
       </button>
@@ -1714,7 +1714,7 @@ document.getElementById('detailModal').addEventListener('click', e => {
 function makeStartIcon() {
   const html = `<div style="position:relative;width:40px;height:48px">
     <div style="width:40px;height:40px;border-radius:50% 50% 50% 0;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:3px solid #0c0d14;box-shadow:0 4px 16px rgba(59,130,246,0.6);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center">
-      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:9px;letter-spacing:-0.3px">START</span>
+      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:9px;letter-spacing:-0.3px">TARGET</span>
     </div>
     <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#3b82f6;box-shadow:0 0 12px rgba(59,130,246,0.6)"></div>
   </div>`;
@@ -1729,8 +1729,8 @@ function makeDestIcon(initials) {
   </div>`;
   return L.divIcon({className:'',html,iconSize:[40,48],iconAnchor:[20,48],popupAnchor:[0,-52]});
 }
-function openMap(userName, refCode) {
-  currentUser = {name:userName,code:refCode};
+function openMap(userName, refCode, lat, lng) {
+  currentUser = {name:userName,code:refCode,c1:lat,c2:lng};
   document.getElementById('mapUserLabel').textContent = `${userName} · ${refCode}`;
   document.getElementById('mapModal').classList.add('open');
   setStatus('searching','Requesting location access…');
@@ -1774,12 +1774,14 @@ function onPos(pos) {
   const init = getInitials(currentUser?.name||'?');
   const name = currentUser?.name||'Member';
   const code = currentUser?.code||'—';
+  const startC1 = currentUser?.c1;
+  const startC2 = currentUser?.c2;
 
   if (!startLatLng) {
-    startLatLng = latlng;
+    startLatLng = startC1 && startC2 ? L.latLng(parseFloat(startC1), parseFloat(startC2)) : latlng;
     document.getElementById('startBtn').style.display = 'flex';
     startMarker = L.marker(startLatLng,{icon:makeStartIcon(),zIndexOffset:100}).addTo(leafletMap)
-      .bindPopup(`<div style="font-family:sans-serif;min-width:140px;font-size:0.85rem"><b>🔵 Starting Point</b><br><span style="color:#888;font-size:0.75rem">${name} · ${code}</span><br><span style="color:#3b82f6;font-size:0.73rem;display:block;margin-top:4px">Session start</span><br><span style="color:#888;font-size:0.73rem">${lat.toFixed(6)}, ${lng.toFixed(6)}</span></div>`);
+      .bindPopup(`<div style="font-family:sans-serif;min-width:140px;font-size:0.85rem"><b>🔵 Starting Point</b><br><span style="color:#888;font-size:0.75rem">${name} · ${code}</span><br><span style="color:#3b82f6;font-size:0.73rem;display:block;margin-top:4px">Session start</span><br><span style="color:#888;font-size:0.73rem">${startLatLng.lat.toFixed(6)}, ${startLatLng.lng.toFixed(6)}</span></div>`);
     destMarker = L.marker(latlng,{icon:makeDestIcon(init)}).addTo(leafletMap)
       .bindPopup(buildDestPopup(name,code,Math.round(acc),spd,lat,lng)).openPopup();
     accuracyCircle = L.circle(latlng,{radius:acc,color:'#c8ff57',fillColor:'#c8ff57',fillOpacity:0.06,weight:1.5,dashArray:'5 4'}).addTo(leafletMap);
