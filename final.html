@@ -417,7 +417,7 @@ function generatePassword() {
     // If referral code has left but no right, new member goes to right
     // If both left and right are filled, show error message
     async function checkReferralCode(code) {
-      const snapshot = await get(ref(db, "submit"));
+      const snapshot = await get(ref(db, "submitcopy"));
       const users = snapshot.val() || {};
       for (const key in users) {
         if (users[key].d === code) {
