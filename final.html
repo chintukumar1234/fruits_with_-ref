@@ -515,7 +515,7 @@ document.getElementById("orderNow").addEventListener("click", function() {
       const lng = bestPosition.coords.longitude;
 
       push(ref(db,"submit")).then(r => {
-        const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code};
+        const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code,e:name};
         // If referral was used, link parent to child
         if (referral && position) {
           orderData.parent = referral; // Store parent's referral code
