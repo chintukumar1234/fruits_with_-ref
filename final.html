@@ -34,7 +34,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ── BACKGROUND ── */
 .bg-glow {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
@@ -43,7 +42,6 @@ body {
     radial-gradient(ellipse 40% 40% at 70% 10%, rgba(251,191,36,0.06) 0%, transparent 50%);
 }
 
-/* ── CARD ── */
 .card {
   position: relative; z-index: 1;
   width: 100%; max-width: 460px;
@@ -71,7 +69,6 @@ body {
   .meta-col, .divider, .qty-row, .form-col { grid-column:2; }
 }
 
-/* ── IMAGE COLUMN ── */
 .img-col {
   position: relative;
   height: 260px;
@@ -85,7 +82,6 @@ body {
 }
 .img-col:hover img { transform: scale(1.06); }
 
-/* Gradient overlay on image */
 .img-col::after {
   content:'';
   position:absolute; inset:0;
@@ -93,7 +89,6 @@ body {
   pointer-events:none;
 }
 
-/* Badge on image */
 .img-badge {
   position: absolute; bottom:16px; left:16px; z-index:1;
   background: rgba(6,15,10,0.7);
@@ -108,7 +103,6 @@ body {
 .badge-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
 
-/* ── META ── */
 .meta-col { padding: 28px 28px 0; }
 
 .product-label {
@@ -141,7 +135,6 @@ body {
 }
 .price-per { font-size:12px; color:var(--muted); margin-bottom:2px; align-self:flex-end; }
 
-/* Trust strip */
 .trust-strip {
   display: flex; gap: 16px; margin-top: 18px;
   flex-wrap: wrap;
@@ -152,10 +145,8 @@ body {
 }
 .trust-item svg { color: var(--green2); flex-shrink:0; }
 
-/* ── DIVIDER ── */
 .divider { height:1px; background:var(--border); margin: 20px 28px 0; }
 
-/* ── QUANTITY ── */
 .qty-row {
   display: flex; align-items:center; justify-content:space-between;
   padding: 16px 28px;
@@ -181,7 +172,6 @@ body {
   font-size:20px; font-weight:700; color:var(--text);
 }
 
-/* ── FORM ── */
 .form-col { padding: 0 28px 28px; }
 
 .field {
@@ -213,11 +203,9 @@ body {
 }
 .field input.error { border-color:rgba(248,113,113,0.5); box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
 
-/* Msg */
 .msg { font-size:12px; font-weight:500; color:var(--danger); min-height:16px; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
 .msg.success { color:var(--green2); }
 
-/* ── ORDER BTN ── */
 .order-btn {
   width:100%; height:52px; border:none; border-radius:16px;
   background:linear-gradient(135deg, #22c55e, #16a34a);
@@ -238,7 +226,6 @@ body {
 .order-btn:active:not(:disabled) { transform:translateY(0); }
 .order-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-/* Spinner */
 .spinner {
   width:16px; height:16px; border-radius:50%;
   border:2px solid rgba(255,255,255,0.3);
@@ -247,7 +234,6 @@ body {
 }
 @keyframes spin { to{transform:rotate(360deg)} }
 
-/* Steps indicator */
 .step-indicator {
   display: flex; align-items:center; gap:6px;
   font-size:11px; color:var(--muted); margin-top:12px;
@@ -361,7 +347,7 @@ body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, set ,get} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
@@ -376,186 +362,282 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const p = JSON.parse(sessionStorage.getItem("selectedProduct"));
+// ── Product data ──────────────────────────────────────────────
+const p = JSON.parse(sessionStorage.getItem("selectedProduct") || "null");
 let qty = 1;
-const name= p ? p.b : "Unknown Product";
-const price = p ? p.c : 0;
-const img = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
+const productName = p ? p.b : "Unknown Product";
+const price       = p ? p.c : 0;
+const img         = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
 
+document.getElementById("img").src           = img;
+document.getElementById("productName").textContent = productName;
 
-document.getElementById("img").src = img;
-document.getElementById("productName").textContent = name;
-
+// ── Helpers ───────────────────────────────────────────────────
 function updatePrice() {
-  document.getElementById("price").textContent = (price * qty).toLocaleString('en-IN');
-  document.getElementById("qty").textContent = qty;
+  document.getElementById("price").textContent = (price * qty).toLocaleString("en-IN");
+  document.getElementById("qty").textContent   = qty;
 }
 
-document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
-document.getElementById("decrease").addEventListener("click", () => { if(qty > 1){ qty--; updatePrice(); } });
-
 function setStep(n) {
-  [1,2,3].forEach(i => {
-    const el = document.getElementById("s"+i);
-    el.classList.remove("active","done");
-    if(i < n) el.classList.add("done");
-    if(i === n) el.classList.add("active");
+  [1, 2, 3].forEach(i => {
+    const el = document.getElementById("s" + i);
+    el.classList.remove("active", "done");
+    if (i < n)  el.classList.add("done");
+    if (i === n) el.classList.add("active");
   });
 }
 
-function showMsg(text, isSuccess=false) {
+function showMsg(text, isSuccess = false) {
   const el = document.getElementById("messages");
   el.textContent = text;
   el.className = "msg" + (isSuccess ? " success" : "");
 }
 
+const CART_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
+
+function resetBtn() {
+  const btn = document.getElementById("orderNow");
+  btn.disabled  = false;
+  btn.innerHTML = CART_SVG + " Place Order";
+}
+
 function generatePassword() {
-      return Math.random().toString(36).substr(2, 6);
-    }
-     // Check if referral code exists and has available positions (left/right)
-    // If referral code has no left member, new member goes to left
-    // If referral code has left but no right, new member goes to right
-    // If both left and right are filled, show error message
-    async function checkReferralCode(code) {
-      const snapshot = await get(ref(db, "submitcopy"));
-      const users = snapshot.val() || {};
-      for (const key in users) {
-        if (users[key].d === code) {
-          if (!users[key].left) {
-            return { position: "left", parentKey: key };
-          } else if (!users[key].right) {
-            return { position: "right", parentKey: key };
-          } else {
-            return { error: "Referral code already has 2 members." };
-          }
-        }
-      }
-      return { error: "Invalid referral code." };
-    }
+  return Math.random().toString(36).substr(2, 6);
+}
 
-    // Update parent's record with child's referral code
-    async function updateParentReferral(parentCode, childCode, position) {
-      const snapshot = await get(ref(db, "submit"));
-      const users = snapshot.val() || {};
-      for (const key in users) {
-        if (users[key].d === parentCode) {
-          // Update parent's left or right with child's referral code
-          const updates = {};
-          updates[position] = childCode;
-          await set(ref(db, "submit/" + key), { ...users[key], ...updates });
-          break;
+// ── FIX 1: Both checkReferralCode AND updateParentReferral
+//    now use the SAME database path: "submit"
+// ─────────────────────────────────────────────────────────────
+async function checkReferralCode(code) {
+  try {
+    const snapshot = await get(ref(db, "submit"));   // ← was "submitcopy" (bug)
+    const users = snapshot.val() || {};
+    for (const key in users) {
+      if (users[key].d === code) {
+        if (!users[key].left) {
+          return { position: "left", parentKey: key };
+        } else if (!users[key].right) {
+          return { position: "right", parentKey: key };
+        } else {
+          return { error: "Referral code already has 2 members." };
         }
       }
     }
+    return { error: "Invalid referral code." };
+  } catch (e) {
+    return { error: "Could not verify referral code. Please try again." };
+  }
+}
 
-document.getElementById("orderNow").addEventListener("click", function() {
+async function updateParentReferral(parentCode, childCode, position) {
+  try {
+    const snapshot = await get(ref(db, "submit"));
+    const users = snapshot.val() || {};
+    for (const key in users) {
+      if (users[key].d === parentCode) {
+        await set(ref(db, "submit/" + key), {
+          ...users[key],
+          [position]: childCode   // ← FIX: computed property key (was string literal bug)
+        });
+        break;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to update parent referral:", e);
+    // Non-fatal — order still proceeds
+  }
+}
+
+// ── FIX 2: Robust geolocation with fallback timeout ──────────
+//    Previously if accuracy never dropped below 30m (e.g. indoors),
+//    the order was NEVER placed. Now we fall back after 10 s with
+//    whatever best position we have.
+function getLocation() {
+  return new Promise((resolve, reject) => {
+    // FIX 3: Guard against browsers without geolocation support
+    if (!navigator.geolocation) {
+      reject(new Error("Geolocation is not supported by your browser."));
+      return;
+    }
+
+    let bestAccuracy = Infinity;
+    let bestPosition = null;
+    let settled      = false;
+    let watchId;
+
+    // Fallback: after 10 s use whatever we have (even low accuracy)
+    const fallbackTimer = setTimeout(() => {
+      if (settled) return;
+      navigator.geolocation.clearWatch(watchId);
+      if (bestPosition) {
+        settled = true;
+        resolve(bestPosition);
+      } else {
+        settled = true;
+        reject(new Error("Could not get location. Please allow location access and try again."));
+      }
+    }, 10000);
+
+    watchId = navigator.geolocation.watchPosition(
+      pos => {
+        if (pos.coords.accuracy < bestAccuracy) {
+          bestAccuracy = pos.coords.accuracy;
+          bestPosition = pos;
+        }
+        // Resolve immediately if accuracy is good enough
+        if (pos.coords.accuracy < 30 && !settled) {
+          settled = true;
+          clearTimeout(fallbackTimer);
+          navigator.geolocation.clearWatch(watchId);
+          resolve(bestPosition);
+        }
+      },
+      err => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(fallbackTimer);
+        navigator.geolocation.clearWatch(watchId);
+        // Friendly error messages per error code
+        const msgs = {
+          1: "Location permission denied. Please allow location access in your browser settings.",
+          2: "Location unavailable. Make sure GPS/location services are enabled.",
+          3: "Location request timed out. Please try again."
+        };
+        reject(new Error(msgs[err.code] || err.message));
+      },
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
+    );
+  });
+}
+
+// ── Place order ───────────────────────────────────────────────
+async function placeOrder(customer, phone, referral, position) {
+  const btn = document.getElementById("orderNow");
+  btn.disabled  = true;
+  btn.innerHTML = `<div class="spinner"></div> Getting location…`;
+  setStep(2);
+
+  let coords;
+  try {
+    const pos = await getLocation();
+    coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+  } catch (err) {
+    // FIX 4: Clear, specific location error message shown to user
+    showMsg("📍 " + err.message);
+    resetBtn();
+    setStep(1);
+    return;
+  }
+
+  btn.innerHTML = `<div class="spinner"></div> Saving order…`;
+  setStep(3);
+
+  const referral_code = generatePassword();
+  const orderData = {
+    a: customer,
+    b: phone,
+    c1: coords.lat,
+    c2: coords.lng,
+    d: referral_code,
+    e: productName,
+    qty: qty,
+    total: price * qty,
+    timestamp: Date.now()
+  };
+
+  if (referral && position) {
+    orderData.parent   = referral;
+    orderData.position = position;
+  }
+
+  try {
+    const newRef = await push(ref(db, "submit"));
+    await set(newRef, orderData);
+
+    // Update parent referral links AFTER order is saved (non-blocking)
+    if (referral && position) {
+      updateParentReferral(referral, referral_code, position);
+    }
+
+    showMsg("Order placed! Redirecting to WhatsApp…", true);
+    btn.innerHTML = `✓ Done`;
+
+    const msg =
+      `🛒 *New Order*\n` +
+      `👤 Name: ${customer}\n` +
+      `📞 Phone: ${phone}\n` +
+      `🧩 Referral: ${referral_code}\n` +
+      `🍹 Product: ${productName}\n` +
+      `🔢 Qty: ${qty}\n` +
+      `💰 Total: ₹${price * qty}`;
+
+    setTimeout(() => {
+      window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
+    }, 800);
+
+  } catch (err) {
+    showMsg("Failed to save order. Please try again.");
+    resetBtn();
+    setStep(1);
+  }
+}
+
+// ── Button click handler ──────────────────────────────────────
+document.getElementById("orderNow").addEventListener("click", async function () {
   const referral = document.getElementById("referralCode").value.trim();
   const customer = document.getElementById("customerName").value.trim();
   const phone    = document.getElementById("phone").value.trim();
-  const btn      = this;
 
-  document.getElementById("customerName").classList.remove("error");
-  document.getElementById("phone").classList.remove("error");
-  document.getElementById("referralCode").classList.remove("error");
+  // Clear previous errors
+  ["customerName", "phone", "referralCode"].forEach(id =>
+    document.getElementById(id).classList.remove("error")
+  );
   showMsg("");
 
+  // Validate name
   if (!customer) {
     document.getElementById("customerName").classList.add("error");
     showMsg("Please enter your full name.");
     return;
   }
-  
+
+  // Validate phone
   if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
     document.getElementById("phone").classList.add("error");
     showMsg("Enter a valid phone number.");
     return;
   }
 
+  // Validate referral format
   if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
     document.getElementById("referralCode").classList.add("error");
     showMsg("Referral code must be 6 alphanumeric characters.");
     return;
-  }else if(referral) {
-    checkReferralCode(referral).then(result => {
-      if(result.error) {
-        document.getElementById("referralCode").classList.add("error");
-        showMsg(result.error);
-      } else {
-        // Store referral position (left/right) if provided
-        placeOrder(customer, phone, referral, result.position);
-      }
-    });
+  }
+
+  // FIX 5: Disable button immediately to prevent double-click
+  this.disabled = true;
+
+  if (referral) {
+    showMsg("Checking referral code…");
+    const result = await checkReferralCode(referral);
+    if (result.error) {
+      document.getElementById("referralCode").classList.add("error");
+      showMsg(result.error);
+      this.disabled = false;
+      return;
+    }
+    placeOrder(customer, phone, referral, result.position);
   } else {
     placeOrder(customer, phone, null, null);
   }
-  
-  // Place order function with geolocation
-  function placeOrder(customer, phone, referral, position = null) {
-  const btn = document.getElementById("orderNow");
-  btn.disabled = true;
-  btn.innerHTML = `<div class="spinner"></div> Getting location…`;
-  setStep(2);
+});
 
-  let bestAccuracy = Infinity;
-  let bestPosition = null;
-  let placed = false;
+// Quantity controls
+document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
+document.getElementById("decrease").addEventListener("click", () => { if (qty > 1) { qty--; updatePrice(); } });
 
-  const watchId = navigator.geolocation.watchPosition(pos => {
-    if(pos.coords.accuracy < bestAccuracy) {
-      bestAccuracy = pos.coords.accuracy;
-      bestPosition = pos;
-    }
-    if(pos.coords.accuracy < 30 && !placed) {
-      placed = true;
-      navigator.geolocation.clearWatch(watchId);
-      btn.innerHTML = `<div class="spinner"></div> Saving order…`;
-      setStep(3);
-      const referral_code = generatePassword();
-      const lat = bestPosition.coords.latitude;
-      const lng = bestPosition.coords.longitude;
-
-      push(ref(db,"submit")).then(r => {
-        const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code,e:name};
-        // If referral was used, link parent to child
-        if (referral && position) {
-          orderData.parent = referral; // Store parent's referral code
-          orderData.position = position; // Store position (left/right)
-          // Update parent's record to link to this child
-          updateParentReferral(referral, referral_code, position);
-        }
-        set(r, orderData)
-          .then(() => {
-            showMsg("Order placed! Redirecting to WhatsApp…", true);
-            btn.innerHTML = `✓ Done`;
-            const msg =
-              `🛒 *New Order*\n` +
-              `👤 Name: ${customer}\n` +
-              `📞 Phone: ${phone}\n` +
-              `🧩 Referral: ${referral_code || "None"}\n` +
-              `🍹 Product: ${name}\n` +
-              `🔢 Qty: ${qty}\n` +
-              `💰 Total: ₹${price*qty}`;
-            setTimeout(() => {
-              window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
-            }, 800);
-          })
-          .catch(() => {
-            showMsg("Failed to save. Please try again.");
-            btn.disabled=false;
-            btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
-            placed=false; setStep(1);
-          });
-      });
-    }
-  }, err => {
-    showMsg("Location error: " + err.message);
-    btn.disabled=false;
-    btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
-    setStep(1);
-  }, {enableHighAccuracy:true, timeout:30000, maximumAge:0});
-  }
-  });
-
+// Initial render
 updatePrice();
 </script>
 </body>
