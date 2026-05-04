@@ -85,6 +85,7 @@ body {
 }
 .img-col:hover img { transform: scale(1.06); }
 
+/* Gradient overlay on image */
 .img-col::after {
   content:'';
   position:absolute; inset:0;
@@ -92,6 +93,7 @@ body {
   pointer-events:none;
 }
 
+/* Badge on image */
 .img-badge {
   position: absolute; bottom:16px; left:16px; z-index:1;
   background: rgba(6,15,10,0.7);
@@ -139,6 +141,7 @@ body {
 }
 .price-per { font-size:12px; color:var(--muted); margin-bottom:2px; align-self:flex-end; }
 
+/* Trust strip */
 .trust-strip {
   display: flex; gap: 16px; margin-top: 18px;
   flex-wrap: wrap;
@@ -210,6 +213,7 @@ body {
 }
 .field input.error { border-color:rgba(248,113,113,0.5); box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
 
+/* Msg */
 .msg { font-size:12px; font-weight:500; color:var(--danger); min-height:16px; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
 .msg.success { color:var(--green2); }
 
@@ -234,6 +238,7 @@ body {
 .order-btn:active:not(:disabled) { transform:translateY(0); }
 .order-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
+/* Spinner */
 .spinner {
   width:16px; height:16px; border-radius:50%;
   border:2px solid rgba(255,255,255,0.3);
@@ -242,6 +247,7 @@ body {
 }
 @keyframes spin { to{transform:rotate(360deg)} }
 
+/* Steps indicator */
 .step-indicator {
   display: flex; align-items:center; gap:6px;
   font-size:11px; color:var(--muted); margin-top:12px;
@@ -355,9 +361,8 @@ body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, push, set ,get} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-// ── Firebase config ──────────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
   authDomain: "myproject-fdb4c.firebaseapp.com",
@@ -369,278 +374,188 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
+const db = getDatabase(app);
 
-// ── Single DB collection name (was split between "submit" and "submitcopy") ──
-const DB_PATH = "submit";
-
-// ── Product from sessionStorage ───────────────────────────────────────────────
-const p = JSON.parse(sessionStorage.getItem("selectedProduct") || "null");
-const productImg  = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
-const productName = p ? p.b : "Unknown Product";
-const productPrice = p ? Number(p.c) : 0;
-
+const p = JSON.parse(sessionStorage.getItem("selectedProduct"));
 let qty = 1;
+const name= p ? p.b : "Unknown Product";
+const price = p ? p.c : 0;
+const img = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
 
-document.getElementById("img").src          = productImg;
-document.getElementById("productName").textContent = productName;
 
-// ── Price / Qty helpers ───────────────────────────────────────────────────────
+document.getElementById("img").src = img;
+document.getElementById("productName").textContent = name;
+
 function updatePrice() {
-  document.getElementById("price").textContent = (productPrice * qty).toLocaleString("en-IN");
-  document.getElementById("qty").textContent   = qty;
+  document.getElementById("price").textContent = (price * qty).toLocaleString('en-IN');
+  document.getElementById("qty").textContent = qty;
 }
 
 document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
-document.getElementById("decrease").addEventListener("click", () => { if (qty > 1) { qty--; updatePrice(); } });
+document.getElementById("decrease").addEventListener("click", () => { if(qty > 1){ qty--; updatePrice(); } });
 
-// ── Step indicator ────────────────────────────────────────────────────────────
 function setStep(n) {
-  [1, 2, 3].forEach(i => {
-    const el = document.getElementById("s" + i);
-    el.classList.remove("active", "done");
-    if (i < n)  el.classList.add("done");
-    if (i === n) el.classList.add("active");
+  [1,2,3].forEach(i => {
+    const el = document.getElementById("s"+i);
+    el.classList.remove("active","done");
+    if(i < n) el.classList.add("done");
+    if(i === n) el.classList.add("active");
   });
 }
 
-// ── Message helper ────────────────────────────────────────────────────────────
-function showMsg(text, isSuccess = false) {
+function showMsg(text, isSuccess=false) {
   const el = document.getElementById("messages");
   el.textContent = text;
-  el.className   = "msg" + (isSuccess ? " success" : "");
+  el.className = "msg" + (isSuccess ? " success" : "");
 }
 
-// ── Reset button to initial state ─────────────────────────────────────────────
-const BTN_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
-function resetBtn(btn) {
-  btn.disabled   = false;
-  btn.innerHTML  = BTN_ICON + " Place Order";
-  setStep(1);
-}
-
-// ── Generate a random 6-char alphanumeric referral code ───────────────────────
-function generateReferralCode() {
-  return Math.random().toString(36).substr(2, 6).toUpperCase();
-}
-
-// ── Check if a referral code exists and has a free slot (left or right) ───────
-// FIX: Was reading from "submitcopy" — now reads from the same DB_PATH ("submit")
-async function checkReferralCode(code) {
-  const snapshot = await get(ref(db, DB_PATH));
-  const users    = snapshot.val() || {};
-
-  for (const key in users) {
-    if (users[key].d === code) {
-      if (!users[key].left) {
-        return { position: "left", parentKey: key, parentCode: users[key].d };
-      } else if (!users[key].right) {
-        return { position: "right", parentKey: key, parentCode: users[key].d };
-      } else {
-        return { error: "This referral code already has 2 members." };
-      }
+function generatePassword() {
+      return Math.random().toString(36).substr(2, 6);
     }
-  }
-  return { error: "Invalid referral code." };
-}
-
-// ── Update parent's record to link left/right to child's referral code ────────
-// FIX: Was reading from "submit" (correct) but the parent update was only
-//      done on the local `users` object from DB_PATH. Now uses parentKey directly.
-async function linkChildToParent(parentKey, position, childReferralCode) {
-  const parentSnap = await get(ref(db, DB_PATH + "/" + parentKey));
-  const parentData = parentSnap.val();
-  if (!parentData) return; // parent disappeared — skip silently
-  parentData[position] = childReferralCode;
-  await set(ref(db, DB_PATH + "/" + parentKey), parentData);
-}
-
-// ── Geolocation: returns best position within timeout ─────────────────────────
-// FIX: Original watchPosition never fired a fallback if accuracy stayed ≥ 30m.
-//      Now resolves with the best reading after `maxWaitMs` regardless of accuracy.
-function getBestLocation({ accuracyTarget = 30, maxWaitMs = 15000 } = {}) {
-  return new Promise((resolve, reject) => {
-    let bestPos  = null;
-    let watchId  = null;
-    let timer    = null;
-
-    function finish(pos) {
-      if (timer)   clearTimeout(timer);
-      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-      resolve(pos);
+     // Check if referral code exists and has available positions (left/right)
+    // If referral code has no left member, new member goes to left
+    // If referral code has left but no right, new member goes to right
+    // If both left and right are filled, show error message
+    async function checkReferralCode(code) {
+      const snapshot = await get(ref(db, "submitcopy"));
+      const users = snapshot.val() || {};
+      for (const key in users) {
+        if (users[key].d === code) {
+          if (!users[key].left) {
+            return { position: "left", parentKey: key };
+          } else if (!users[key].right) {
+            return { position: "right", parentKey: key };
+          } else {
+            return { error: "Referral code already has 2 members." };
+          }
+        }
+      }
+      return { error: "Invalid referral code." };
     }
 
-    function onPos(pos) {
-      if (!bestPos || pos.coords.accuracy < bestPos.coords.accuracy) {
-        bestPos = pos;
-      }
-      // Good enough — resolve early
-      if (pos.coords.accuracy < accuracyTarget) {
-        finish(bestPos);
+    // Update parent's record with child's referral code
+    async function updateParentReferral(parentCode, childCode, position) {
+      const snapshot = await get(ref(db, "submit"));
+      const users = snapshot.val() || {};
+      for (const key in users) {
+        if (users[key].d === parentCode) {
+          // Update parent's left or right with child's referral code
+          const updates = {};
+          updates[position] = childCode;
+          await set(ref(db, "submit/" + key), { ...users[key], ...updates });
+          break;
+        }
       }
     }
 
-    function onErr(err) {
-      if (timer)   clearTimeout(timer);
-      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-      reject(err);
-    }
-
-    watchId = navigator.geolocation.watchPosition(onPos, onErr, {
-      enableHighAccuracy: true,
-      timeout: maxWaitMs,
-      maximumAge: 0
-    });
-
-    // FIX: Fallback — resolve with whatever we have after maxWaitMs
-    timer = setTimeout(() => {
-      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-      if (bestPos) {
-        resolve(bestPos);
-      } else {
-        reject(new Error("Could not determine location. Please enable GPS and try again."));
-      }
-    }, maxWaitMs);
-  });
-}
-
-// ── Core order placement logic ────────────────────────────────────────────────
-// FIX: Was re-declaring `const btn` inside nested function, shadowing outer btn.
-//      Now `btn` is passed as a parameter from the click handler.
-async function placeOrder(btn, customer, phone, referral, position, parentKey) {
-  btn.disabled  = true;
-  btn.innerHTML = `<div class="spinner"></div> Getting location…`;
-  setStep(2);
-
-  let pos;
-  try {
-    pos = await getBestLocation({ accuracyTarget: 30, maxWaitMs: 15000 });
-  } catch (err) {
-    showMsg("Location error: " + err.message);
-    resetBtn(btn);
-    return;
-  }
-
-  btn.innerHTML = `<div class="spinner"></div> Saving order…`;
-  setStep(3);
-
-  const childReferralCode = generateReferralCode();
-  const lat = pos.coords.latitude;
-  const lng = pos.coords.longitude;
-
-  const orderData = {
-    a: customer,
-    b: phone,
-    c1: lat,
-    c2: lng,
-    d: childReferralCode,
-    e: productName,
-    qty: qty,
-    total: productPrice * qty,
-    timestamp: Date.now()
-  };
-
-  if (referral && position && parentKey) {
-    orderData.parent   = referral;   // parent's referral code
-    orderData.position = position;   // "left" or "right"
-  }
-
-  try {
-    const newRef = await push(ref(db, DB_PATH));
-    await set(newRef, orderData);
-
-    // FIX: Link child to parent AFTER child is saved (was called before, causing race condition)
-    if (referral && position && parentKey) {
-      await linkChildToParent(parentKey, position, childReferralCode);
-    }
-
-    showMsg("Order placed! Redirecting to WhatsApp…", true);
-    btn.innerHTML = `✓ Done`;
-
-    const msg =
-      `🛒 *New Order*\n` +
-      `👤 Name: ${customer}\n` +
-      `📞 Phone: ${phone}\n` +
-      `🎫 My Referral: ${childReferralCode}\n` +
-      `🔗 Used Referral: ${referral || "None"}\n` +
-      `🍹 Product: ${productName}\n` +
-      `🔢 Qty: ${qty}\n` +
-      `💰 Total: ₹${productPrice * qty}`;
-
-    setTimeout(() => {
-      window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
-    }, 800);
-
-  } catch (err) {
-    showMsg("Failed to save order. Please try again.");
-    resetBtn(btn);
-  }
-}
-
-// ── Order button click handler ────────────────────────────────────────────────
-document.getElementById("orderNow").addEventListener("click", async function () {
-  const btn      = this;                                        // captured once — no shadow
+document.getElementById("orderNow").addEventListener("click", function() {
+  const referral = document.getElementById("referralCode").value.trim();
   const customer = document.getElementById("customerName").value.trim();
   const phone    = document.getElementById("phone").value.trim();
-  const referral = document.getElementById("referralCode").value.trim().toUpperCase();
+  const btn      = this;
 
-  // Clear previous errors
-  ["customerName", "phone", "referralCode"].forEach(id => {
-    document.getElementById(id).classList.remove("error");
-  });
+  document.getElementById("customerName").classList.remove("error");
+  document.getElementById("phone").classList.remove("error");
+  document.getElementById("referralCode").classList.remove("error");
   showMsg("");
 
-  // ── Validation ──────────────────────────────────────────────────
   if (!customer) {
     document.getElementById("customerName").classList.add("error");
     showMsg("Please enter your full name.");
     return;
   }
-
+  
   if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
     document.getElementById("phone").classList.add("error");
     showMsg("Enter a valid phone number.");
     return;
   }
 
-  // FIX: Referral validation pattern now uses uppercase (codes are uppercased on generate)
-  if (referral && !/^[A-Z0-9]{6}$/.test(referral)) {
+  if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
     document.getElementById("referralCode").classList.add("error");
     showMsg("Referral code must be 6 alphanumeric characters.");
     return;
-  }
-
-  // ── Referral check (only if provided) ───────────────────────────
-  if (referral) {
-    btn.disabled  = true;
-    btn.innerHTML = `<div class="spinner"></div> Checking referral…`;
-
-    let result;
-    try {
-      result = await checkReferralCode(referral);
-    } catch (err) {
-      showMsg("Could not verify referral code. Please try again.");
-      resetBtn(btn);
-      return;
-    }
-
-    if (result.error) {
-      document.getElementById("referralCode").classList.add("error");
-      showMsg(result.error);
-      resetBtn(btn);
-      return;
-    }
-
-    // Valid referral — proceed
-    await placeOrder(btn, customer, phone, referral, result.position, result.parentKey);
-
+  }else if(referral) {
+    checkReferralCode(referral).then(result => {
+      if(result.error) {
+        document.getElementById("referralCode").classList.add("error");
+        showMsg(result.error);
+      } else {
+        // Store referral position (left/right) if provided
+        placeOrder(customer, phone, referral, result.position);
+      }
+    });
   } else {
-    // No referral — proceed directly
-    await placeOrder(btn, customer, phone, null, null, null);
+    placeOrder(customer, phone, null, null);
   }
-});
+  
+  // Place order function with geolocation
+  function placeOrder(customer, phone, referral, position = null) {
+  const btn = document.getElementById("orderNow");
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Getting location…`;
+  setStep(2);
 
-// ── Init price display ────────────────────────────────────────────────────────
+  let bestAccuracy = Infinity;
+  let bestPosition = null;
+  let placed = false;
+
+  const watchId = navigator.geolocation.watchPosition(pos => {
+    if(pos.coords.accuracy < bestAccuracy) {
+      bestAccuracy = pos.coords.accuracy;
+      bestPosition = pos;
+    }
+    if(pos.coords.accuracy < 30 && !placed) {
+      placed = true;
+      navigator.geolocation.clearWatch(watchId);
+      btn.innerHTML = `<div class="spinner"></div> Saving order…`;
+      setStep(3);
+      const referral_code = generatePassword();
+      const lat = bestPosition.coords.latitude;
+      const lng = bestPosition.coords.longitude;
+
+      push(ref(db,"submit")).then(r => {
+        const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code,e:name};
+        // If referral was used, link parent to child
+        if (referral && position) {
+          orderData.parent = referral; // Store parent's referral code
+          orderData.position = position; // Store position (left/right)
+          // Update parent's record to link to this child
+          updateParentReferral(referral, referral_code, position);
+        }
+        set(r, orderData)
+          .then(() => {
+            showMsg("Order placed! Redirecting to WhatsApp…", true);
+            btn.innerHTML = `✓ Done`;
+            const msg =
+              `🛒 *New Order*\n` +
+              `👤 Name: ${customer}\n` +
+              `📞 Phone: ${phone}\n` +
+              `🧩 Referral: ${referral_code || "None"}\n` +
+              `🍹 Product: ${name}\n` +
+              `🔢 Qty: ${qty}\n` +
+              `💰 Total: ₹${price*qty}`;
+            setTimeout(() => {
+              window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
+            }, 800);
+          })
+          .catch(() => {
+            showMsg("Failed to save. Please try again.");
+            btn.disabled=false;
+            btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+            placed=false; setStep(1);
+          });
+      });
+    }
+  }, err => {
+    showMsg("Location error: " + err.message);
+    btn.disabled=false;
+    btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+    setStep(1);
+  }, {enableHighAccuracy:true, timeout:30000, maximumAge:0});
+  }
+  });
+
 updatePrice();
 </script>
 </body>
