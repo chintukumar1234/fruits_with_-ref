@@ -214,16 +214,67 @@ header p {
 
 /* ── SKELETON ── */
 .skeleton {
-  border-radius: 20px; overflow:hidden;
-  background: var(--surface); border:1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
-.skel-img { height:150px; background:rgba(255,255,255,0.05); animation:shimmer 1.4s infinite; }
-.skel-body { padding:12px 13px 14px; display:flex; flex-direction:column; gap:8px; }
-.skel-line { height:12px; border-radius:6px; background:rgba(255,255,255,0.05); animation:shimmer 1.4s infinite; }
-.skel-line.short { width:55%; }
+
+/* The shimmer sweep animation */
 @keyframes shimmer {
-  0%,100% { opacity:0.5; } 50% { opacity:1; }
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
 }
+
+.skel-img {
+  height: 150px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+.skel-body {
+  padding: 12px 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Every skel-line is purely visual — NO text inside */
+.skel-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+.skel-line.short { width: 55%; }
+
+/* stagger shimmer phase per card */
+.skeleton:nth-child(2) .skel-img,
+.skeleton:nth-child(2) .skel-line { animation-delay: 0.15s; }
+.skeleton:nth-child(3) .skel-img,
+.skeleton:nth-child(3) .skel-line { animation-delay: 0.30s; }
+.skeleton:nth-child(4) .skel-img,
+.skeleton:nth-child(4) .skel-line { animation-delay: 0.45s; }
+.skeleton:nth-child(5) .skel-img,
+.skeleton:nth-child(5) .skel-line { animation-delay: 0.60s; }
+.skeleton:nth-child(6) .skel-img,
+.skeleton:nth-child(6) .skel-line { animation-delay: 0.75s; }
+.skeleton:nth-child(7) .skel-img,
+.skeleton:nth-child(7) .skel-line { animation-delay: 0.90s; }
+.skeleton:nth-child(8) .skel-img,
+.skeleton:nth-child(8) .skel-line { animation-delay: 1.05s; }
 
 /* ── TOAST ── */
 .toast {
@@ -270,15 +321,15 @@ footer {
 </div>
 
 <div class="grid-wrap" id="productContainer">
-  <!-- skeletons -->
-  ${[...Array(8)].map(()=>`
-  <div class="skeleton">
-    <div class="skel-img"></div>
-    <div class="skel-body">
-      <div class="skel-line"></div>
-      <div class="skel-line short"></div>
-    </div>
-  </div>`).join('')}
+  <!-- Pure visual skeletons — no text nodes inside -->
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -347,10 +398,10 @@ function renderCards(products) {
       showToast(`${p.b} added to cart 🛒`);
     });
 
-   card.addEventListener("click", () => {
-  sessionStorage.setItem("selectedProduct", JSON.stringify(p));
-  window.location.href = `final.html`;
-});
+    card.addEventListener("click", () => {
+      sessionStorage.setItem("selectedProduct", JSON.stringify(p));
+      window.location.href = `final.html`;
+    });
 
     container.appendChild(card);
   });
