@@ -233,7 +233,6 @@ body {
   color: #fff;
 }
 .modal-submit.danger-submit:hover { box-shadow:0 10px 28px rgba(255,77,109,0.35); }
-
 /* ── MENU BUTTON ── */
 .menu-btn {
   position: fixed;
@@ -516,6 +515,7 @@ onValue(ref(db,"submit"),snapshot=>{
 
 /* ── Globals ── */
 window.k=function(id){
+  if(!confirm("Are you sure you want to delete this item?")) return;
   remove(ref(db,"submit/"+id));
   list.del(id); list.render();
 };
