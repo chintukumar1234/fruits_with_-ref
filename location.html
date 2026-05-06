@@ -34,7 +34,7 @@ body {
 
 /* ── MAP ── */
 #map {
-  height: 100vh;
+  height: 90vh;
   width: 100%;
   transition: margin-left 0.45s var(--ease);
 }
@@ -56,6 +56,7 @@ body {
 }
 .sidenav.open { width: var(--sidebar-w); }
 
+/* Sidebar header */
 .sidebar-header {
   padding: 24px 20px 16px;
   border-bottom: 1px solid var(--border);
@@ -85,6 +86,7 @@ body {
   50% { opacity:0.5; transform:scale(0.8); }
 }
 
+/* Sidebar action buttons */
 .sidebar-actions {
   display: flex;
   gap: 8px;
@@ -111,6 +113,7 @@ body {
 .action-btn.danger:hover { border-color: var(--danger); background: rgba(255,77,109,0.06); }
 .action-btn svg { flex-shrink:0; }
 
+/* Delivery list */
 .sidebar-list-label {
   padding: 14px 18px 8px;
   font-size: 10px;
@@ -133,6 +136,7 @@ body {
 #display_items::-webkit-scrollbar-track { background: transparent; }
 #display_items::-webkit-scrollbar-thumb { background: var(--border); border-radius:4px; }
 
+/* Delivery item card */
 .delivery-card {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -162,108 +166,6 @@ body {
 }
 .icon-btn.route-btn:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(0,255,136,0.06); }
 .icon-btn.del-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(255,77,109,0.06); }
-
-/* ── TOAST NOTIFICATION ── */
-#toast {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 20px;
-  border-radius: 14px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-  white-space: nowrap;
-  max-width: 90vw;
-}
-#toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-#toast.success { border-color: rgba(0,255,136,0.3); }
-#toast.success .toast-icon { color: var(--accent2); }
-#toast.error { border-color: rgba(255,77,109,0.3); }
-#toast.error .toast-icon { color: var(--danger); }
-#toast.info { border-color: rgba(0,212,255,0.3); }
-#toast.info .toast-icon { color: var(--accent); }
-.toast-icon { flex-shrink: 0; }
-
-/* ── CONFIRM DIALOG ── */
-.confirm-overlay {
-  position: fixed; inset: 0; z-index: 3000;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center;
-}
-.confirm-overlay.open { display: flex; }
-.confirm-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 28px;
-  width: 320px;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
-  animation: modal-in 0.25s var(--ease);
-  text-align: center;
-}
-.confirm-icon {
-  width: 52px; height: 52px; border-radius: 16px;
-  background: rgba(255,77,109,0.1);
-  border: 1px solid rgba(255,77,109,0.25);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-  color: var(--danger);
-}
-.confirm-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--danger);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-.confirm-text {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-.confirm-name {
-  color: var(--text);
-  font-weight: 600;
-}
-.confirm-btns {
-  display: flex;
-  gap: 10px;
-}
-.confirm-btn {
-  flex: 1; height: 42px; border-radius: 11px; border: 1px solid var(--border);
-  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: 0.2s;
-}
-.confirm-btn.cancel {
-  background: var(--surface2);
-  color: var(--text);
-}
-.confirm-btn.cancel:hover { border-color: var(--muted); }
-.confirm-btn.confirm-delete {
-  background: linear-gradient(135deg, var(--danger), #cc2244);
-  color: #fff;
-  border-color: transparent;
-}
-.confirm-btn.confirm-delete:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,77,109,0.35); }
 
 /* ── MODAL OVERLAY ── */
 .modal-overlay {
@@ -331,7 +233,6 @@ body {
   color: #fff;
 }
 .modal-submit.danger-submit:hover { box-shadow:0 10px 28px rgba(255,77,109,0.35); }
-
 /* ── MENU BUTTON ── */
 .menu-btn {
   position: fixed;
@@ -354,50 +255,107 @@ body {
 
 /* ── MAP CUSTOM ── */
 .leaflet-container { background: #0d1117 !important; }
-
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
-  :root { --sidebar-w: 85%; }
-  body { overflow: auto; }
-  .sidenav { width: 0; }
-  .sidenav.open { width: var(--sidebar-w); }
-  #map { margin-left: 0 !important; }
-  .action-btn { height: 44px; font-size: 14px; }
-  .icon-btn { width: 36px; height: 36px; }
-  .modal { width: 90%; padding: 20px; }
-  .confirm-box { width: 90%; }
-  .menu-btn { top: 12px; left: 12px; width: 42px; height: 42px; }
-  .delivery-card { padding: 14px; }
-  .delivery-name { font-size: 15px; }
-  #toast { bottom: 20px; font-size: 13px; }
+
+  :root {
+    --sidebar-w: 85%; /* sidebar becomes % instead of fixed */
+  }
+
+  body {
+    overflow: auto; /* allow scrolling on mobile */
+  }
+
+  /* Sidebar full overlay style */
+  .sidenav {
+    width: 0;
+  }
+
+  .sidenav.open {
+    width: var(--sidebar-w);
+  }
+
+  /* Map should NOT shift on mobile */
+  #map {
+    margin-left: 0 !important;
+  }
+
+  /* Bigger touch targets */
+  .action-btn {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Modal scaling */
+  .modal {
+    width: 90%;
+    padding: 20px;
+  }
+
+  /* Menu button spacing */
+  .menu-btn {
+    top: 12px;
+    left: 12px;
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Delivery cards spacing */
+  .delivery-card {
+    padding: 14px;
+  }
+
+  .delivery-name {
+    font-size: 15px;
+  }
+}
+.confirm-box{
+    position: fixed; inset:0; z-index: 3000;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    display: none; align-items:center; justify-content:center;
+}
+
+.confirm-content{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    width: 320px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+}
+
+.confirm-content p{
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--accent);
+}
+
+.confirm-content button{
+    width: 100px; height: 36px; border-radius: 8px; border: none;
+    font-family:'Outfit',sans-serif; font-size:14px; font-weight:600;
+    cursor: pointer;
+}
+
+#yesBtn{
+    background:linear-gradient(123deg,rgba(0, 0, 0, 0.445),rgb(0, 255, 13),black);
+    color: #000;
+}
+
+#noBtn{
+    background: var(--danger);
+    color: #fff;
 }
 </style>
 </head>
 <body>
-
-<!-- Toast Notification -->
-<div id="toast">
-  <span class="toast-icon" id="toastIcon"></span>
-  <span id="toastMsg"></span>
-</div>
-
-<!-- Confirm Delete Dialog -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <div class="confirm-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-        <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-      </svg>
-    </div>
-    <div class="confirm-title">Delete Point</div>
-    <div class="confirm-text">Are you sure you want to remove <span class="confirm-name" id="confirmName">"this item"</span> from the map?<br>This action cannot be undone.</div>
-    <div class="confirm-btns">
-      <button class="confirm-btn cancel" id="confirmCancelBtn">Cancel</button>
-      <button class="confirm-btn confirm-delete" id="confirmDeleteBtn">Delete</button>
-    </div>
-  </div>
-</div>
 
 <!-- Menu toggle -->
 <button class="menu-btn" id="menuBtn" onclick="openNav()">
@@ -423,6 +381,14 @@ body {
     </button>
   </div>
   <div class="sidebar-list-label">Delivery Points</div>
+  <div id="confirmBox" class="confirm-box">
+  <div class="confirm-content">
+    <p id="confirmText">Are you sure?</p>
+
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">Cancel</button>
+  </div>
+</div>
   <div id="display_items"></div>
 </div>
 
@@ -501,64 +467,6 @@ let routingControl = null;
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-/* ── Toast System ── */
-let toastTimer = null;
-window.showToast = function(message, type = 'info') {
-  const toast = document.getElementById('toast');
-  const msg = document.getElementById('toastMsg');
-  const icon = document.getElementById('toastIcon');
-
-  const icons = {
-    success: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>`,
-    error:   `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
-    info:    `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-  };
-
-  toast.className = '';
-  toast.classList.add(type);
-  msg.textContent = message;
-  icon.innerHTML = icons[type] || icons.info;
-
-  if (toastTimer) clearTimeout(toastTimer);
-  // Force reflow to restart animation
-  void toast.offsetWidth;
-  toast.classList.add('show');
-
-  toastTimer = setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-};
-
-/* ── Confirm Dialog ── */
-window.showConfirm = function(itemName, onConfirm) {
-  const overlay = document.getElementById('confirmOverlay');
-  document.getElementById('confirmName').textContent = `"${itemName}"`;
-  overlay.classList.add('open');
-
-  const deleteBtn = document.getElementById('confirmDeleteBtn');
-  const cancelBtn = document.getElementById('confirmCancelBtn');
-
-  // Clone to remove old listeners
-  const newDeleteBtn = deleteBtn.cloneNode(true);
-  const newCancelBtn = cancelBtn.cloneNode(true);
-  deleteBtn.parentNode.replaceChild(newDeleteBtn, deleteBtn);
-  cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-
-  newDeleteBtn.addEventListener('click', () => {
-    overlay.classList.remove('open');
-    onConfirm();
-  });
-  newCancelBtn.addEventListener('click', () => {
-    overlay.classList.remove('open');
-    showToast('Delete cancelled', 'info');
-  });
-};
-
-// Close confirm on backdrop
-document.getElementById('confirmOverlay').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.remove('open');
-});
-
 /* ── Linked List ── */
 class Node { constructor(d,id,lat,lng){this.data=d;this.id=id;this.lat=lat;this.lng=lng;this.link=null;} }
 class LinkedList {
@@ -575,22 +483,10 @@ class LinkedList {
     while(c.link&&c.link.id!==id)c=c.link;
     if(c.link)c.link=c.link.link;
   }
-  findById(id) {
-    let c = this.head;
-    while (c) { if (c.id === id) return c; c = c.link; }
-    return null;
-  }
   render(){
     const el=document.getElementById("display_items");
     el.innerHTML="";
     let c=this.head;
-    if (!c) {
-      el.innerHTML = `<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.3;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        No delivery points yet
-      </div>`;
-      return;
-    }
     while(c){
       const card=document.createElement("div");
       card.className="delivery-card";
@@ -598,12 +494,12 @@ class LinkedList {
         <div class="delivery-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
-        <div class="delivery-name" title="${c.data}">${c.data}</div>
+        <div class="delivery-name">${c.data}</div>
         <div class="card-actions">
-          <button class="icon-btn route-btn" title="Show Route" onclick="window.route(${c.lat},${c.lng})">
+          <button class="icon-btn route-btn" title="Route" onclick="window.route(${c.lat},${c.lng})">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 8 14 12"/><path d="M2 12h16"/><path d="M2 6h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2"/></svg>
           </button>
-          <button class="icon-btn del-btn" title="Delete" onclick="window.k('${c.id}','${c.data.replace(/'/g,"\\'")}')">
+          <button class="icon-btn del-btn" title="Delete" onclick="window.k('${c.id}')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           </button>
         </div>`;
@@ -664,24 +560,31 @@ onValue(ref(db,"submit"),snapshot=>{
   list.render();
 });
 
-/* ── Delete from card (by Firebase ID) ── */
-window.k = function(id, name) {
-  showConfirm(name, () => {
-    remove(ref(db, "submit/" + id))
-      .then(() => {
+/* ── Globals ── */
+window.k = function(id){
+
+    const box = document.getElementById("confirmBox");
+
+    box.style.display = "flex";
+
+    document.getElementById("yesBtn").onclick = function(){
+
+        remove(ref(db,"submit/"+id));
+
         list.del(id);
         list.render();
-        showToast(`"${name}" deleted successfully`, 'success');
-      })
-      .catch(err => {
-        console.error(err);
-        showToast('Failed to delete. Try again.', 'error');
-      });
-  });
+
+        box.style.display = "none";
+    };
+
+    document.getElementById("noBtn").onclick = function(){
+
+        box.style.display = "none";
+    };
 };
 
 window.route=function(tLat,tLng){
-  if(!userLat||!userLng){ showToast("Location not ready yet!", 'error'); return; }
+  if(!userLat||!userLng){ alert("Location not ready yet!"); return; }
   if(routingControl) map.removeControl(routingControl);
   routingControl=L.Routing.control({
     waypoints:[L.latLng(userLat,userLng),L.latLng(tLat,tLng)],
@@ -691,7 +594,6 @@ window.route=function(tLat,tLng){
     lineOptions:{styles:[{color:'#00d4ff',opacity:0.9,weight:4}]}
   }).addTo(map);
   map.fitBounds(L.latLngBounds([[userLat,userLng],[tLat,tLng]]),{padding:[60,60]});
-  showToast('Route calculated!', 'success');
 };
 
 /* ── Upload ── */
@@ -714,68 +616,40 @@ window.chintu=function(){
   reader.onload=function(){
     const data={a:reader.result,b:name,c:amt};
     const r=push(ref(db,'user'));
-    set(r,data)
-      .then(()=>{
-        document.getElementById("images").value="";
-        document.getElementById("names").value="";
-        document.getElementById("numbers").value="";
-        msg.style.color="var(--accent2)";
-        msg.textContent="Item uploaded!";
-        setTimeout(()=>{ msg.textContent=""; closeModal('uploadModal'); }, 1200);
-        showToast(`"${name}" uploaded successfully`, 'success');
-      })
-      .catch(e=>{
-        console.error(e);
-        showToast('Upload failed. Try again.', 'error');
-      });
+    set(r,data).then(()=>console.log("Saved")).catch(e=>console.error(e));
     items.add(data);
+    document.getElementById("images").value="";
+    document.getElementById("names").value="";
+    document.getElementById("numbers").value="";
+    msg.style.color="var(--accent2)";
+    msg.textContent="Item uploaded!";
+    setTimeout(()=>{msg.textContent="";closeModal('uploadModal');},1200);
   };
   reader.readAsDataURL(file);
 };
 
-/* ── Delete by name + amount (from modal) ── */
 window.delete_btn=function(){
   const nam=document.getElementById("nam").value.trim();
   const amu=document.getElementById("amu").value.trim();
   const msg=document.getElementById("delete_msg");
   if(!nam){msg.textContent="Please enter a name";return;}
   if(!amu){msg.textContent="Please enter an amount";return;}
-
   onValue(ref(db,"user"),snapshot=>{
     let found=false;
-    let foundKey=null;
-
     snapshot.forEach(child=>{
       const d=child.val();
-      if(d.b===nam && String(d.c)===String(amu)){
+      if(d.b===nam&&d.c===amu){
         found=true;
-        foundKey=child.key;
-      }
-    });
-
-    if(!found){
-      msg.style.color="var(--danger)";
-      msg.textContent="❌ Item not found. Check name & amount.";
-      showToast('Item not found', 'error');
-      return;
-    }
-
-    // Show confirm dialog before deleting
-    closeModal('deleteModal');
-    showConfirm(nam, () => {
-      remove(ref(db,"user/"+foundKey))
-        .then(()=>{
+        remove(ref(db,"user/"+child.key)).then(()=>{
           document.getElementById("nam").value="";
           document.getElementById("amu").value="";
           msg.style.color="var(--accent2)";
           msg.textContent="Deleted successfully";
-          showToast(`"${nam}" deleted successfully`, 'success');
-        })
-        .catch(err=>{
-          console.error(err);
-          showToast('Delete failed. Try again.', 'error');
+          setTimeout(()=>{msg.textContent="";closeModal('deleteModal');},1200);
         });
+      }
     });
+    if(!found){msg.textContent="Item not found";}
   },{onlyOnce:true});
 };
 
@@ -786,10 +660,7 @@ window.openNav=function(){
   const isOpen=nav.classList.contains("open");
   nav.classList.toggle("open");
   btn.classList.toggle("open");
-  // Only shift map on desktop
-  if(window.innerWidth > 768) {
-    document.getElementById("map").style.marginLeft=isOpen?"0":"var(--sidebar-w)";
-  }
+  document.getElementById("map").style.marginLeft=isOpen?"0":("var(--sidebar-w)");
 };
 
 window.showUpload=function(){ document.getElementById("uploadModal").classList.add("open"); };
