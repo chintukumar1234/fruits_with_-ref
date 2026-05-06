@@ -34,7 +34,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ── BACKGROUND ── */
 .bg-glow {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
@@ -43,7 +42,6 @@ body {
     radial-gradient(ellipse 40% 40% at 70% 10%, rgba(251,191,36,0.06) 0%, transparent 50%);
 }
 
-/* ── CARD ── */
 .card {
   position: relative; z-index: 1;
   width: 100%; max-width: 460px;
@@ -71,7 +69,6 @@ body {
   .meta-col, .divider, .qty-row, .form-col { grid-column:2; }
 }
 
-/* ── IMAGE COLUMN ── */
 .img-col {
   position: relative;
   height: 260px;
@@ -85,7 +82,6 @@ body {
 }
 .img-col:hover img { transform: scale(1.06); }
 
-/* Gradient overlay on image */
 .img-col::after {
   content:'';
   position:absolute; inset:0;
@@ -93,7 +89,6 @@ body {
   pointer-events:none;
 }
 
-/* Badge on image */
 .img-badge {
   position: absolute; bottom:16px; left:16px; z-index:1;
   background: rgba(6,15,10,0.7);
@@ -108,7 +103,6 @@ body {
 .badge-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
 
-/* ── META ── */
 .meta-col { padding: 28px 28px 0; }
 
 .product-label {
@@ -141,7 +135,6 @@ body {
 }
 .price-per { font-size:12px; color:var(--muted); margin-bottom:2px; align-self:flex-end; }
 
-/* Trust strip */
 .trust-strip {
   display: flex; gap: 16px; margin-top: 18px;
   flex-wrap: wrap;
@@ -152,10 +145,8 @@ body {
 }
 .trust-item svg { color: var(--green2); flex-shrink:0; }
 
-/* ── DIVIDER ── */
 .divider { height:1px; background:var(--border); margin: 20px 28px 0; }
 
-/* ── QUANTITY ── */
 .qty-row {
   display: flex; align-items:center; justify-content:space-between;
   padding: 16px 28px;
@@ -181,7 +172,6 @@ body {
   font-size:20px; font-weight:700; color:var(--text);
 }
 
-/* ── FORM ── */
 .form-col { padding: 0 28px 28px; }
 
 .field {
@@ -213,11 +203,26 @@ body {
 }
 .field input.error { border-color:rgba(248,113,113,0.5); box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
 
-/* Msg */
+/* Auto-placement info badge */
+.auto-badge {
+  display: none;
+  font-size: 11px;
+  color: var(--green2);
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-top: -6px;
+  margin-bottom: 10px;
+  align-items: center;
+  gap: 6px;
+}
+.auto-badge.show { display: flex; }
+.auto-badge svg { flex-shrink: 0; }
+
 .msg { font-size:12px; font-weight:500; color:var(--danger); min-height:16px; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
 .msg.success { color:var(--green2); }
 
-/* ── ORDER BTN ── */
 .order-btn {
   width:100%; height:52px; border:none; border-radius:16px;
   background:linear-gradient(135deg, #22c55e, #16a34a);
@@ -238,7 +243,6 @@ body {
 .order-btn:active:not(:disabled) { transform:translateY(0); }
 .order-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-/* Spinner */
 .spinner {
   width:16px; height:16px; border-radius:50%;
   border:2px solid rgba(255,255,255,0.3);
@@ -247,7 +251,6 @@ body {
 }
 @keyframes spin { to{transform:rotate(360deg)} }
 
-/* Steps indicator */
 .step-indicator {
   display: flex; align-items:center; gap:6px;
   font-size:11px; color:var(--muted); margin-top:12px;
@@ -277,13 +280,11 @@ body {
 <div class="bg-glow"></div>
 
 <div class="card">
-  <!-- IMAGE -->
   <div class="img-col">
     <img id="img" src="" alt="Product"/>
     <div class="img-badge"><div class="badge-dot"></div>Fresh Today</div>
   </div>
 
-  <!-- META -->
   <div class="meta-col">
     <div class="product-label">Premium Pick</div>
     <h2 class="product-name" id="productName">Loading…</h2>
@@ -310,7 +311,6 @@ body {
 
   <div class="divider"></div>
 
-  <!-- QUANTITY -->
   <div class="qty-row">
     <span class="qty-label">Quantity</span>
     <div class="qty-control">
@@ -320,7 +320,6 @@ body {
     </div>
   </div>
 
-  <!-- FORM -->
   <div class="form-col">
 
     <div class="field">
@@ -336,9 +335,15 @@ body {
     </div>
 
     <div class="field">
-      <label class="field-label" for="referralCode">Referral code</label>
+      <label class="field-label" for="referralCode">Referral code <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional – leave blank for auto-placement)</span></label>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1.5 15h-3m3-4h-3"/></svg>
-      <input type="text" id="referralCode" placeholder="Optional referral code" autocomplete="off"/>
+      <input type="text" id="referralCode" placeholder="Optional – auto-placed if empty" autocomplete="off"/>
+    </div>
+
+    <!-- shown when no referral given and a leaf node is found -->
+    <div class="auto-badge" id="autoBadge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="autoBadgeText">You'll be auto-placed in the network tree.</span>
     </div>
 
     <div class="msg" id="messages"></div>
@@ -360,8 +365,8 @@ body {
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, set ,get} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { initializeApp }         from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, push, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
@@ -374,26 +379,27 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db  = getDatabase(app);
 
-const p = JSON.parse(sessionStorage.getItem("selectedProduct"));
-let qty = 1;
-const name= p ? p.b : "Unknown Product";
-const price = p ? p.c : 0;
-const img = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
+/* ── Product from session ── */
+const p     = JSON.parse(sessionStorage.getItem("selectedProduct"));
+let   qty   = 1;
+const pName  = p ? p.b : "Unknown Product";
+const pPrice = p ? p.c : 0;
+const pImg   = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
 
+document.getElementById("img").src           = pImg;
+document.getElementById("productName").textContent = pName;
 
-document.getElementById("img").src = img;
-document.getElementById("productName").textContent = name;
-
+/* ── Price / qty ── */
 function updatePrice() {
-  document.getElementById("price").textContent = (price * qty).toLocaleString('en-IN');
-  document.getElementById("qty").textContent = qty;
+  document.getElementById("price").textContent = (pPrice * qty).toLocaleString('en-IN');
+  document.getElementById("qty").textContent   = qty;
 }
-
 document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
-document.getElementById("decrease").addEventListener("click", () => { if(qty > 1){ qty--; updatePrice(); } });
+document.getElementById("decrease").addEventListener("click", () => { if(qty>1){ qty--; updatePrice(); } });
 
+/* ── Step indicator ── */
 function setStep(n) {
   [1,2,3].forEach(i => {
     const el = document.getElementById("s"+i);
@@ -403,94 +409,153 @@ function setStep(n) {
   });
 }
 
+/* ── Messages ── */
 function showMsg(text, isSuccess=false) {
   const el = document.getElementById("messages");
   el.textContent = text;
   el.className = "msg" + (isSuccess ? " success" : "");
 }
 
-function generatePassword() {
-      return Math.random().toString(36).substr(2, 6);
-    }
-     // Check if referral code exists and has available positions (left/right)
-    // If referral code has no left member, new member goes to left
-    // If referral code has left but no right, new member goes to right
-    // If both left and right are filled, show error message
-    async function checkReferralCode(code) {
-      const snapshot = await get(ref(db, "submitcopy"));
-      const users = snapshot.val() || {};
-      for (const key in users) {
-        if (users[key].d === code) {
-          if (!users[key].left) {
-            return { position: "left", parentKey: key };
-          } else if (!users[key].right) {
-            return { position: "right", parentKey: key };
-          } else {
-            return { error: "Referral code already has 2 members." };
-          }
-        }
-      }
-      return { error: "Invalid referral code." };
-    }
+/* ── Helpers ── */
+function generateCode() {
+  return Math.random().toString(36).substr(2, 6).toUpperCase();
+}
 
-    // Update parent's record with child's referral code
-    async function updateParentReferral(parentCode, childCode, position) {
-      const snapshot = await get(ref(db, "submit"));
-      const users = snapshot.val() || {};
-      for (const key in users) {
-        if (users[key].d === parentCode) {
-          // Update parent's left or right with child's referral code
-          const updates = {};
-          updates[position] = childCode;
-          await set(ref(db, "submit/" + key), { ...users[key], ...updates });
-          break;
-        }
-      }
+/**
+ * Load ALL users from "submit" once.
+ * Returns { key: userData } object or {}.
+ */
+async function loadAllUsers() {
+  const snap = await get(ref(db, "submit"));
+  return snap.val() || {};
+}
+
+/**
+ * Check a manual referral code.
+ * Returns { position, parentKey, parentCode } or { error }
+ */
+async function checkReferralCode(code) {
+  const users = await loadAllUsers();
+  for (const key in users) {
+    if (users[key].d === code) {
+      if (!users[key].left)       return { position:"left",  parentKey:key, parentCode:code };
+      else if (!users[key].right) return { position:"right", parentKey:key, parentCode:code };
+      else                        return { error:"Referral code already has 2 members." };
     }
+  }
+  return { error:"Invalid referral code." };
+}
 
-document.getElementById("orderNow").addEventListener("click", function() {
-  const referral = document.getElementById("referralCode").value.trim();
-  const customer = document.getElementById("customerName").value.trim();
-  const phone    = document.getElementById("phone").value.trim();
-  const btn      = this;
+/**
+ * BFS over "submit" to find the first leaf node
+ * (a user who has no left OR no right child).
+ * Returns { position, parentKey, parentCode } or null if tree is empty.
+ */
+async function findLeafNode() {
+  const users = await loadAllUsers();
+  const keys  = Object.keys(users);
+  if (keys.length === 0) return null; // very first user ever – no parent
 
-  document.getElementById("customerName").classList.remove("error");
-  document.getElementById("phone").classList.remove("error");
-  document.getElementById("referralCode").classList.remove("error");
+  /* Build a map: referral_code → firebase key */
+  const codeToKey = {};
+  keys.forEach(k => { if (users[k].d) codeToKey[users[k].d] = k; });
+
+  /* Find root(s): users with no parent field */
+  const roots = keys.filter(k => !users[k].parent);
+
+  /* BFS queue seeded with roots */
+  const queue = [...roots];
+  while (queue.length > 0) {
+    const key  = queue.shift();
+    const node = users[key];
+
+    if (!node.left)  return { position:"left",  parentKey:key, parentCode:node.d };
+    if (!node.right) return { position:"right", parentKey:key, parentCode:node.d };
+
+    /* Both slots filled – enqueue children */
+    const leftKey  = codeToKey[node.left];
+    const rightKey = codeToKey[node.right];
+    if (leftKey)  queue.push(leftKey);
+    if (rightKey) queue.push(rightKey);
+  }
+  return null; // every node full (shouldn't happen in a growing tree)
+}
+
+/**
+ * After placing a child, update the parent node in Firebase:
+ *  • set parent.left / parent.right to the child's referral code
+ *  • increment parent.points by 1
+ */
+async function updateParentNode(parentKey, position, childCode) {
+  const snap     = await get(ref(db, `submit/${parentKey}`));
+  const existing = snap.val() || {};
+  const newPoints = (existing.points || 0) + 1;
+
+  await update(ref(db, `submit/${parentKey}`), {
+    [position]: childCode,
+    points: newPoints
+  });
+}
+
+/* ── Order button ── */
+document.getElementById("orderNow").addEventListener("click", async function() {
+  const referral  = document.getElementById("referralCode").value.trim();
+  const customer  = document.getElementById("customerName").value.trim();
+  const phone     = document.getElementById("phone").value.trim();
+
+  /* Reset errors */
+  ["customerName","phone","referralCode"].forEach(id =>
+    document.getElementById(id).classList.remove("error"));
   showMsg("");
+  document.getElementById("autoBadge").classList.remove("show");
 
+  /* Validate */
   if (!customer) {
     document.getElementById("customerName").classList.add("error");
     showMsg("Please enter your full name.");
     return;
   }
-  
   if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
     document.getElementById("phone").classList.add("error");
     showMsg("Enter a valid phone number.");
     return;
   }
-
   if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
     document.getElementById("referralCode").classList.add("error");
     showMsg("Referral code must be 6 alphanumeric characters.");
     return;
-  }else if(referral) {
-    checkReferralCode(referral).then(result => {
-      if(result.error) {
-        document.getElementById("referralCode").classList.add("error");
-        showMsg(result.error);
-      } else {
-        // Store referral position (left/right) if provided
-        placeOrder(customer, phone, referral, result.position);
-      }
-    });
-  } else {
-    placeOrder(customer, phone, null, null);
   }
-  
-  // Place order function with geolocation
-  function placeOrder(customer, phone, referral, position = null) {
+
+  /* ── Resolve placement ── */
+  let placement = null; // { position, parentKey, parentCode } or null
+
+  if (referral) {
+    /* Manual referral code provided */
+    const result = await checkReferralCode(referral);
+    if (result.error) {
+      document.getElementById("referralCode").classList.add("error");
+      showMsg(result.error);
+      return;
+    }
+    placement = result;
+  } else {
+    /* No referral – auto BFS leaf placement */
+    const leaf = await findLeafNode();
+    if (leaf) {
+      placement = leaf;
+      document.getElementById("autoBadgeText").textContent =
+        `Auto-placed under node ${leaf.parentCode} (${leaf.position} slot).`;
+      document.getElementById("autoBadge").classList.add("show");
+    }
+    // leaf === null → very first member, no parent needed
+  }
+
+  /* ── Proceed to location ── */
+  placeOrder(customer, phone, placement);
+});
+
+/* ── Place order with geolocation ── */
+function placeOrder(customer, phone, placement) {
   const btn = document.getElementById("orderNow");
   btn.disabled = true;
   btn.innerHTML = `<div class="spinner"></div> Getting location…`;
@@ -501,60 +566,79 @@ document.getElementById("orderNow").addEventListener("click", function() {
   let placed = false;
 
   const watchId = navigator.geolocation.watchPosition(pos => {
-    if(pos.coords.accuracy < bestAccuracy) {
+    if (pos.coords.accuracy < bestAccuracy) {
       bestAccuracy = pos.coords.accuracy;
       bestPosition = pos;
     }
-    if(pos.coords.accuracy < 30 && !placed) {
+    if (pos.coords.accuracy < 30 && !placed) {
       placed = true;
       navigator.geolocation.clearWatch(watchId);
       btn.innerHTML = `<div class="spinner"></div> Saving order…`;
       setStep(3);
-      const referral_code = generatePassword();
+
+      const referral_code = generateCode();
       const lat = bestPosition.coords.latitude;
       const lng = bestPosition.coords.longitude;
 
-      push(ref(db,"submit")).then(r => {
-        const orderData = {a:customer, b:phone, c1:lat, c2:lng, d:referral_code,e:name};
-        // If referral was used, link parent to child
-        if (referral && position) {
-          orderData.parent = referral; // Store parent's referral code
-          orderData.position = position; // Store position (left/right)
-          // Update parent's record to link to this child
-          updateParentReferral(referral, referral_code, position);
+      const orderData = {
+        a: customer,
+        b: phone,
+        c1: lat,
+        c2: lng,
+        d: referral_code,
+        e: pName,
+        points: 0  // every new member starts with 0 points
+      };
+
+      if (placement) {
+        orderData.parent   = placement.parentCode;
+        orderData.position = placement.position;
+      }
+
+      push(ref(db, "submit")).then(async r => {
+        try {
+          await set(r, orderData);
+
+          /* Update parent: link child + increment points */
+          if (placement) {
+            await updateParentNode(placement.parentKey, placement.position, referral_code);
+          }
+
+          showMsg("Order placed! Redirecting to WhatsApp…", true);
+          btn.innerHTML = `✓ Done`;
+
+          const msg =
+            `🛒 *New Order*\n` +
+            `👤 Name: ${customer}\n` +
+            `📞 Phone: ${phone}\n` +
+            `🧩 My Referral: ${referral_code}\n` +
+            `🔗 Used Referral: ${placement ? placement.parentCode : "None (root)"}\n` +
+            `📍 Position: ${placement ? placement.position : "Root"}\n` +
+            `🍹 Product: ${pName}\n` +
+            `🔢 Qty: ${qty}\n` +
+            `💰 Total: ₹${pPrice * qty}`;
+
+          setTimeout(() => {
+            window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
+          }, 800);
+
+        } catch(e) {
+          showMsg("Failed to save. Please try again.");
+          btn.disabled = false;
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+          placed = false;
+          setStep(1);
         }
-        set(r, orderData)
-          .then(() => {
-            showMsg("Order placed! Redirecting to WhatsApp…", true);
-            btn.innerHTML = `✓ Done`;
-            const msg =
-              `🛒 *New Order*\n` +
-              `👤 Name: ${customer}\n` +
-              `📞 Phone: ${phone}\n` +
-              `🧩 Referral: ${referral_code || "None"}\n` +
-              `🍹 Product: ${name}\n` +
-              `🔢 Qty: ${qty}\n` +
-              `💰 Total: ₹${price*qty}`;
-            setTimeout(() => {
-              window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
-            }, 800);
-          })
-          .catch(() => {
-            showMsg("Failed to save. Please try again.");
-            btn.disabled=false;
-            btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
-            placed=false; setStep(1);
-          });
       });
     }
   }, err => {
     showMsg("Location error: " + err.message);
-    btn.disabled=false;
-    btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+    const btn2 = document.getElementById("orderNow");
+    btn2.disabled = false;
+    btn2.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
     setStep(1);
-  }, {enableHighAccuracy:true, timeout:30000, maximumAge:0});
-  }
-  });
+  }, { enableHighAccuracy:true, timeout:30000, maximumAge:0 });
+}
 
 updatePrice();
 </script>
