@@ -45,16 +45,12 @@ body{
   color:var(--text-0);
   min-height:100vh;
   overflow-x:hidden;
-  cursor:default;
 }
 body::before{
   content:'';
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  opacity:0.025;
-  pointer-events:none;
-  z-index:9999;
+  opacity:0.025;pointer-events:none;z-index:9999;
 }
 .grid-bg{
   position:fixed;inset:0;
@@ -103,6 +99,8 @@ header{
 }
 .nav-btn:hover{background:var(--border);color:var(--text-0)}
 .nav-btn.active{background:var(--lime-dim);border-color:rgba(200,255,87,0.3);color:var(--lime)}
+.nav-btn.danger{color:var(--rose)}
+.nav-btn.danger:hover{background:var(--rose-dim);border-color:rgba(255,107,138,0.3);color:var(--rose)}
 .header-right{display:flex;align-items:center;gap:0.75rem;margin-left:auto}
 .live-pulse{
   display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.85rem;
@@ -175,7 +173,6 @@ header{
 .stat-icon.violet{background:var(--violet-dim);color:var(--violet)}
 .stat-trend{font-size:0.7rem;font-weight:600;display:flex;align-items:center;gap:0.2rem;padding:0.2rem 0.5rem;border-radius:4px}
 .stat-trend.up{background:rgba(200,255,87,0.1);color:var(--lime)}
-.stat-trend.down{background:rgba(255,107,138,0.1);color:var(--rose)}
 .stat-value{font-family:var(--font-head);font-size:1.8rem;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:0.25rem}
 .stat-label{font-size:0.75rem;color:var(--text-1);font-weight:400}
 
@@ -196,7 +193,7 @@ header{
   background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
   padding:0;position:relative;overflow:hidden;
   transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  cursor:default;animation:cardReveal 0.5s both;
+  animation:cardReveal 0.5s both;
 }
 @keyframes cardReveal{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .card:hover{border-color:var(--border-bright);transform:translateY(-4px) scale(1.01);box-shadow:0 20px 50px rgba(0,0,0,0.5),0 0 0 1px rgba(200,255,87,0.08)}
@@ -239,7 +236,7 @@ header{
 .branch.filled{border-style:solid;border-color:rgba(200,255,87,0.12);background:rgba(200,255,87,0.04)}
 .branch.filled.gold{border-color:rgba(255,181,71,0.12);background:rgba(255,181,71,0.04)}
 .branch-label{font-size:0.65rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.3rem;font-weight:500}
-.branch-name{font-size:0.78rem;font-weight:600;color:var(--lime);font-family:var(--font-mono)}
+.branch-name{font-size:0.78rem;font-weight:600;color:var(--lime);font-family:var(--font-mono);word-break:break-all}
 .branch-name.empty{color:var(--text-2);font-weight:400;font-style:italic}
 .branch-name.gold{color:var(--amber)}
 .progress-wrap{margin-bottom:0.85rem}
@@ -270,7 +267,6 @@ header{
 .detail-panel{background:var(--card);border:1px solid var(--border-bright);border-radius:24px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-deep);animation:panelIn 0.35s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes panelIn{from{opacity:0;transform:scale(0.9) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .detail-header{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:0;background:var(--card);z-index:1}
-.detail-avatar{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1.3rem;font-weight:700}
 .detail-name{font-family:var(--font-head);font-size:1.2rem;font-weight:700;letter-spacing:-0.3px}
 .detail-sub{font-size:0.78rem;color:var(--text-1);margin-top:3px}
 .detail-close{margin-left:auto;width:34px;height:34px;border-radius:8px;background:var(--panel);border:1px solid var(--border);color:var(--text-1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0}
@@ -346,7 +342,7 @@ header{
 
 /* EMPTY + LOADING */
 .empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--text-2)}
-.loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem;margin-top:0}
+.loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
 .skeleton{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
 .skel-line{border-radius:6px;background:linear-gradient(90deg,var(--panel) 25%,var(--card-hover) 50%,var(--panel) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -367,6 +363,20 @@ header{
 .toast-icon.lime{background:var(--lime);box-shadow:0 0 8px var(--lime)}
 .toast-icon.amber{background:var(--amber);box-shadow:0 0 8px var(--amber)}
 .toast-icon.rose{background:var(--rose);box-shadow:0 0 8px var(--rose)}
+
+/* CONFIRM DIALOG */
+.confirm-overlay{display:none;position:fixed;inset:0;z-index:4000;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px)}
+.confirm-overlay.open{display:flex}
+.confirm-box{background:var(--card);border:1px solid rgba(255,107,138,0.3);border-radius:20px;padding:2rem;max-width:360px;width:90%;box-shadow:var(--shadow-deep);animation:panelIn 0.3s cubic-bezier(0.34,1.56,0.64,1);text-align:center}
+.confirm-icon{width:52px;height:52px;border-radius:14px;background:var(--rose-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;color:var(--rose)}
+.confirm-title{font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:0.5rem}
+.confirm-text{font-size:0.82rem;color:var(--text-1);line-height:1.5;margin-bottom:1.5rem}
+.confirm-actions{display:flex;gap:0.75rem}
+.confirm-btn{flex:1;padding:0.65rem;border-radius:10px;border:1px solid transparent;font-family:var(--font-body);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.confirm-btn.cancel{background:var(--panel);border-color:var(--border);color:var(--text-1)}
+.confirm-btn.cancel:hover{background:var(--card-hover);color:var(--text-0)}
+.confirm-btn.confirm{background:var(--rose-dim);border-color:rgba(255,107,138,0.3);color:var(--rose)}
+.confirm-btn.confirm:hover{background:rgba(255,107,138,0.25)}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:6px;height:6px}
@@ -408,6 +418,21 @@ header{
 <div class="overlay" id="overlay" onclick="closeNav()"></div>
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="confirm-title">Reset All Data?</div>
+    <div class="confirm-text">This will permanently delete all members and their referral data from both databases. This action cannot be undone.</div>
+    <div class="confirm-actions">
+      <button class="confirm-btn cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-btn confirm" onclick="doReset()">Yes, Reset All</button>
+    </div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div id="mySidebar" class="sidebar">
   <div class="sidebar-inner" style="position:relative">
@@ -441,8 +466,8 @@ header{
     <div class="logo-text">NEXUS<span>.</span></div>
   </a>
   <nav class="header-nav">
-    <button class="nav-btn active" onclick="setView('grid',this)">Members</button>
-    <button class="nav-btn" onclick="resetalldata()">Reset all </button>
+    <button class="nav-btn active">Members</button>
+    <button class="nav-btn danger" onclick="openConfirm()">Reset All</button>
   </nav>
   <div class="header-right">
     <div class="live-pulse">
@@ -547,7 +572,7 @@ header{
 
 <!-- MAP MODAL -->
 <div id="mapModal">
-  <div class="map-shell">
+  <div class="map-shell" id="mapShell">
     <div class="map-head">
       <div class="map-head-info">
         <div class="map-head-title">
@@ -557,8 +582,8 @@ header{
         <div class="map-head-sub" id="mapUserLabel">Initialising…</div>
       </div>
       <div class="map-legend">
-        <div class="legend-item"><div class="legend-dot start"></div><span>Start Point</span></div>
-        <div class="legend-item"><div class="legend-dot live"></div><span>Live Position</span></div>
+        <div class="legend-item"><div class="legend-dot start"></div><span>Stored Location</span></div>
+        <div class="legend-item"><div class="legend-dot live"></div><span>Your Live Position</span></div>
       </div>
       <button class="map-btn ghost" style="margin-left:0.5rem" onclick="closeMap()">✕ Close</button>
     </div>
@@ -571,7 +596,7 @@ header{
       <div class="coords-chip" id="coordsDisplay">📍 Awaiting GPS…</div>
       <button class="map-btn ghost" id="startBtn" style="display:none" onclick="goToStart()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>
-        Start
+        Stored Pin
       </button>
       <button class="map-btn primary" onclick="recenterMap()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
@@ -581,7 +606,6 @@ header{
   </div>
 </div>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -603,169 +627,174 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 /* ════════════════════════════════════════
-   REFERENCES
+   STATE
 ════════════════════════════════════════ */
-const submitRef     = db.ref('submit');      // source of truth (read + write from form)
-const submitCopyRef = db.ref('submitcopy');  // archive: inserts only, never deletes
+let tree          = {};       // keyed by Firebase record key
+let currentFilter = 'all';
+let currentLayout = 'grid';
 
 /* ════════════════════════════════════════
-   LOCAL STATE
+   SINGLE SOURCE OF TRUTH: listen to 'submit'
+   We removed the submitcopy mirror to avoid
+   the race condition.  Dashboard reads
+   'submit' directly via a real-time listener.
 ════════════════════════════════════════ */
-let tree = {};
-let currentFilter  = 'all';
-let currentLayout  = 'grid';
-
-/* ════════════════════════════════════════
-   FIREBASE LISTENERS
-   ─────────────────────────────────────
-   child_added   → fires for every existing record on load,
-                   then again for every new insert.
-                   We copy to submitcopy ONLY if the key
-                   does not already exist there.
-
-   child_changed → keeps submitcopy in sync when a record
-                   is EDITED in submit (not deleted).
-
-   child_removed → deliberately NOT listened to, so
-                   deleting from submit NEVER touches
-                   submitcopy.
-════════════════════════════════════════ */
-submitRef.on('child_added', snapshot => {
-  const key = snapshot.key;
-  const val = snapshot.val();
-
-  // Merge into local tree
-  tree[key] = val;
-
-  // Write to submitcopy only if this key isn't already there
-  submitCopyRef.child(key).once('value').then(existing => {
-    if (!existing.exists()) {
-      submitCopyRef.child(key).set(val);
-    }
-  });
-
-  updatePoints();
-  renderTree();
-});
-
-submitRef.on('child_changed', snapshot => {
-  const key = snapshot.key;
-  const val = snapshot.val();
-
-  // Update local tree
-  tree[key] = val;
-
-  // Sync the change to submitcopy (edit, not delete)
-  submitCopyRef.child(key).update(val);
-
-  updatePoints();
-  renderTree();
-});
-
-submitRef.on('child_removed', snapshot => {
-  // Remove from local view so the card disappears,
-  // but DO NOT touch submitcopy
-  delete tree[snapshot.key];
-  updatePoints();
-  renderTree();
-});
-
-// submitcopy drives the display — also keep it as
-// the read source for the cards grid
-const treeRef = db.ref('submitcopy');
-treeRef.on('value', snap => {
+db.ref('submit').on('value', snap => {
   tree = snap.val() || {};
-  updatePoints();
   document.getElementById('loadingGrid').style.display = 'none';
   renderTree();
 });
+
 /* ════════════════════════════════════════
-   MAP STATE
+   CONFIRM / RESET
 ════════════════════════════════════════ */
-function resetalldata(){
-  if(confirm("Are you sure you want to reset all data? This action cannot be undone.")){
-    submitCopyRef.remove();
+function openConfirm()  { document.getElementById('confirmOverlay').classList.add('open'); }
+function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('open'); }
+
+function doReset() {
+  closeConfirm();
+  db.ref('submit').remove().then(() => {
+    db.ref('submitcopy').remove();
     tree = {};
-    updatePoints();
     renderTree();
-    showToast("All data has been reset.", "rose");
-  }
+    showToast('All data has been reset.', 'rose');
+  }).catch(() => showToast('Reset failed — check permissions.', 'rose'));
 }
+
 /* ════════════════════════════════════════
    MAP STATE
 ════════════════════════════════════════ */
-let leafletMap = null, startMarker = null, destMarker = null;
+let leafletMap = null, storedMarker = null, liveMarker = null;
 let accuracyCircle = null, routeLine = null, watchId = null;
-let currentUser = null, mapReady = false, startLatLng = null;
+let currentMapUser = null, mapInitialised = false, storedLatLng = null;
 
 /* ════════════════════════════════════════
    HELPERS
 ════════════════════════════════════════ */
 function getInitials(name) {
   if (!name) return '?';
-  return name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
-function countSubtree(key) {
-  const u = tree[key]; if (!u) return 0;
-  let n = 1;
-  if (u.left)  { const k = findKeyByCode(u.left);  if (k) n += countSubtree(k); }
-  if (u.right) { const k = findKeyByCode(u.right); if (k) n += countSubtree(k); }
-  return n;
+
+/* Reliable empty check for left/right child fields */
+function hasBranch(val) {
+  return val !== null && val !== undefined && String(val).trim() !== '';
 }
+
+/**
+ * Find a Firebase record key by referral code ('d' field).
+ * Case-insensitive.
+ */
 function findKeyByCode(code) {
-  for (const key in tree) if (tree[key].d === code) return key;
+  if (!code) return null;
+  const search = String(code).trim().toUpperCase();
+  for (const k in tree) {
+    if (tree[k] && String(tree[k].d || '').trim().toUpperCase() === search) return k;
+  }
   return null;
 }
-function updatePoints() {
-  for (const key in tree) {
-    const u = tree[key];
-    if (u) u.points = Math.min(countSubtree(key) * 10, 100);
+
+/**
+ * Count all nodes in the subtree rooted at `key` (including the node itself).
+ * Visits each node at most once via a visited set to prevent infinite loops.
+ */
+function countSubtree(rootKey) {
+  const visited = new Set();
+  const stack   = [rootKey];
+  let count     = 0;
+
+  while (stack.length > 0) {
+    const k = stack.pop();
+    if (!k || visited.has(k)) continue;
+    visited.add(k);
+    const node = tree[k];
+    if (!node) continue;
+    count++;
+    if (hasBranch(node.left))  { const lk = findKeyByCode(node.left);  if (lk) stack.push(lk); }
+    if (hasBranch(node.right)) { const rk = findKeyByCode(node.right); if (rk) stack.push(rk); }
   }
+  return count;
 }
-function getNetworkDepth(key, depth=0) {
-  const u = tree[key]; if (!u) return depth;
-  let maxD = depth;
-  if (u.left)  { const k = findKeyByCode(u.left);  if (k) maxD = Math.max(maxD, getNetworkDepth(k, depth+1)); }
-  if (u.right) { const k = findKeyByCode(u.right); if (k) maxD = Math.max(maxD, getNetworkDepth(k, depth+1)); }
-  return maxD;
+
+/**
+ * Get the maximum depth of the subtree rooted at `key`.
+ */
+function getNetworkDepth(rootKey) {
+  const visited = new Set();
+
+  function dfs(k, depth) {
+    if (!k || visited.has(k)) return depth;
+    visited.add(k);
+    const node = tree[k];
+    if (!node) return depth;
+    let maxD = depth;
+    if (hasBranch(node.left))  { const lk = findKeyByCode(node.left);  if (lk) maxD = Math.max(maxD, dfs(lk, depth + 1)); }
+    if (hasBranch(node.right)) { const rk = findKeyByCode(node.right); if (rk) maxD = Math.max(maxD, dfs(rk, depth + 1)); }
+    return maxD;
+  }
+  return dfs(rootKey, 0);
 }
-function getAvatarClass(u) {
-  const pts = u.points || 0;
-  if (pts >= 100) return 'gold';
-  if (pts >= 60)  return 'blue';
-  if (pts >= 30)  return 'violet';
+
+/**
+ * Compute score for a node: 10 points per member in its subtree (excluding itself),
+ * capped at 100.  So score = 100 when the subtree has ≥ 11 members total.
+ */
+function computeScore(key) {
+  const subtree = countSubtree(key); // includes the node itself
+  return Math.min((subtree - 1) * 10, 100); // direct + indirect referrals × 10
+}
+
+function getAvatarClass(score) {
+  if (score >= 100) return 'gold';
+  if (score >= 60)  return 'blue';
+  if (score >= 30)  return 'violet';
   return 'lime';
 }
-function getStripeClass(u) {
-  const pts = u.points || 0;
-  if (pts >= 100) return 'gold';
-  if (pts >= 60)  return 'blue';
-  if (pts >= 30)  return 'violet';
+
+function getStripeClass(score) {
+  if (score >= 100) return 'gold';
+  if (score >= 60)  return 'blue';
+  if (score >= 30)  return 'violet';
   return '';
 }
-function getBadge(u) {
-  const pts = u.points || 0;
-  const childCount = (u.left?1:0)+(u.right?1:0);
-  if (pts >= 100) return {cls:'top',label:'Top Earner'};
-  if (childCount === 2) return {cls:'active',label:'Full'};
-  if (pts > 0)    return {cls:'new',label:'Growing'};
-  return {cls:'pending',label:'Pending'};
+
+function getBadge(score, childCount) {
+  if (score >= 100)      return { cls: 'top',     label: 'Top Earner' };
+  if (childCount === 2)  return { cls: 'active',  label: 'Full' };
+  if (score > 0)         return { cls: 'new',     label: 'Growing' };
+  return                        { cls: 'pending', label: 'Pending' };
+}
+
+/** Safely escape for HTML attribute strings inside onclick="..." */
+function safeAttr(str) {
+  return String(str || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g,  "\\'")
+    .replace(/"/g,  '&quot;')
+    .replace(/\n/g, ' ');
+}
+
+/** Escape for HTML content */
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;');
 }
 
 /* ════════════════════════════════════════
    TOAST
 ════════════════════════════════════════ */
-function showToast(msg, type='lime') {
+function showToast(msg, type = 'lime') {
   const el = document.createElement('div');
   el.className = 'toast';
-  el.innerHTML = `<div class="toast-icon ${type}"></div>${msg}`;
+  el.innerHTML = `<div class="toast-icon ${type}"></div>${escHtml(msg)}`;
   document.getElementById('toastContainer').appendChild(el);
   setTimeout(() => {
-    el.style.opacity='0';
-    el.style.transform='translateY(10px)';
-    el.style.transition='all 0.3s';
-    setTimeout(()=>el.remove(),300);
-  }, 3000);
+    el.style.cssText += 'opacity:0;transform:translateY(10px);transition:all 0.3s';
+    setTimeout(() => el.remove(), 300);
+  }, 3200);
 }
 
 /* ════════════════════════════════════════
@@ -777,35 +806,36 @@ function setFilter(f, el) {
   el.classList.add('active');
   renderTree();
 }
+
 function filterCards() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   document.querySelectorAll('#tree .card').forEach(card => {
-    card.style.display = (card.dataset.search||'').includes(q) ? '' : 'none';
+    card.style.display = (card.dataset.search || '').includes(q) ? '' : 'none';
   });
   updateCardCount();
 }
+
 function updateCardCount() {
   const visible = document.querySelectorAll('#tree .card:not([style*="display: none"])').length;
   document.getElementById('cardCount').textContent = visible;
 }
-function setView(v, el) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-}
+
 function toggleLayout(l) {
   currentLayout = l;
   document.getElementById('tree').className = l === 'list' ? 'list-view' : '';
-  document.getElementById('gridViewBtn').className = l==='grid' ? 'active' : '';
-  document.getElementById('listViewBtn').className = l==='list' ? 'active' : '';
+  document.getElementById('gridViewBtn').className = l === 'grid' ? 'active' : '';
+  document.getElementById('listViewBtn').className = l === 'list' ? 'active' : '';
 }
+
 function filterSidebar() {
   const q = document.getElementById('sidebarSearch').value.toLowerCase();
   document.querySelectorAll('.slot-item').forEach(el => {
     el.style.display = el.dataset.search.includes(q) ? '' : 'none';
   });
 }
+
 function manualRefresh() {
-  showToast('Refreshing network…', 'lime');
+  showToast('Network is live — data updates automatically.', 'lime');
 }
 
 /* ════════════════════════════════════════
@@ -817,40 +847,43 @@ function renderTree() {
   container.innerHTML = '';
   sideList.innerHTML  = '';
 
-  let total=0, rewarded=0, openSlots=0, maxDepth=0, idx=0;
+  let total = 0, rewarded = 0, openSlots = 0, maxDepth = 0, idx = 0;
   const keys = Object.keys(tree);
 
   for (const key of keys) {
     const u = tree[key];
-    if (!u) continue;
+    if (!u || !u.d) continue; // skip malformed records
     total++;
-    const pts        = u.points || 0;
-    if (pts >= 100) rewarded++;
-    const childCount = (u.left?1:0) + (u.right?1:0);
+
+    const score       = computeScore(key);
+    const isRewarded  = score >= 100;
+    if (isRewarded) rewarded++;
+
+    const leftFilled  = hasBranch(u.left);
+    const rightFilled = hasBranch(u.right);
+    const childCount  = (leftFilled ? 1 : 0) + (rightFilled ? 1 : 0);
     if (childCount < 2) openSlots++;
+
     const depth = getNetworkDepth(key);
     if (depth > maxDepth) maxDepth = depth;
 
-    // Filter
-    if (currentFilter === 'rewarded' && pts < 100) continue;
+    /* Filter */
+    if (currentFilter === 'rewarded' && !isRewarded)    continue;
     if (currentFilter === 'open'     && childCount >= 2) continue;
     if (currentFilter === 'full'     && childCount < 2)  continue;
 
-    const avCls       = getAvatarClass(u);
-    const strCls      = getStripeClass(u);
-    const badge       = getBadge(u);
-    const isGold      = pts >= 100;
-    const refCode     = u.d || '—';
-    const userName    = u.a || '—';
-    const lName       = userName.replace(/'/g,"\\'");
-    const lCode       = refCode.replace(/'/g,"\\'");
-    const leftFilled  = !!u.left;
-    const rightFilled = !!u.right;
+    const avCls      = getAvatarClass(score);
+    const strCls     = getStripeClass(score);
+    const badge      = getBadge(score, childCount);
+    const leftLabel  = leftFilled  ? String(u.left)  : 'empty slot';
+    const rightLabel = rightFilled ? String(u.right) : 'empty slot';
+    const refCode    = u.d  || '—';
+    const userName   = u.a  || '—';
 
     const card = document.createElement('div');
-    card.className = 'card' + (isGold ? ' gold-card' : '');
+    card.className   = 'card' + (isRewarded ? ' gold-card' : '');
     card.style.animationDelay = (idx * 45) + 'ms';
-    card.dataset.search = (userName+refCode+(u.c1||'')+(u.c2||'')).toLowerCase();
+    card.dataset.search = (userName + refCode + (u.b || '') + leftLabel + rightLabel).toLowerCase();
 
     card.innerHTML = `
       <div class="card-glow"></div>
@@ -859,11 +892,11 @@ function renderTree() {
         <div class="card-top">
           <div class="avatar ${avCls}">
             <div class="avatar-shine"></div>
-            ${getInitials(u.a)}
+            ${escHtml(getInitials(u.a))}
           </div>
           <div class="card-meta">
-            <div class="card-name">${userName}</div>
-            <div class="card-phone">${u.b||''}</div>
+            <div class="card-name">${escHtml(userName)}</div>
+            <div class="card-phone">${escHtml(u.b || '')}</div>
           </div>
           <div class="card-badge ${badge.cls}">${badge.label}</div>
         </div>
@@ -874,54 +907,54 @@ function renderTree() {
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               Ref Code
             </div>
-            <code class="ref-code ${isGold?'gold':''}">${refCode}</code>
+            <code class="ref-code ${isRewarded ? 'gold' : ''}">${escHtml(refCode)}</code>
           </div>
           <div class="info-row">
             <div class="info-row-label">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Score
             </div>
-            <span style="font-family:var(--font-mono);font-size:0.76rem;font-weight:600;color:${isGold?'var(--amber)':'var(--lime)'}">${pts}/100</span>
+            <span style="font-family:var(--font-mono);font-size:0.76rem;font-weight:600;color:${isRewarded ? 'var(--amber)' : 'var(--lime)'}">${score}/100</span>
           </div>
         </div>
 
         <div class="branches">
-          <div class="branch ${leftFilled?'filled'+(isGold?' gold':''):''}">
+          <div class="branch ${leftFilled ? 'filled' + (isRewarded ? ' gold' : '') : ''}">
             <div class="branch-label">◀ Left</div>
-            <div class="branch-name ${leftFilled?(isGold?'gold':''):'empty'}">${u.left||'empty slot'}</div>
+            <div class="branch-name ${leftFilled ? (isRewarded ? 'gold' : '') : 'empty'}">${escHtml(leftLabel)}</div>
           </div>
-          <div class="branch ${rightFilled?'filled'+(isGold?' gold':''):''}">
+          <div class="branch ${rightFilled ? 'filled' + (isRewarded ? ' gold' : '') : ''}">
             <div class="branch-label">Right ▶</div>
-            <div class="branch-name ${rightFilled?(isGold?'gold':''):'empty'}">${u.right||'empty slot'}</div>
+            <div class="branch-name ${rightFilled ? (isRewarded ? 'gold' : '') : 'empty'}">${escHtml(rightLabel)}</div>
           </div>
         </div>
 
         <div class="progress-wrap">
           <div class="progress-head">
             <div class="progress-label">Network Score</div>
-            <div class="progress-val">${pts}%</div>
+            <div class="progress-val">${score}%</div>
           </div>
           <div class="progress-track">
-            <div class="progress-fill ${isGold?'gold':''}" style="width:${pts}%"></div>
+            <div class="progress-fill ${isRewarded ? 'gold' : ''}" style="width:${score}%"></div>
           </div>
         </div>
 
-        <div class="reward-row ${isGold?'unlocked':'locked'}">
+        <div class="reward-row ${isRewarded ? 'unlocked' : 'locked'}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            ${isGold
+            ${isRewarded
               ? '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'
               : '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'}
           </svg>
-          ${isGold ? 'Reward Unlocked' : 'Reward Pending · ' + (100-pts) + '% to go'}
-          <span class="reward-amount">${isGold ? '₹500' : '₹0'}</span>
+          ${isRewarded ? 'Reward Unlocked 🎉' : 'Need ' + (100 - score) + '% more · ₹500 reward'}
+          <span class="reward-amount">${isRewarded ? '₹500' : '₹0'}</span>
         </div>
 
         <div class="card-actions">
-          <button class="action-btn primary" onclick="openMap('${lName}','${lCode}','${u.c1||''}','${u.c2||''}')">
+          <button class="action-btn primary" onclick="openMap('${safeAttr(userName)}','${safeAttr(refCode)}','${safeAttr(u.c1 || '')}','${safeAttr(u.c2 || '')}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
             Track
           </button>
-          <button class="action-btn secondary" onclick="openDetail('${key}')">
+          <button class="action-btn secondary" onclick="openDetail('${safeAttr(key)}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Detail
           </button>
@@ -931,46 +964,58 @@ function renderTree() {
     container.appendChild(card);
     idx++;
 
-    // Sidebar slot items (members with open positions)
+    /* Sidebar: members with open slots */
     if (childCount < 2) {
       const slots = 2 - childCount;
       const item  = document.createElement('div');
       item.className    = 'slot-item';
-      item.dataset.search = (userName+refCode).toLowerCase();
+      item.dataset.search = (userName + refCode).toLowerCase();
       item.onclick = () => { closeNav(); openDetail(key); };
       item.innerHTML = `
-        <div class="slot-avatar-sm">${getInitials(u.a)}</div>
+        <div class="slot-avatar-sm">${escHtml(getInitials(u.a))}</div>
         <div class="slot-meta">
-          <div class="slot-name">${userName}</div>
-          <div class="slot-code">${refCode}</div>
+          <div class="slot-name">${escHtml(userName)}</div>
+          <div class="slot-code">${escHtml(refCode)}</div>
         </div>
-        <div class="slot-badge ${slots===2?'two':'one'}">${slots} open</div>`;
+        <div class="slot-badge ${slots === 2 ? 'two' : 'one'}">${slots} open</div>`;
       sideList.appendChild(item);
     }
   }
 
-  // Stats
+  /* Stats */
   animateStat('statTotal',    total);
   animateStat('statRewarded', rewarded);
   animateStat('statOpen',     openSlots);
   animateStat('statNetwork',  maxDepth);
-  document.getElementById('statRewards').textContent = '₹' + (rewarded * 500).toLocaleString();
+  document.getElementById('statRewards').textContent = '₹' + (rewarded * 500).toLocaleString('en-IN');
   document.getElementById('cardCount').textContent   = idx;
+
+  if (idx === 0) {
+    container.innerHTML = `<div class="empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:1rem;opacity:0.3"><circle cx="12" cy="5" r="3"/><circle cx="4" cy="19" r="3"/><circle cx="20" cy="19" r="3"/><path d="M12 8v3M8.5 17l3-5.5M15.5 17l-3-5.5"/></svg>
+      <div style="font-size:0.9rem;margin-bottom:0.4rem">No members yet</div>
+      <div style="font-size:0.78rem">Orders will appear here in real-time</div>
+    </div>`;
+  }
 }
 
+/* ════════════════════════════════════════
+   ANIMATED STAT COUNTER
+════════════════════════════════════════ */
 function animateStat(id, target) {
-  const el = document.getElementById(id);
+  const el  = document.getElementById(id);
   let start = parseInt(el.textContent) || 0;
   if (start === target) { el.textContent = target; return; }
-  const step = Math.ceil(Math.abs(target - start) / 20);
-  const dir  = target > start ? 1 : -1;
+  const delta = target - start;
+  const steps = 24;
+  const step  = delta / steps;
+  let i = 0;
   const timer = setInterval(() => {
-    start += dir * step;
-    if ((dir===1 && start>=target) || (dir===-1 && start<=target)) {
-      start = target; clearInterval(timer);
-    }
-    el.textContent = start;
-  }, 30);
+    i++;
+    start += step;
+    el.textContent = Math.round(i < steps ? start : target);
+    if (i >= steps) clearInterval(timer);
+  }, 25);
 }
 
 /* ════════════════════════════════════════
@@ -979,22 +1024,27 @@ function animateStat(id, target) {
 function openDetail(key) {
   const u = tree[key];
   if (!u) return;
-  const pts         = u.points || 0;
-  const isGold      = pts >= 100;
-  const avCls       = getAvatarClass(u);
-  const childCount  = (u.left?1:0)+(u.right?1:0);
+
+  const score      = computeScore(key);
+  const isRewarded = score >= 100;
+  const avCls      = getAvatarClass(score);
+  const leftFilled  = hasBranch(u.left);
+  const rightFilled = hasBranch(u.right);
+  const childCount  = (leftFilled ? 1 : 0) + (rightFilled ? 1 : 0);
   const subtreeSize = countSubtree(key);
   const depth       = getNetworkDepth(key);
+  const leftLabel   = leftFilled  ? String(u.left)  : 'Empty';
+  const rightLabel  = rightFilled ? String(u.right) : 'Empty';
 
   document.getElementById('detailPanelContent').innerHTML = `
     <div class="detail-header">
-      <div class="detail-avatar avatar ${avCls}" style="width:56px;height:56px;font-size:1.3rem">
+      <div class="avatar ${avCls}" style="width:56px;height:56px;font-size:1.3rem;border-radius:14px">
         <div class="avatar-shine"></div>
-        ${getInitials(u.a)}
+        ${escHtml(getInitials(u.a))}
       </div>
       <div>
-        <div class="detail-name">${u.a || '—'}</div>
-        <div class="detail-sub">${u.c1||''} · ${u.c2||''}</div>
+        <div class="detail-name">${escHtml(u.a || '—')}</div>
+        <div class="detail-sub">${escHtml(u.b || '')}${u.c1 ? ' · ' + Number(u.c1).toFixed(4) + ', ' + Number(u.c2).toFixed(4) : ''}</div>
       </div>
       <button class="detail-close" onclick="closeDetail()">✕</button>
     </div>
@@ -1002,75 +1052,95 @@ function openDetail(key) {
       <div class="detail-section">
         <div class="detail-section-title">Identity</div>
         <div class="detail-grid">
-          <div class="detail-field full">
-            <div class="detail-field-label">Item name</div>
-            <div class="detail-field-value mono lime">${u.e||'—'}</div>
+          <div class="detail-field">
+            <div class="detail-field-label">Full Name</div>
+            <div class="detail-field-value">${escHtml(u.a || '—')}</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Phone</div>
+            <div class="detail-field-value mono">${escHtml(u.b || '—')}</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Referral Code</div>
+            <div class="detail-field-value mono lime">${escHtml(u.d || '—')}</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Product Ordered</div>
+            <div class="detail-field-value mono">${escHtml(u.e || '—')}</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Order Total</div>
+            <div class="detail-field-value mono">₹${u.total ? Number(u.total).toLocaleString('en-IN') : '—'}</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-field-label">Placed Under</div>
+            <div class="detail-field-value mono">${escHtml(u.parent || 'Root')}</div>
           </div>
           <div class="detail-field">
             <div class="detail-field-label">Latitude</div>
-            <div class="detail-field-value mono">${u.c1||'—'}</div>
+            <div class="detail-field-value mono">${u.c1 ? Number(u.c1).toFixed(6) : '—'}</div>
           </div>
           <div class="detail-field">
             <div class="detail-field-label">Longitude</div>
-            <div class="detail-field-value mono">${u.c2||'—'}</div>
+            <div class="detail-field-value mono">${u.c2 ? Number(u.c2).toFixed(6) : '—'}</div>
           </div>
         </div>
       </div>
+
       <div class="detail-section">
         <div class="detail-section-title">Network Position</div>
         <div class="detail-grid">
           <div class="detail-field">
             <div class="detail-field-label">Network Score</div>
-            <div class="detail-field-value ${isGold?'amber':'lime'}">${pts}/100</div>
+            <div class="detail-field-value ${isRewarded ? 'amber' : 'lime'}">${score}/100</div>
           </div>
           <div class="detail-field">
-            <div class="detail-field-label">Direct Refs</div>
+            <div class="detail-field-label">Direct Referrals</div>
             <div class="detail-field-value">${childCount}/2</div>
           </div>
           <div class="detail-field">
-            <div class="detail-field-label">Subtree Size</div>
+            <div class="detail-field-label">Total Network</div>
             <div class="detail-field-value">${subtreeSize} members</div>
           </div>
           <div class="detail-field">
             <div class="detail-field-label">Tree Depth</div>
-            <div class="detail-field-value">${depth} levels</div>
+            <div class="detail-field-value">${depth} level${depth !== 1 ? 's' : ''}</div>
           </div>
         </div>
       </div>
+
       <div class="detail-section">
         <div class="detail-section-title">Binary Tree Structure</div>
         <div class="tree-viz">
-          <div class="tree-node-root">${u.d||'ROOT'}</div>
-          <div style="display:flex;gap:2rem;position:relative">
+          <div class="tree-node-root">${escHtml(u.d || 'ROOT')}</div>
+          <div style="display:flex;gap:2rem">
             <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
               <div style="width:1px;height:24px;background:var(--border-bright)"></div>
-              <div class="tree-child ${u.left?'has-ref':'empty-slot'}">
-                ${u.left ? '◀ ' + u.left : '◀ Empty'}
-              </div>
+              <div class="tree-child ${leftFilled ? 'has-ref' : 'empty-slot'}">◀ ${escHtml(leftLabel)}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
               <div style="width:1px;height:24px;background:var(--border-bright)"></div>
-              <div class="tree-child ${u.right?'has-ref':'empty-slot'}">
-                ${u.right ? u.right + ' ▶' : 'Empty ▶'}
-              </div>
+              <div class="tree-child ${rightFilled ? 'has-ref' : 'empty-slot'}">${escHtml(rightLabel)} ▶</div>
             </div>
           </div>
         </div>
       </div>
+
       <div class="detail-section">
         <div class="detail-section-title">Reward Status</div>
-        <div class="reward-row ${isGold?'unlocked':'locked'}" style="margin-bottom:0">
+        <div class="reward-row ${isRewarded ? 'unlocked' : 'locked'}" style="margin-bottom:0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            ${isGold
+            ${isRewarded
               ? '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'
               : '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'}
           </svg>
-          ${isGold ? '₹500 Reward Unlocked 🎉' : 'Need ' + (100-pts) + '% more to unlock ₹500'}
-          <span class="reward-amount">${isGold?'₹500':'—'}</span>
+          ${isRewarded ? '₹500 Reward Unlocked! 🎉' : 'Needs ' + (100 - score) + '% more to unlock ₹500'}
+          <span class="reward-amount">${isRewarded ? '₹500' : '—'}</span>
         </div>
       </div>
-      <button class="action-btn primary" style="width:100%;margin-top:0.5rem"
-        onclick="closeDetail();openMap('${(u.a||'').replace(/'/g,"\\'")}','${(u.d||'').replace(/'/g,"\\'")}','${u.c1||''}','${u.c2||''}')">
+
+      <button class="action-btn primary" style="width:100%;margin-top:0.75rem"
+        onclick="closeDetail();openMap('${safeAttr(u.a || '')}','${safeAttr(u.d || '')}','${safeAttr(u.c1 || '')}','${safeAttr(u.c2 || '')}')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
           <circle cx="12" cy="9" r="2.5"/>
@@ -1081,140 +1151,173 @@ function openDetail(key) {
 
   document.getElementById('detailModal').classList.add('open');
 }
+
 function closeDetail() {
   document.getElementById('detailModal').classList.remove('open');
 }
-document.getElementById('detailModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('detailModal')) closeDetail();
+
+/* Close detail modal on backdrop click only */
+document.getElementById('detailModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDetail();
 });
 
 /* ════════════════════════════════════════
    MAP
 ════════════════════════════════════════ */
-function makeStartIcon() {
+function makeStoredIcon(initials) {
   const html = `<div style="position:relative;width:40px;height:48px">
     <div style="width:40px;height:40px;border-radius:50% 50% 50% 0;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:3px solid #0c0d14;box-shadow:0 4px 16px rgba(59,130,246,0.6);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center">
-      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:9px;letter-spacing:-0.3px">TARGET</span>
+      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:9px">${initials}</span>
     </div>
     <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#3b82f6;box-shadow:0 0 12px rgba(59,130,246,0.6)"></div>
   </div>`;
-  return L.divIcon({className:'',html,iconSize:[40,48],iconAnchor:[20,48],popupAnchor:[0,-52]});
+  return L.divIcon({ className: '', html, iconSize: [40, 48], iconAnchor: [20, 48], popupAnchor: [0, -52] });
 }
-function makeDestIcon(initials) {
+
+function makeLiveIcon() {
   const html = `<div style="position:relative;width:40px;height:48px">
     <div style="width:40px;height:40px;border-radius:50% 50% 50% 0;background:linear-gradient(135deg,#0a3d1f,#2dc76b);border:3px solid #0c0d14;box-shadow:0 4px 16px rgba(45,199,107,0.6);transform:rotate(-45deg);display:flex;align-items:center;justify-content:center">
-      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:11px;letter-spacing:-0.5px">${initials}</span>
+      <span style="transform:rotate(45deg);color:white;font-weight:700;font-size:8px">YOU</span>
     </div>
     <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#c8ff57;box-shadow:0 0 12px rgba(200,255,87,0.8)"></div>
   </div>`;
-  return L.divIcon({className:'',html,iconSize:[40,48],iconAnchor:[20,48],popupAnchor:[0,-52]});
+  return L.divIcon({ className: '', html, iconSize: [40, 48], iconAnchor: [20, 48], popupAnchor: [0, -52] });
 }
+
 function openMap(userName, refCode, lat, lng) {
-  currentUser = {name:userName, code:refCode, c1:lat, c2:lng};
+  currentMapUser = { name: userName, code: refCode, c1: lat, c2: lng };
   document.getElementById('mapUserLabel').textContent = `${userName} · ${refCode}`;
   document.getElementById('mapModal').classList.add('open');
-  setStatus('searching','Requesting location access…');
+  setMapStatus('searching', 'Requesting your location…');
   document.getElementById('coordsDisplay').textContent = '📍 Awaiting GPS…';
   document.getElementById('startBtn').style.display = 'none';
 
-  if (!mapReady) {
-    leafletMap = L.map('leafletMap',{zoomControl:true,attributionControl:true});
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      attribution:'© OpenStreetMap contributors', maxZoom:19
+  if (!mapInitialised) {
+    leafletMap = L.map('leafletMap', { zoomControl: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 19
     }).addTo(leafletMap);
-    mapReady = true;
+    mapInitialised = true;
   }
-  [startMarker, destMarker, accuracyCircle, routeLine].forEach(l => { if(l) leafletMap.removeLayer(l); });
-  startMarker=destMarker=accuracyCircle=routeLine=null;
-  startLatLng = null;
+
+  /* Clear previous markers/layers */
+  [storedMarker, liveMarker, accuracyCircle, routeLine].forEach(l => { if (l) { try { leafletMap.removeLayer(l); } catch(e){} } });
+  storedMarker = liveMarker = accuracyCircle = routeLine = null;
+  storedLatLng = null;
+
   setTimeout(() => leafletMap && leafletMap.invalidateSize(), 200);
-  startWatching();
+
+  /* Pin the member's stored GPS location first */
+  if (lat && lng && !isNaN(parseFloat(lat))) {
+    storedLatLng = L.latLng(parseFloat(lat), parseFloat(lng));
+    storedMarker = L.marker(storedLatLng, { icon: makeStoredIcon(getInitials(userName)), zIndexOffset: 100 })
+      .addTo(leafletMap)
+      .bindPopup(`<div style="font-family:sans-serif;min-width:150px;font-size:0.85rem">
+        <b>📌 ${escHtml(userName)}</b><br>
+        <span style="color:#888;font-size:0.75rem">Code: ${escHtml(refCode)}</span><br>
+        <span style="color:#3b82f6;font-size:0.73rem;display:block;margin-top:4px">Stored location at order time</span><br>
+        <span style="color:#888;font-size:0.73rem">${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}</span>
+      </div>`).openPopup();
+    document.getElementById('startBtn').style.display = 'flex';
+    leafletMap.setView(storedLatLng, 15, { animate: true });
+  }
+
+  startMapWatch();
   showToast(`Tracking ${userName}`, 'lime');
 }
+
 function closeMap() {
   document.getElementById('mapModal').classList.remove('open');
-  stopWatching();
+  stopMapWatch();
 }
-function startWatching() {
-  if (!navigator.geolocation) { setStatus('error','Geolocation not supported.'); return; }
-  const opts = {enableHighAccuracy:true, timeout:15000, maximumAge:3000};
-  navigator.geolocation.getCurrentPosition(onPos, onErr, opts);
-  stopWatching();
-  watchId = navigator.geolocation.watchPosition(onPos, onErr, opts);
+
+function startMapWatch() {
+  if (!navigator.geolocation) { setMapStatus('error', 'Geolocation not supported.'); return; }
+  stopMapWatch();
+  const opts = { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 };
+  watchId = navigator.geolocation.watchPosition(onMapPos, onMapErr, opts);
 }
-function stopWatching() {
-  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId=null; }
+
+function stopMapWatch() {
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
 }
-function onPos(pos) {
-  const {latitude:lat, longitude:lng, accuracy:acc, speed} = pos.coords;
-  const spd    = speed != null ? (speed*3.6).toFixed(1)+' km/h' : 'stationary';
+
+function onMapPos(pos) {
+  const { latitude: lat, longitude: lng, accuracy: acc } = pos.coords;
   const latlng = L.latLng(lat, lng);
-  setStatus('live', `Live · ±${Math.round(acc)}m · ${spd}`);
+  setMapStatus('live', `Live position · ±${Math.round(acc)}m`);
   document.getElementById('coordsDisplay').textContent = `📍 ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
-  const init   = getInitials(currentUser?.name||'?');
-  const name   = currentUser?.name||'Member';
-  const code   = currentUser?.code||'—';
-  const startC1 = currentUser?.c1;
-  const startC2 = currentUser?.c2;
+  if (!liveMarker) {
+    liveMarker = L.marker(latlng, { icon: makeLiveIcon() }).addTo(leafletMap)
+      .bindPopup(`<div style="font-family:sans-serif;font-size:0.82rem"><b>🟢 Your Live Position</b><br><span style="color:#888">±${Math.round(acc)}m accuracy</span></div>`);
+    accuracyCircle = L.circle(latlng, {
+      radius: acc, color: '#c8ff57', fillColor: '#c8ff57',
+      fillOpacity: 0.05, weight: 1.5, dashArray: '5 4'
+    }).addTo(leafletMap);
 
-  if (!startLatLng) {
-    startLatLng = (startC1 && startC2) ? L.latLng(parseFloat(startC1), parseFloat(startC2)) : latlng;
-    document.getElementById('startBtn').style.display = 'flex';
-    startMarker = L.marker(startLatLng,{icon:makeStartIcon(),zIndexOffset:100}).addTo(leafletMap)
-      .bindPopup(`<div style="font-family:sans-serif;min-width:140px;font-size:0.85rem"><b>🔵 Starting Point</b><br><span style="color:#888;font-size:0.75rem">${name} · ${code}</span><br><span style="color:#3b82f6;font-size:0.73rem;display:block;margin-top:4px">Session start</span><br><span style="color:#888;font-size:0.73rem">${startLatLng.lat.toFixed(6)}, ${startLatLng.lng.toFixed(6)}</span></div>`);
-    destMarker = L.marker(latlng,{icon:makeDestIcon(init)}).addTo(leafletMap)
-      .bindPopup(buildDestPopup(name,code,Math.round(acc),spd,lat,lng)).openPopup();
-    accuracyCircle = L.circle(latlng,{radius:acc,color:'#c8ff57',fillColor:'#c8ff57',fillOpacity:0.06,weight:1.5,dashArray:'5 4'}).addTo(leafletMap);
-    leafletMap.fitBounds([startLatLng,latlng],{padding:[70,70],maxZoom:16,animate:true});
+    /* Fit to show both markers if we have a stored location */
+    if (storedLatLng) {
+      leafletMap.fitBounds([storedLatLng, latlng], { padding: [60, 60], maxZoom: 17 });
+      drawRoute(storedLatLng, latlng);
+    } else {
+      leafletMap.flyTo(latlng, 16, { duration: 1 });
+    }
   } else {
-    destMarker.setLatLng(latlng);
-    destMarker.getPopup().setContent(buildDestPopup(name,code,Math.round(acc),spd,lat,lng));
+    liveMarker.setLatLng(latlng);
     accuracyCircle.setLatLng(latlng);
     accuracyCircle.setRadius(acc);
-    drawRoute(startLatLng, latlng);
   }
 }
-function buildDestPopup(name,code,acc,spd,lat,lng) {
-  return `<div style="font-family:sans-serif;min-width:150px;font-size:0.85rem">
-    <b>🟢 ${name}</b><br>
-    <span style="color:#888;font-size:0.75rem">Code: ${code}</span><br>
-    <span style="color:#2dc76b;font-size:0.73rem;display:block;margin-top:4px">● Live position</span>
-    <span style="color:#888;font-size:0.73rem;display:block">±${acc}m · ${spd}</span>
-    <span style="color:#666;font-size:0.73rem;display:block;margin-top:4px">${lat.toFixed(6)}, ${lng.toFixed(6)}</span>
-  </div>`;
+
+function onMapErr(err) {
+  const msgs = { 1: 'Location permission denied.', 2: 'GPS unavailable.', 3: 'Location timeout — retrying…' };
+  setMapStatus('error', msgs[err.code] || 'Location error.');
+  if (err.code === 3) setTimeout(startMapWatch, 5000);
 }
+
 function drawRoute(from, to) {
   const url = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`;
-  fetch(url).then(r=>r.json()).then(data => {
-    if (data.code==='Ok' && data.routes?.[0]) {
-      if (routeLine) leafletMap.removeLayer(routeLine);
-      routeLine = L.geoJSON(data.routes[0].geometry,{
-        style:{color:'#c8ff57',weight:4.5,opacity:0.7,dashArray:'10 8',lineCap:'round',lineJoin:'round'}
-      }).addTo(leafletMap);
-      routeLine.bringToBack();
-    }
-  }).catch(()=>{});
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      if (data.code === 'Ok' && data.routes?.[0]) {
+        if (routeLine) leafletMap.removeLayer(routeLine);
+        routeLine = L.geoJSON(data.routes[0].geometry, {
+          style: { color: '#c8ff57', weight: 4.5, opacity: 0.7, dashArray: '10 8', lineCap: 'round' }
+        }).addTo(leafletMap);
+        routeLine.bringToBack();
+      }
+    })
+    .catch(() => {}); // silent fail — route is optional
 }
-function onErr(err) {
-  const msgs = {1:'Location permission denied.',2:'GPS unavailable.',3:'Location timeout — retrying…'};
-  setStatus('error', msgs[err.code]||'Location error.');
-  if (err.code===3) setTimeout(startWatching, 5000);
-}
+
 function recenterMap() {
   if (!leafletMap) return;
-  if (startLatLng && destMarker) leafletMap.fitBounds([startLatLng,destMarker.getLatLng()],{padding:[60,60],animate:true});
-  else if (destMarker) leafletMap.flyTo(destMarker.getLatLng(),16,{duration:1});
+  if (storedLatLng && liveMarker) {
+    leafletMap.fitBounds([storedLatLng, liveMarker.getLatLng()], { padding: [60, 60], animate: true });
+  } else if (liveMarker) {
+    leafletMap.flyTo(liveMarker.getLatLng(), 16, { duration: 1 });
+  } else if (storedLatLng) {
+    leafletMap.flyTo(storedLatLng, 15, { duration: 1 });
+  }
 }
+
 function goToStart() {
-  if (startMarker && leafletMap) { leafletMap.flyTo(startLatLng,17,{duration:1}); startMarker.openPopup(); }
+  if (storedMarker && leafletMap) {
+    leafletMap.flyTo(storedLatLng, 17, { duration: 1 });
+    storedMarker.openPopup();
+  }
 }
-function setStatus(type, text) {
-  document.getElementById('liveDot').className = 'status-dot ' + type;
+
+function setMapStatus(type, text) {
+  document.getElementById('liveDot').className  = 'status-dot ' + type;
   document.getElementById('statusText').textContent = text;
 }
-document.getElementById('mapModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('mapModal')) closeMap();
+
+/* Close map modal on backdrop click only */
+document.getElementById('mapModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMap();
 });
 
 /* ════════════════════════════════════════

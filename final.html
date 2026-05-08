@@ -19,9 +19,7 @@
   --danger:  #f87171;
   --ease:    cubic-bezier(0.4,0,0.2,1);
 }
-
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -33,7 +31,6 @@ body {
   padding: 24px 16px;
   overflow-x: hidden;
 }
-
 .bg-glow {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
@@ -41,7 +38,6 @@ body {
     radial-gradient(ellipse 50% 50% at 85% 80%, rgba(74,222,128,0.09) 0%, transparent 55%),
     radial-gradient(ellipse 40% 40% at 70% 10%, rgba(251,191,36,0.06) 0%, transparent 50%);
 }
-
 .card {
   position: relative; z-index: 1;
   width: 100%; max-width: 460px;
@@ -58,7 +54,6 @@ body {
   from { opacity:0; transform: translateY(28px) scale(0.97); }
   to   { opacity:1; transform: translateY(0) scale(1); }
 }
-
 @media(min-width:860px) {
   .card {
     max-width: 820px;
@@ -68,27 +63,23 @@ body {
   .img-col { grid-column:1; grid-row:1/5; }
   .meta-col, .divider, .qty-row, .form-col { grid-column:2; }
 }
-
 .img-col {
   position: relative;
   height: 260px;
   overflow: hidden;
 }
 @media(min-width:860px) { .img-col { height: auto; min-height: 460px; } }
-
 .img-col img {
   width:100%; height:100%; object-fit:cover; display:block;
   transition: transform 0.7s var(--ease);
 }
 .img-col:hover img { transform: scale(1.06); }
-
 .img-col::after {
   content:'';
   position:absolute; inset:0;
   background: linear-gradient(to top, rgba(6,15,10,0.55) 0%, transparent 55%);
   pointer-events:none;
 }
-
 .img-badge {
   position: absolute; bottom:16px; left:16px; z-index:1;
   background: rgba(6,15,10,0.7);
@@ -102,9 +93,7 @@ body {
 }
 .badge-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
-
 .meta-col { padding: 28px 28px 0; }
-
 .product-label {
   font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
   text-transform: uppercase; color: var(--green);
@@ -113,7 +102,6 @@ body {
 .product-label::after {
   content:''; flex:1; height:1px; background:rgba(34,197,94,0.2);
 }
-
 .product-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(24px,4.5vw,34px);
@@ -122,7 +110,6 @@ body {
   color: var(--text);
   margin-bottom: 16px;
 }
-
 .price-wrap { display: flex; align-items: baseline; gap: 6px; }
 .price-sym { font-size:18px; font-weight:300; color:var(--muted); }
 .price-val {
@@ -134,19 +121,13 @@ body {
   transition: color 0.25s;
 }
 .price-per { font-size:12px; color:var(--muted); margin-bottom:2px; align-self:flex-end; }
-
-.trust-strip {
-  display: flex; gap: 16px; margin-top: 18px;
-  flex-wrap: wrap;
-}
+.trust-strip { display: flex; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
 .trust-item {
   display: flex; align-items:center; gap:6px;
   font-size: 11px; color: var(--muted); font-weight: 400;
 }
 .trust-item svg { color: var(--green2); flex-shrink:0; }
-
 .divider { height:1px; background:var(--border); margin: 20px 28px 0; }
-
 .qty-row {
   display: flex; align-items:center; justify-content:space-between;
   padding: 16px 28px;
@@ -171,12 +152,8 @@ body {
   font-family:'Cormorant Garamond',serif;
   font-size:20px; font-weight:700; color:var(--text);
 }
-
 .form-col { padding: 0 28px 28px; }
-
-.field {
-  position: relative; margin-bottom: 12px;
-}
+.field { position: relative; margin-bottom: 12px; }
 .field-label {
   font-size:10px; font-weight:600; letter-spacing:1px;
   text-transform:uppercase; color:var(--muted);
@@ -202,8 +179,6 @@ body {
   box-shadow:0 0 0 3px rgba(34,197,94,0.1);
 }
 .field input.error { border-color:rgba(248,113,113,0.5); box-shadow:0 0 0 3px rgba(248,113,113,0.1); }
-
-/* Auto-placement info badge */
 .auto-badge {
   display: none;
   font-size: 11px;
@@ -219,10 +194,8 @@ body {
 }
 .auto-badge.show { display: flex; }
 .auto-badge svg { flex-shrink: 0; }
-
 .msg { font-size:12px; font-weight:500; color:var(--danger); min-height:16px; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
 .msg.success { color:var(--green2); }
-
 .order-btn {
   width:100%; height:52px; border:none; border-radius:16px;
   background:linear-gradient(135deg, #22c55e, #16a34a);
@@ -242,7 +215,6 @@ body {
 .order-btn:hover::before { opacity:1; }
 .order-btn:active:not(:disabled) { transform:translateY(0); }
 .order-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
 .spinner {
   width:16px; height:16px; border-radius:50%;
   border:2px solid rgba(255,255,255,0.3);
@@ -250,7 +222,6 @@ body {
   animation:spin 0.7s linear infinite;
 }
 @keyframes spin { to{transform:rotate(360deg)} }
-
 .step-indicator {
   display: flex; align-items:center; gap:6px;
   font-size:11px; color:var(--muted); margin-top:12px;
@@ -267,7 +238,6 @@ body {
 .step.active .step-num { background:var(--green); border-color:var(--green); color:#fff; }
 .step.done .step-num { background:rgba(34,197,94,0.2); border-color:rgba(34,197,94,0.3); color:var(--green2); }
 .step-line { width:24px; height:1px; background:var(--border); }
-
 @media(max-width:480px) {
   .meta-col, .form-col { padding-left:20px; padding-right:20px; }
   .qty-row { padding:14px 20px; }
@@ -276,15 +246,12 @@ body {
 </style>
 </head>
 <body>
-
 <div class="bg-glow"></div>
-
 <div class="card">
   <div class="img-col">
-    <img id="img" src="" alt="Product"/>
+    <img id="img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80" alt="Product"/>
     <div class="img-badge"><div class="badge-dot"></div>Fresh Today</div>
   </div>
-
   <div class="meta-col">
     <div class="product-label">Premium Pick</div>
     <h2 class="product-name" id="productName">Loading…</h2>
@@ -308,9 +275,7 @@ body {
       </div>
     </div>
   </div>
-
   <div class="divider"></div>
-
   <div class="qty-row">
     <span class="qty-label">Quantity</span>
     <div class="qty-control">
@@ -319,40 +284,31 @@ body {
       <button class="qty-btn" id="increase" aria-label="Increase">+</button>
     </div>
   </div>
-
   <div class="form-col">
-
     <div class="field">
       <label class="field-label" for="customerName">Full name</label>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <input type="text" id="customerName" placeholder="Enter your name" autocomplete="name"/>
     </div>
-
     <div class="field">
       <label class="field-label" for="phone">Phone number</label>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 12 19.79 19.79 0 0 1 .93 3.18a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel"/>
     </div>
-
     <div class="field">
-      <label class="field-label" for="referralCode">Referral code <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional – leave blank for auto-placement)</span></label>
+      <label class="field-label" for="referralCode">Referral code <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1.5 15h-3m3-4h-3"/></svg>
-      <input type="text" id="referralCode" placeholder="Optional – auto-placed if empty" autocomplete="off"/>
+      <input type="text" id="referralCode" placeholder="Leave blank for auto-placement" autocomplete="off"/>
     </div>
-
-    <!-- shown when no referral given and a leaf node is found -->
     <div class="auto-badge" id="autoBadge">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       <span id="autoBadgeText">You'll be auto-placed in the network tree.</span>
     </div>
-
     <div class="msg" id="messages"></div>
-
     <button class="order-btn" id="orderNow">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       Place Order
     </button>
-
     <div class="step-indicator" id="steps">
       <div class="step active" id="s1"><div class="step-num">1</div><span>Details</span></div>
       <div class="step-line"></div>
@@ -360,12 +316,11 @@ body {
       <div class="step-line"></div>
       <div class="step" id="s3"><div class="step-num">3</div><span>Confirm</span></div>
     </div>
-
   </div>
 </div>
 
 <script type="module">
-import { initializeApp }         from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, push, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -381,14 +336,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-/* ── Product from session ── */
-const p     = JSON.parse(sessionStorage.getItem("selectedProduct"));
-let   qty   = 1;
-const pName  = p ? p.b : "Unknown Product";
-const pPrice = p ? p.c : 0;
-const pImg   = p ? p.a : "https://via.placeholder.com/400x300?text=No+Image";
+/* ── Product from sessionStorage (with fallback demo values) ── */
+let p;
+try { p = JSON.parse(sessionStorage.getItem("selectedProduct")); } catch(e) { p = null; }
 
-document.getElementById("img").src           = pImg;
+let   qty    = 1;
+const pName  = (p && p.b) ? p.b : "Fresh Organic Bundle";
+const pPrice = (p && p.c) ? Number(p.c) : 499;
+const pImg   = (p && p.a) ? p.a : "https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80";
+
+document.getElementById("img").src = pImg;
 document.getElementById("productName").textContent = pName;
 
 /* ── Price / qty ── */
@@ -397,23 +354,32 @@ function updatePrice() {
   document.getElementById("qty").textContent   = qty;
 }
 document.getElementById("increase").addEventListener("click", () => { qty++; updatePrice(); });
-document.getElementById("decrease").addEventListener("click", () => { if(qty>1){ qty--; updatePrice(); } });
+document.getElementById("decrease").addEventListener("click", () => { if(qty > 1){ qty--; updatePrice(); } });
+updatePrice();
 
 /* ── Step indicator ── */
 function setStep(n) {
   [1,2,3].forEach(i => {
-    const el = document.getElementById("s"+i);
+    const el = document.getElementById("s" + i);
     el.classList.remove("active","done");
-    if(i < n) el.classList.add("done");
-    if(i === n) el.classList.add("active");
+    if (i < n) el.classList.add("done");
+    if (i === n) el.classList.add("active");
   });
 }
 
 /* ── Messages ── */
-function showMsg(text, isSuccess=false) {
+function showMsg(text, isSuccess = false) {
   const el = document.getElementById("messages");
   el.textContent = text;
   el.className = "msg" + (isSuccess ? " success" : "");
+}
+
+/* ── Reset button state ── */
+function resetBtn() {
+  const btn = document.getElementById("orderNow");
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
+  setStep(1);
 }
 
 /* ── Helpers ── */
@@ -421,95 +387,106 @@ function generateCode() {
   return Math.random().toString(36).substr(2, 6).toUpperCase();
 }
 
-/**
- * Load ALL users from "submit" once.
- * Returns { key: userData } object or {}.
- */
 async function loadAllUsers() {
   const snap = await get(ref(db, "submit"));
   return snap.val() || {};
 }
 
 /**
- * Check a manual referral code.
+ * Find a user key by referral code (field 'd').
+ * Case-insensitive match.
+ */
+function findKeyByCode(users, code) {
+  if (!code) return null;
+  const search = String(code).trim().toUpperCase();
+  for (const key in users) {
+    if (users[key] && String(users[key].d || '').trim().toUpperCase() === search) return key;
+  }
+  return null;
+}
+
+/**
+ * Check a manual referral code against the live DB.
  * Returns { position, parentKey, parentCode } or { error }
  */
 async function checkReferralCode(code) {
   const users = await loadAllUsers();
-  for (const key in users) {
-    if (users[key].d === code) {
-      if (!users[key].left)       return { position:"left",  parentKey:key, parentCode:code };
-      else if (!users[key].right) return { position:"right", parentKey:key, parentCode:code };
-      else                        return { error:"Referral code already has 2 members." };
-    }
-  }
-  return { error:"Invalid referral code." };
+  const key   = findKeyByCode(users, code);
+  if (!key) return { error: "Invalid referral code. Please check and try again." };
+  const u = users[key];
+  if (!u.left)  return { position: "left",  parentKey: key, parentCode: u.d };
+  if (!u.right) return { position: "right", parentKey: key, parentCode: u.d };
+  return { error: "This referral code's network is already full (both slots taken)." };
 }
 
 /**
- * BFS over "submit" to find the first leaf node
- * (a user who has no left OR no right child).
- * Returns { position, parentKey, parentCode } or null if tree is empty.
+ * BFS to find the first open leaf node in the binary tree.
+ * Returns { position, parentKey, parentCode } or null (if tree is completely empty).
  */
 async function findLeafNode() {
   const users = await loadAllUsers();
   const keys  = Object.keys(users);
-  if (keys.length === 0) return null; // very first user ever – no parent
+  if (keys.length === 0) return null; // very first user ever — root node, no parent
 
-  /* Build a map: referral_code → firebase key */
+  /* Build code→key map */
   const codeToKey = {};
-  keys.forEach(k => { if (users[k].d) codeToKey[users[k].d] = k; });
-
-  /* Find root(s): users with no parent field */
-  const roots = keys.filter(k => !users[k].parent);
-
-  /* BFS queue seeded with roots */
-  const queue = [...roots];
-  while (queue.length > 0) {
-    const key  = queue.shift();
-    const node = users[key];
-
-    if (!node.left)  return { position:"left",  parentKey:key, parentCode:node.d };
-    if (!node.right) return { position:"right", parentKey:key, parentCode:node.d };
-
-    /* Both slots filled – enqueue children */
-    const leftKey  = codeToKey[node.left];
-    const rightKey = codeToKey[node.right];
-    if (leftKey)  queue.push(leftKey);
-    if (rightKey) queue.push(rightKey);
+  for (const k of keys) {
+    if (users[k] && users[k].d) codeToKey[String(users[k].d).trim().toUpperCase()] = k;
   }
-  return null; // every node full (shouldn't happen in a growing tree)
+
+  /* Find root nodes (nodes with no 'parent' field) */
+  const roots = keys.filter(k => users[k] && !users[k].parent);
+  if (roots.length === 0) {
+    // Fallback: just use the first record as root
+    roots.push(keys[0]);
+  }
+
+  /* BFS */
+  const queue = [...roots];
+  const visited = new Set();
+
+  while (queue.length > 0) {
+    const k = queue.shift();
+    if (visited.has(k)) continue;
+    visited.add(k);
+
+    const node = users[k];
+    if (!node) continue;
+
+    if (!node.left)  return { position: "left",  parentKey: k, parentCode: node.d };
+    if (!node.right) return { position: "right", parentKey: k, parentCode: node.d };
+
+    /* Both filled — enqueue children */
+    const lk = codeToKey[String(node.left).trim().toUpperCase()];
+    const rk = codeToKey[String(node.right).trim().toUpperCase()];
+    if (lk && !visited.has(lk)) queue.push(lk);
+    if (rk && !visited.has(rk)) queue.push(rk);
+  }
+
+  return null; // entire tree full (very unlikely in practice)
 }
 
 /**
- * After placing a child, update the parent node in Firebase:
- *  • set parent.left / parent.right to the child's referral code
- *  • increment parent.points by 1
+ * After placing a child, update the parent's left/right pointer.
+ * Points are computed in the admin dashboard from subtree size — no need to store here.
  */
 async function updateParentNode(parentKey, position, childCode) {
-  const snap     = await get(ref(db, `submit/${parentKey}`));
-  const existing = snap.val() || {};
-  const newPoints = (existing.points || 0) + 1;
-
-  await update(ref(db, `submit/${parentKey}`), {
-    [position]: childCode,
-    points: newPoints
-  });
+  await update(ref(db, `submit/${parentKey}`), { [position]: childCode });
 }
 
-/* ── Order button ── */
+/* ── Order button handler ── */
 document.getElementById("orderNow").addEventListener("click", async function() {
-  const referral  = document.getElementById("referralCode").value.trim();
-  const customer  = document.getElementById("customerName").value.trim();
-  const phone     = document.getElementById("phone").value.trim();
+  const referral = document.getElementById("referralCode").value.trim().toUpperCase();
+  const customer = document.getElementById("customerName").value.trim();
+  const phone    = document.getElementById("phone").value.trim();
 
-  /* Reset errors */
+  /* Clear previous state */
   ["customerName","phone","referralCode"].forEach(id =>
     document.getElementById(id).classList.remove("error"));
   showMsg("");
   document.getElementById("autoBadge").classList.remove("show");
 
-  /* Validate */
+  /* Client-side validation */
   if (!customer) {
     document.getElementById("customerName").classList.add("error");
     showMsg("Please enter your full name.");
@@ -517,130 +494,172 @@ document.getElementById("orderNow").addEventListener("click", async function() {
   }
   if (!phone || !/^\+?[\d\s\-]{7,15}$/.test(phone)) {
     document.getElementById("phone").classList.add("error");
-    showMsg("Enter a valid phone number.");
+    showMsg("Enter a valid phone number (7–15 digits).");
     return;
   }
-  if (referral && !/^[a-zA-Z0-9]{6}$/.test(referral)) {
+  if (referral && !/^[A-Z0-9]{6}$/.test(referral)) {
     document.getElementById("referralCode").classList.add("error");
-    showMsg("Referral code must be 6 alphanumeric characters.");
+    showMsg("Referral code must be exactly 6 letters/numbers.");
     return;
   }
 
-  /* ── Resolve placement ── */
-  let placement = null; // { position, parentKey, parentCode } or null
+  const btn = document.getElementById("orderNow");
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Checking network…`;
 
-  if (referral) {
-    /* Manual referral code provided */
-    const result = await checkReferralCode(referral);
-    if (result.error) {
-      document.getElementById("referralCode").classList.add("error");
-      showMsg(result.error);
-      return;
+  /* ── Resolve tree placement ── */
+  let placement = null;
+
+  try {
+    if (referral) {
+      const result = await checkReferralCode(referral);
+      if (result.error) {
+        document.getElementById("referralCode").classList.add("error");
+        showMsg(result.error);
+        resetBtn();
+        return;
+      }
+      placement = result;
+    } else {
+      const leaf = await findLeafNode();
+      if (leaf) {
+        placement = leaf;
+        document.getElementById("autoBadgeText").textContent =
+          `Auto-placed under referral ${leaf.parentCode} (${leaf.position} slot).`;
+        document.getElementById("autoBadge").classList.add("show");
+      }
+      // leaf === null → tree is empty, this becomes the root node
     }
-    placement = result;
-  } else {
-    /* No referral – auto BFS leaf placement */
-    const leaf = await findLeafNode();
-    if (leaf) {
-      placement = leaf;
-      document.getElementById("autoBadgeText").textContent =
-        `Auto-placed under node ${leaf.parentCode} (${leaf.position} slot).`;
-      document.getElementById("autoBadge").classList.add("show");
-    }
-    // leaf === null → very first member, no parent needed
+  } catch(err) {
+    showMsg("Network error. Please check your connection and try again.");
+    resetBtn();
+    return;
   }
 
-  /* ── Proceed to location ── */
+  /* ── Get location & save ── */
   placeOrder(customer, phone, placement);
 });
 
-/* ── Place order with geolocation ── */
+/* ── Geolocation + Firebase save ── */
 function placeOrder(customer, phone, placement) {
   const btn = document.getElementById("orderNow");
-  btn.disabled = true;
   btn.innerHTML = `<div class="spinner"></div> Getting location…`;
   setStep(2);
 
-  let bestAccuracy = Infinity;
-  let bestPosition = null;
-  let placed = false;
+  if (!navigator.geolocation) {
+    showMsg("Geolocation not supported by your browser.");
+    resetBtn();
+    return;
+  }
 
-  const watchId = navigator.geolocation.watchPosition(pos => {
-    if (pos.coords.accuracy < bestAccuracy) {
-      bestAccuracy = pos.coords.accuracy;
-      bestPosition = pos;
-    }
-    if (pos.coords.accuracy < 30 && !placed) {
-      placed = true;
+  let watchId       = null;
+  let bestAccuracy  = Infinity;
+  let bestPosition  = null;
+  let committed     = false;
+
+  /* Fallback: after 15 seconds use whatever we have */
+  const fallbackTimer = setTimeout(() => {
+    if (!committed && bestPosition) {
+      committed = true;
       navigator.geolocation.clearWatch(watchId);
-      btn.innerHTML = `<div class="spinner"></div> Saving order…`;
-      setStep(3);
+      doSave(bestPosition);
+    } else if (!committed) {
+      showMsg("Could not get location. Please enable GPS and retry.");
+      resetBtn();
+      committed = true;
+    }
+  }, 15000);
 
-      const referral_code = generateCode();
-      const lat = bestPosition.coords.latitude;
-      const lng = bestPosition.coords.longitude;
+  watchId = navigator.geolocation.watchPosition(
+    pos => {
+      if (pos.coords.accuracy < bestAccuracy) {
+        bestAccuracy = pos.coords.accuracy;
+        bestPosition = pos;
+      }
+      /* Accept if accuracy < 60 m (relaxed from 30 m for better compatibility) */
+      if (pos.coords.accuracy < 60 && !committed) {
+        committed = true;
+        clearTimeout(fallbackTimer);
+        navigator.geolocation.clearWatch(watchId);
+        doSave(bestPosition);
+      }
+    },
+    err => {
+      clearTimeout(fallbackTimer);
+      if (!committed) {
+        committed = true;
+        const msgs = {
+          1: "Location permission denied. Please allow location access.",
+          2: "GPS signal unavailable. Try again outdoors.",
+          3: "Location request timed out. Please retry."
+        };
+        showMsg(msgs[err.code] || "Location error. Please retry.");
+        resetBtn();
+      }
+    },
+    { enableHighAccuracy: true, timeout: 14000, maximumAge: 0 }
+  );
 
-      const orderData = {
-        a: customer,
-        b: phone,
-        c1: lat,
-        c2: lng,
-        d: referral_code,
-        e: pName,
-        points: 0  // every new member starts with 0 points
-      };
+  async function doSave(position) {
+    const btn2 = document.getElementById("orderNow");
+    btn2.innerHTML = `<div class="spinner"></div> Saving order…`;
+    setStep(3);
 
+    const referral_code = generateCode();
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+
+    const orderData = {
+      a: customer,           // name
+      b: phone,              // phone
+      c1: lat,               // latitude
+      c2: lng,               // longitude
+      d: referral_code,      // this user's own referral code
+      e: pName,              // product name
+      qty: qty,              // quantity ordered
+      total: pPrice * qty,   // total amount
+      ts: Date.now()         // timestamp
+    };
+
+    /* Link to parent if placement exists */
+    if (placement) {
+      orderData.parent   = placement.parentCode;  // parent's referral code
+      orderData.position = placement.position;    // "left" or "right"
+    }
+
+    try {
+      const newRef = await push(ref(db, "submit"));
+      await set(newRef, orderData);
+
+      /* Update parent node: write child's referral code into parent's left/right slot */
       if (placement) {
-        orderData.parent   = placement.parentCode;
-        orderData.position = placement.position;
+        await updateParentNode(placement.parentKey, placement.position, referral_code);
       }
 
-      push(ref(db, "submit")).then(async r => {
-        try {
-          await set(r, orderData);
+      showMsg("Order placed! Redirecting to WhatsApp…", true);
+      btn2.innerHTML = `✓ Done`;
 
-          /* Update parent: link child + increment points */
-          if (placement) {
-            await updateParentNode(placement.parentKey, placement.position, referral_code);
-          }
+      const msg =
+        `🛒 *New Order*\n` +
+        `👤 Name: ${customer}\n` +
+        `📞 Phone: ${phone}\n` +
+        `🧩 My Referral Code: ${referral_code}\n` +
+        `🔗 Placed Under: ${placement ? placement.parentCode : "Root (first member)"}\n` +
+        `📍 Position: ${placement ? placement.position : "Root"}\n` +
+        `🍹 Product: ${pName}\n` +
+        `🔢 Qty: ${qty}\n` +
+        `💰 Total: ₹${(pPrice * qty).toLocaleString('en-IN')}`;
 
-          showMsg("Order placed! Redirecting to WhatsApp…", true);
-          btn.innerHTML = `✓ Done`;
+      setTimeout(() => {
+        window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
+      }, 900);
 
-          const msg =
-            `🛒 *New Order*\n` +
-            `👤 Name: ${customer}\n` +
-            `📞 Phone: ${phone}\n` +
-            `🧩 My Referral: ${referral_code}\n` +
-            `🔗 Used Referral: ${placement ? placement.parentCode : "None (root)"}\n` +
-            `📍 Position: ${placement ? placement.position : "Root"}\n` +
-            `🍹 Product: ${pName}\n` +
-            `🔢 Qty: ${qty}\n` +
-            `💰 Total: ₹${pPrice * qty}`;
-
-          setTimeout(() => {
-            window.location.href = "https://wa.me/919576718589?text=" + encodeURIComponent(msg);
-          }, 800);
-
-        } catch(e) {
-          showMsg("Failed to save. Please try again.");
-          btn.disabled = false;
-          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
-          placed = false;
-          setStep(1);
-        }
-      });
+    } catch(e) {
+      showMsg("Failed to save order. Please try again.");
+      resetBtn();
     }
-  }, err => {
-    showMsg("Location error: " + err.message);
-    const btn2 = document.getElementById("orderNow");
-    btn2.disabled = false;
-    btn2.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Place Order`;
-    setStep(1);
-  }, { enableHighAccuracy:true, timeout:30000, maximumAge:0 });
+  }
 }
-
-updatePrice();
 </script>
 </body>
 </html>
