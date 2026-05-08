@@ -782,7 +782,7 @@ function showToast(msg) {
 /* ══════════════════════════════════════
    FIREBASE — load referrals
 ══════════════════════════════════════ */
-db.ref('submitcopy').on('value', snap => {
+db.ref('submit').on('value', snap => {
   const raw = snap.val() || {};
 
   // Compute points for each member
