@@ -622,7 +622,6 @@ function nextStatus(){return STATUSES[statusIdx++%STATUSES.length];}
 
 /* ── RENDER ── */
 function render(){
-  if (!list || window.isPaused) return;
   const el=document.getElementById('display_items');
   const arr=list.toArray();
   deliveryPoints=arr;
