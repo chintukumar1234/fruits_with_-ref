@@ -502,10 +502,48 @@ function haversine(lat1,lng1,lat2,lng2){
 /* ── Linked List ── */
 class Node{constructor(d,id,lat,lng){this.data=d;this.id=id;this.lat=lat;this.lng=lng;this.link=null;}}
 class LinkedList{
-  constructor(){this.head=null;}
-  add(v,id,lat,lng){const n=new Node(v,id,lat,lng);if(!this.head){this.head=n;return;}let c=this.head;while(c.link)c=c.link;c.link=n;}
-  del(id){if(!this.head)return;if(this.head.id===id){this.head=this.head.link;return;}let c=this.head;while(c.link&&c.link.id!==id)c=c.link;if(c.link)c.link=c.link.link;}
-  toArray(){const a=[];let c=this.head;while(c){a.push(c);c=c.link;}return a;}
+  constructor(){
+    this.head=null;
+  }
+
+  // add new data at the beginning
+  add(v,id,lat,lng){
+    const n = new Node(v,id,lat,lng);
+    n.link = this.head;
+    this.head = n;
+  }
+
+  del(id){
+    if(!this.head)return;
+
+    if(this.head.id===id){
+      this.head=this.head.link;
+      return;
+    }
+
+    let c=this.head;
+
+    while(c.link && c.link.id!==id){
+      c=c.link;
+    }
+
+    if(c.link){
+      c.link=c.link.link;
+    }
+  }
+
+  toArray(){
+    const a=[];
+    let c=this.head;
+
+    while(c){
+      a.push(c);
+      c=c.link;
+    }
+
+    return a;
+  }
+
   render(nodes){
     const el=document.getElementById("display_items");
     el.innerHTML="";
