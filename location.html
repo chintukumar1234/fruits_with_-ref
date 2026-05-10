@@ -530,7 +530,6 @@ class LinkedList{
         const pillClass=dist<=2?'close':dist<=10?'':'far';
         distHtml=`<div class="delivery-dist">
           <span class="dist-pill ${pillClass}">${fmtDist(dist)}</span>
-          from your location
         </div>`;
       }
       const card=document.createElement("div"); card.className="delivery-card";
