@@ -30,14 +30,55 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
 .sidebar-header { padding:24px 20px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; min-width:var(--sidebar-w); }
 .sidebar-logo { font-family:'Space Mono',monospace; font-size:15px; font-weight:700; color:var(--accent); letter-spacing:1px; white-space:nowrap; }
 .sidebar-logo span { color:var(--accent2); }
-.status-dot { width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 8px var(--accent2); animation:pulse-dot 2s infinite; margin-left:auto; flex-shrink:0; }
-@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);} }
-.sidebar-actions { display:flex; gap:8px; padding:14px 16px; border-bottom:1px solid var(--border); min-width:var(--sidebar-w); }
-.action-btn { flex:1; height:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:border-color 0.2s,background 0.2s,transform 0.15s; white-space:nowrap; }
+
+/* ── ADDED: Refresh button replaces the pulsing dot ── */
+.refresh-btn {
+  margin-left:auto; flex-shrink:0;
+  display:flex; align-items:center; gap:5px;
+  height:30px; padding:0 10px;
+  border-radius:8px; border:1px solid var(--border);
+  background:var(--surface2); color:var(--muted);
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:600;
+  cursor:pointer; letter-spacing:0.5px; text-transform:uppercase;
+  transition:border-color 0.2s, color 0.2s, background 0.2s;
+  white-space:nowrap;
+}
+.refresh-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(0,212,255,0.06); }
+.refresh-btn svg { transition:transform 0.5s var(--ease); }
+.refresh-btn.spinning svg { transform:rotate(360deg); }
+
+.sidebar-actions { display:flex; gap:8px; padding:14px 16px; border-bottom:1px solid var(--border); min-width:var(--sidebar-w); flex-wrap:wrap; }
+.action-btn { flex:1; min-width:60px; height:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:border-color 0.2s,background 0.2s,transform 0.15s; white-space:nowrap; }
 .action-btn:hover { border-color:var(--accent); background:rgba(0,212,255,0.06); transform:translateY(-1px); }
 .action-btn.danger:hover { border-color:var(--danger); background:rgba(255,77,109,0.06); }
+/* ── ADDED: Route All button accent ── */
+.action-btn.route-all:hover { border-color:var(--accent2); background:rgba(0,255,136,0.06); color:var(--accent2); }
 .action-btn svg { flex-shrink:0; }
-.sidebar-list-label { padding:14px 18px 8px; font-size:10px; font-weight:600; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; min-width:var(--sidebar-w); }
+
+/* ── ADDED: Search + Filter section ── */
+.sidebar-search { padding:10px 12px 6px; min-width:var(--sidebar-w); }
+.search-wrap { position:relative; }
+.search-wrap input {
+  width:100%; height:36px; border-radius:9px;
+  border:1px solid var(--border); background:var(--surface2);
+  color:var(--text); padding:0 12px 0 32px;
+  font-family:'Outfit',sans-serif; font-size:13px;
+  outline:none; transition:border-color 0.2s;
+}
+.search-wrap input:focus { border-color:var(--accent); }
+.search-wrap input::placeholder { color:var(--muted); }
+.search-icon { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+
+.filter-tabs { display:flex; gap:5px; padding:6px 12px 8px; min-width:var(--sidebar-w); border-bottom:1px solid var(--border); overflow-x:auto; }
+.filter-tabs::-webkit-scrollbar { display:none; }
+.ftab { font-size:11px; font-weight:600; letter-spacing:0.5px; padding:4px 10px; border-radius:16px; border:1px solid var(--border); background:none; color:var(--muted); cursor:pointer; transition:0.2s; white-space:nowrap; flex-shrink:0; font-family:'Outfit',sans-serif; }
+.ftab.active { background:rgba(0,212,255,0.1); border-color:var(--accent); color:var(--accent); }
+.ftab:hover:not(.active) { border-color:rgba(255,255,255,0.15); color:var(--text); }
+
+.sidebar-list-label { padding:14px 18px 8px; font-size:10px; font-weight:600; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; min-width:var(--sidebar-w); display:flex; align-items:center; justify-content:space-between; }
+/* ── ADDED: count badge ── */
+.list-count-badge { font-family:'Space Mono',monospace; font-size:10px; color:var(--accent); background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.15); border-radius:12px; padding:2px 7px; }
+
 #display_items { flex:1; overflow-y:auto; padding:6px 12px 12px; display:flex; flex-direction:column; gap:8px; min-width:var(--sidebar-w); }
 #display_items::-webkit-scrollbar { width:4px; }
 #display_items::-webkit-scrollbar-track { background:transparent; }
@@ -75,6 +116,56 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
 .menu-btn.open .bar:nth-child(2) { opacity:0; transform:scaleX(0); }
 .menu-btn.open .bar:nth-child(3) { transform:rotate(-45deg) translate(4px,-5px); }
 .leaflet-container { background:#0d1117 !important; }
+
+/* ── ADDED: Route-all info bar ── */
+.route-bar {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  background:rgba(17,24,32,0.96); backdrop-filter:blur(12px);
+  border:1px solid var(--accent2); border-radius:50px;
+  padding:8px 20px; display:none; align-items:center; gap:14px;
+  z-index:900; box-shadow:0 6px 28px rgba(0,255,136,0.15);
+  animation:slide-up 0.3s var(--ease);
+  font-size:13px; white-space:nowrap;
+}
+.route-bar.visible { display:flex; }
+@keyframes slide-up { from{opacity:0;transform:translateX(-50%) translateY(12px);}to{opacity:1;transform:translateX(-50%) translateY(0);} }
+.route-bar-stat { display:flex; flex-direction:column; align-items:center; gap:1px; }
+.route-bar-val { font-family:'Space Mono',monospace; font-size:14px; font-weight:700; color:var(--accent2); }
+.route-bar-lbl { font-size:9px; color:var(--muted); letter-spacing:0.8px; text-transform:uppercase; }
+.route-bar-div { width:1px; height:24px; background:var(--border); }
+.route-bar-close { width:24px; height:24px; border-radius:50%; border:1px solid var(--border); background:none; color:var(--muted); cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; transition:0.2s; margin-left:4px; }
+.route-bar-close:hover { border-color:var(--danger); color:var(--danger); }
+
+/* ── ADDED: Measure FAB ── */
+.measure-fab {
+  bottom:20px; right:18px; z-index:800;
+  width:44px; height:44px; border-radius:12px;
+  background:rgba(17,24,32,0.96); backdrop-filter:blur(12px);
+  border:1px solid var(--border); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); transition:all 0.2s;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.measure-fab:hover { border-color:var(--accent); color:var(--accent); box-shadow:0 4px 20px rgba(0,212,255,0.15); }
+.measure-fab.active { border-color:var(--accent2); color:var(--accent2); background:rgba(0,255,136,0.08); box-shadow:0 4px 20px rgba(0,255,136,0.2); }
+.measure-tooltip {
+  position:fixed; bottom:72px; right:18px; z-index:800;
+  background:rgba(17,24,32,0.96); backdrop-filter:blur(12px);
+  border:1px solid var(--border); border-radius:10px;
+  padding:8px 12px; font-size:12px; color:var(--text);
+  display:none; flex-direction:column; gap:4px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.measure-tooltip.visible { display:flex; }
+.measure-dist { font-family:'Space Mono',monospace; font-size:14px; color:var(--accent2); font-weight:700; }
+.measure-hint { font-size:11px; color:var(--muted); }
+.measure-clear { font-size:11px; color:var(--danger); cursor:pointer; background:none; border:none; text-align:left; padding:0; font-family:'Outfit',sans-serif; margin-top:2px; }
+.measure-clear:hover { text-decoration:underline; }
+
+/* ── ADDED: Map crosshair cursor when measuring ── */
+.map-measuring { cursor:crosshair !important; }
+.map-measuring .leaflet-interactive { cursor:crosshair !important; }
+
 @media(max-width:768px){
   :root{--sidebar-w:85%;}
   body{overflow:auto;}
@@ -87,6 +178,8 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
   .menu-btn{top:12px;left:12px;width:42px;height:42px;}
   .delivery-card{padding:14px;}
   .delivery-name{font-size:15px;}
+  
+  .measure-tooltip { bottom:132px; }
 }
 .confirm-box { position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; }
 .confirm-content { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; width:320px; box-shadow:0 32px 80px rgba(0,0,0,0.6); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
@@ -145,12 +238,21 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
 <div id="mySidenav" class="sidenav">
   <div class="sidebar-header">
     <div class="sidebar-logo">MAP<span>TRACK</span></div>
-    <div class="status-dot"></div>
+    <!-- ── ADDED: Manual Refresh button replaces pulsing status dot ── -->
+    <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" title="Refresh data">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="23 4 23 10 17 10"/>
+        <polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refresh
+    </button>
   </div>
+
   <div class="sidebar-actions">
     <button class="action-btn" onclick="showUpload()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Add Item
+      Add
     </button>
     <button class="action-btn danger" onclick="showDelete()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
@@ -158,10 +260,38 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
     </button>
     <button class="action-btn" onclick="g()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-      Payment
+      Pay
     </button>
+    <!-- ── ADDED: Route All button ── -->
+    <button class="action-btn route-all" onclick="routeAll()" title="Route through all points">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17V7a2 2 0 0 1 2-2h8"/><polyline points="14 3 18 7 14 11"/></svg>
+      All
+    </button>
+    <button class="measure-fab" id="measureFab" onclick="toggleMeasure()" title="Measure distance">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M2 12h20M2 12l4-4M2 12l4 4M22 12l-4-4M22 12l-4 4"/>
+  </svg>
+</button>
   </div>
-  <div class="sidebar-list-label">Delivery Points</div>
+  <!-- ── ADDED: Search input ── -->
+  <div class="sidebar-search">
+    <div class="search-wrap">
+      <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search delivery points…" oninput="applyFilter()"/>
+    </div>
+  </div>
+
+  <!-- ── ADDED: Filter tabs ── -->
+  <div class="filter-tabs">
+    <button class="ftab active" data-filter="all"    onclick="setFilter('all',this)">All</button>
+    <button class="ftab"        data-filter="nearby" onclick="setFilter('nearby',this)">📍 Nearby</button>
+  </div>
+
+  <div class="sidebar-list-label">
+    Delivery Points
+    <span class="list-count-badge" id="listCount">0</span>
+  </div>
+
   <div id="confirmBox" class="confirm-box">
     <div class="confirm-content">
       <p id="confirmText">Are you sure?</p>
@@ -173,6 +303,33 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
 </div>
 
 <div id="map"></div>
+
+<!-- ── ADDED: Route-all info bar ── -->
+<div class="route-bar" id="routeBar">
+  <div class="route-bar-stat">
+    <span class="route-bar-val" id="rb-dist">—</span>
+    <span class="route-bar-lbl">Distance</span>
+  </div>
+  <div class="route-bar-div"></div>
+  <div class="route-bar-stat">
+    <span class="route-bar-val" id="rb-time">—</span>
+    <span class="route-bar-lbl">Est. Time</span>
+  </div>
+  <div class="route-bar-div"></div>
+  <div class="route-bar-stat">
+    <span class="route-bar-val" id="rb-stops">—</span>
+    <span class="route-bar-lbl">Stops</span>
+  </div>
+  <button class="route-bar-close" onclick="clearRouteAll()">✕</button>
+</div>
+
+<!-- ── ADDED: Measure distance FAB ── -->
+
+<div class="measure-tooltip" id="measureTooltip">
+  <span class="measure-dist" id="measureDist">0 m</span>
+  <span class="measure-hint">Click map points to measure</span>
+  <button class="measure-clear" onclick="clearMeasure()">✕ Clear points</button>
+</div>
 
 <!-- Upload Modal -->
 <div class="modal-overlay" id="uploadModal">
@@ -187,7 +344,6 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
     </div>
   </div>
 </div>
-
 <!-- Delete Modal -->
 <div class="modal-overlay" id="deleteModal">
   <div class="modal">
@@ -224,7 +380,8 @@ body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, onValue, remove, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+/* ── CHANGED: import get instead of onValue for manual-only reads ── */
+import { getDatabase, ref, get, onValue, remove, push, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVWLIDjsmMcH2kfqiKwQ1-jFU6d6654pY",
@@ -238,40 +395,61 @@ const firebaseConfig = {
 
 let userMarker=null, accuracyCircle=null, userLat=null, userLng=null, routingControl=null;
 let qrGenerated=false, qrVisible=false;
+/* ── ADDED: state for new features ── */
+let currentFilter='all', currentSearch='';
+let allNodes=[];          // master list for filter/search
+let routeAllControl=null; // separate control for route-all
+let measureActive=false, measurePoints=[], measurePolyline=null, measureMarkers=[];
+let mapMarkers={};        // key→leaflet marker for deletion
 
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
+// ── Haversine distance (km) ──────────────────────────────────────────────────
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// ── Linked list (unchanged) ──────────────────────────────────────────────────
 class Node { constructor(d,id,lat,lng){this.data=d;this.id=id;this.lat=lat;this.lng=lng;this.link=null;} }
 class LinkedList {
   constructor(){ this.head=null; }
   add(v,id,lat,lng){ const n=new Node(v,id,lat,lng); if(!this.head){this.head=n;return;} let c=this.head; while(c.link)c=c.link; c.link=n; }
   del(id){ if(!this.head)return; if(this.head.id===id){this.head=this.head.link;return;} let c=this.head; while(c.link&&c.link.id!==id)c=c.link; if(c.link)c.link=c.link.link; }
-  render(){
-    const el=document.getElementById("display_items"); el.innerHTML=""; let c=this.head;
-    while(c){
+  toArray(){ const a=[]; let c=this.head; while(c){a.push(c);c=c.link;} return a; }
+  render(nodes){
+    /* ── CHANGED: render accepts a pre-filtered array instead of walking head ── */
+    const el=document.getElementById("display_items"); el.innerHTML="";
+    document.getElementById("listCount").textContent=nodes.length;
+    nodes.forEach(c=>{
       const card=document.createElement("div"); card.className="delivery-card";
       card.innerHTML=`<div class="delivery-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <div class="delivery-name">${c.data}</div>
         <div class="card-actions">
           <button class="icon-btn route-btn" onclick="window.route(${c.lat},${c.lng})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 8 14 12"/><path d="M2 12h16"/><path d="M2 6h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2"/></svg></button>
-          <button class="icon-btn del-btn" onclick="window.k('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+          <button class="icon-btn del-btn"   onclick="window.k('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
         </div>`;
-      el.appendChild(card); c=c.link;
-    }
+      el.appendChild(card);
+    });
   }
 }
 const list = new LinkedList();
 
+// ── Map setup (unchanged) ────────────────────────────────────────────────────
 const map = L.map('map',{zoomControl:false}).setView([20,0],2);
-const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
+const streetLayer    = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
 const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'});
 streetLayer.addTo(map);
 L.control.layers({"Street":streetLayer,"Satellite":satelliteLayer},{},{position:'bottomright'}).addTo(map);
 L.control.zoom({position:'bottomright'}).addTo(map);
 
 const pinIcon = L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/128/9131/9131546.png',iconSize:[32,32],iconAnchor:[16,32],popupAnchor:[0,-32]});
-function addMarker(name,lat,lng){ L.marker([lat,lng],{icon:pinIcon}).addTo(map).bindPopup(`<b>${name}</b>`); }
+function addMarker(name,lat,lng,key){
+  const m=L.marker([lat,lng],{icon:pinIcon}).addTo(map).bindPopup(`<b>${name}</b>`);
+  if(key) mapMarkers[key]=m;
+}
 
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(pos=>{
@@ -281,29 +459,195 @@ if(navigator.geolocation){
   },err=>console.error(err),{enableHighAccuracy:true,maximumAge:0,timeout:5000});
 }
 
-onValue(ref(db,"submit"),snapshot=>{
+// ── CHANGED: loadData() uses get() — one-shot read, no auto-update ──────────
+function loadData(){
+  // Clear existing markers and list
+  Object.values(mapMarkers).forEach(m=>map.removeLayer(m));
+  mapMarkers={};
   list.head=null;
-  snapshot.forEach(child=>{ const d=child.val(); addMarker(d.a,d.c1,d.c2); list.add(d.a,child.key,d.c1,d.c2); });
-  list.render();
-});
 
-window.k = function(id){
-  const box=document.getElementById("confirmBox"); box.style.display="flex";
-  document.getElementById("yesBtn").onclick=function(){ remove(ref(db,"submit/"+id)); list.del(id); list.render(); box.style.display="none"; };
-  document.getElementById("noBtn").onclick=function(){ box.style.display="none"; };
+  get(ref(db,"submit")).then(snapshot=>{
+    snapshot.forEach(child=>{
+      const d=child.val();
+      addMarker(d.a, d.c1, d.c2, child.key);
+      list.add(d.a, child.key, d.c1, d.c2);
+    });
+    allNodes = list.toArray();
+    applyFilter();
+  }).catch(err=>console.error("Load error:",err));
+}
+
+// Initial load on page open
+loadData();
+
+// ── ADDED: Manual refresh ────────────────────────────────────────────────────
+window.manualRefresh=function(){
+  const btn=document.getElementById("refreshBtn");
+  btn.classList.add("spinning");
+  btn.style.pointerEvents="none";
+  loadData();
+  setTimeout(()=>{btn.classList.remove("spinning"); btn.style.pointerEvents="";},600);
 };
 
-window.route = function(tLat,tLng){
+// ── ADDED: Filter + Search logic ─────────────────────────────────────────────
+window.setFilter=function(f,el){
+  currentFilter=f;
+  document.querySelectorAll(".ftab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  applyFilter();
+};
+
+window.applyFilter=function(){
+  currentSearch=document.getElementById("searchInput").value.trim().toLowerCase();
+  let nodes=allNodes;
+
+  // Search filter
+  if(currentSearch){
+    nodes=nodes.filter(n=>n.data.toLowerCase().includes(currentSearch));
+  }
+
+  // Tab filter
+  if(currentFilter==="nearby"){
+    if(userLat&&userLng){
+      nodes=nodes.filter(n=>haversine(userLat,userLng,n.lat,n.lng)<=5); // within 5 km
+    } else {
+      nodes=[];
+      const el=document.getElementById("display_items");
+      el.innerHTML=`<div style="padding:16px;font-size:12px;color:var(--muted);text-align:center;">Waiting for your location…</div>`;
+      document.getElementById("listCount").textContent=0;
+      return;
+    }
+  }
+
+  list.render(nodes);
+};
+
+// ── ADDED: Route All (nearest-first optimisation) ────────────────────────────
+window.routeAll=function(){
   if(!userLat||!userLng){ alert("Location not ready yet!"); return; }
-  if(routingControl) map.removeControl(routingControl);
+  const pts=allNodes.filter(n=>n.lat&&n.lng);
+  if(pts.length===0){ alert("No delivery points loaded."); return; }
+
+  // Greedy nearest-neighbour from user location
+  let remaining=[...pts], ordered=[], cur=[userLat,userLng];
+  while(remaining.length){
+    remaining.sort((a,b)=>haversine(cur[0],cur[1],a.lat,a.lng)-haversine(cur[0],cur[1],b.lat,b.lng));
+    const next=remaining.shift();
+    ordered.push(next);
+    cur=[next.lat,next.lng];
+  }
+
+  if(routeAllControl){ map.removeControl(routeAllControl); routeAllControl=null; }
+  if(routingControl){  map.removeControl(routingControl);  routingControl=null;  }
+
+  const waypoints=[
+    L.latLng(userLat,userLng),
+    ...ordered.map(p=>L.latLng(p.lat,p.lng))
+  ];
+
+  routeAllControl=L.Routing.control({
+    waypoints,
+    router:L.Routing.osrmv1({serviceUrl:'https://router.project-osrm.org/route/v1',profile:'driving'}),
+    routeWhileDragging:false,addWaypoints:false,draggableWaypoints:false,createMarker:()=>null,show:false,
+    lineOptions:{styles:[{color:'#00ff88',opacity:0.85,weight:4,dashArray:'8 4'}]}
+  }).addTo(map);
+
+  routeAllControl.on("routesfound",function(e){
+    const r=e.routes[0];
+    const km=(r.summary.totalDistance/1000).toFixed(1);
+    const mins=Math.round(r.summary.totalTime/60);
+    document.getElementById("rb-dist").textContent=km+" km";
+    document.getElementById("rb-time").textContent=mins>=60?`${Math.floor(mins/60)}h ${mins%60}m`:mins+"m";
+    document.getElementById("rb-stops").textContent=ordered.length;
+    document.getElementById("routeBar").classList.add("visible");
+  });
+
+  const allLatLngs=[[userLat,userLng],...ordered.map(p=>[p.lat,p.lng])];
+  map.fitBounds(L.latLngBounds(allLatLngs),{padding:[60,60]});
+};
+
+window.clearRouteAll=function(){
+  if(routeAllControl){ map.removeControl(routeAllControl); routeAllControl=null; }
+  document.getElementById("routeBar").classList.remove("visible");
+};
+
+// ── ADDED: Measure distance tool ──────────────────────────────────────────────
+const measureDotIcon=L.divIcon({
+  html:`<div style="width:10px;height:10px;border-radius:50%;background:var(--accent2);border:2px solid #fff;box-shadow:0 0 6px var(--accent2);"></div>`,
+  className:'',iconSize:[10,10],iconAnchor:[5,5]
+});
+
+window.toggleMeasure=function(){
+  measureActive=!measureActive;
+  const fab=document.getElementById("measureFab");
+  const tip=document.getElementById("measureTooltip");
+  if(measureActive){
+    fab.classList.add("active");
+    tip.classList.add("visible");
+    map.getContainer().classList.add("map-measuring");
+    map.on("click",onMeasureClick);
+  } else {
+    fab.classList.remove("active");
+    tip.classList.remove("visible");
+    map.getContainer().classList.remove("map-measuring");
+    map.off("click",onMeasureClick);
+    clearMeasure();
+  }
+};
+
+function onMeasureClick(e){
+  measurePoints.push([e.latlng.lat,e.latlng.lng]);
+  const dot=L.marker([e.latlng.lat,e.latlng.lng],{icon:measureDotIcon}).addTo(map);
+  measureMarkers.push(dot);
+
+  if(measurePolyline) map.removeLayer(measurePolyline);
+  if(measurePoints.length>1){
+    measurePolyline=L.polyline(measurePoints,{color:'#00ff88',weight:2,dashArray:'5 5',opacity:0.9}).addTo(map);
+    let total=0;
+    for(let i=1;i<measurePoints.length;i++){
+      total+=haversine(measurePoints[i-1][0],measurePoints[i-1][1],measurePoints[i][0],measurePoints[i][1]);
+    }
+    const txt=total<1?(total*1000).toFixed(0)+" m":total.toFixed(2)+" km";
+    document.getElementById("measureDist").textContent=txt;
+  }
+}
+
+window.clearMeasure=function(){
+  measurePoints=[];
+  measureMarkers.forEach(m=>map.removeLayer(m)); measureMarkers=[];
+  if(measurePolyline){map.removeLayer(measurePolyline); measurePolyline=null;}
+  document.getElementById("measureDist").textContent="0 m";
+};
+
+// ── Unchanged: single-point routing ──────────────────────────────────────────
+window.route=function(tLat,tLng){
+  if(!userLat||!userLng){ alert("Location not ready yet!"); return; }
+  if(routeAllControl){ map.removeControl(routeAllControl); routeAllControl=null; document.getElementById("routeBar").classList.remove("visible"); }
+  if(routingControl)  map.removeControl(routingControl);
   routingControl=L.Routing.control({ waypoints:[L.latLng(userLat,userLng),L.latLng(tLat,tLng)], router:L.Routing.osrmv1({serviceUrl:'https://router.project-osrm.org/route/v1',profile:'driving'}), routeWhileDragging:false, addWaypoints:false, draggableWaypoints:false, createMarker:()=>null, show:false, lineOptions:{styles:[{color:'#00d4ff',opacity:0.9,weight:4}]} }).addTo(map);
   map.fitBounds(L.latLngBounds([[userLat,userLng],[tLat,tLng]]),{padding:[60,60]});
 };
 
+// ── Unchanged: confirm-delete individual card marker ─────────────────────────
+window.k=function(id){
+  const box=document.getElementById("confirmBox"); box.style.display="flex";
+  document.getElementById("yesBtn").onclick=function(){
+    remove(ref(db,"submit/"+id));
+    if(mapMarkers[id]){map.removeLayer(mapMarkers[id]);delete mapMarkers[id];}
+    list.del(id);
+    allNodes=list.toArray();
+    applyFilter();
+    box.style.display="none";
+  };
+  document.getElementById("noBtn").onclick=function(){ box.style.display="none"; };
+};
+
+// ── Unchanged: item linked list ───────────────────────────────────────────────
 class ItemNode{constructor(d){this.data=d;this.link=null;}}
 class ItemList{ constructor(){this.head=null;} add(v){const n=new ItemNode(v);n.link=this.head;this.head=n;} }
 const items=new ItemList();
 
+// ── Unchanged: upload ─────────────────────────────────────────────────────────
 window.chintu=function(){
   const file=document.getElementById("images").files[0], name=document.getElementById("names").value.trim(), amt=document.getElementById("numbers").value.trim(), msg=document.getElementById("upload_msg");
   if(!file){msg.textContent="Please upload an image";return;} if(!name){msg.textContent="Please enter a name";return;} if(!amt){msg.textContent="Please enter an amount";return;}
@@ -316,9 +660,11 @@ window.chintu=function(){
   reader.readAsDataURL(file);
 };
 
+// ── Unchanged: delete by name+amount ─────────────────────────────────────────
 window.delete_btn=function(){
   const nam=document.getElementById("nam").value.trim(), amu=document.getElementById("amu").value.trim(), msg=document.getElementById("delete_msg");
   if(!nam){msg.textContent="Please enter a name";return;} if(!amu){msg.textContent="Please enter an amount";return;}
+  /* uses onValue with onlyOnce:true — this is a one-shot read, not a live listener, so it's fine */
   onValue(ref(db,"user"),snapshot=>{
     let found=false;
     snapshot.forEach(child=>{ const d=child.val(); if(d.b===nam&&d.c===amu){ found=true; remove(ref(db,"user/"+child.key)).then(()=>{ document.getElementById("nam").value=""; document.getElementById("amu").value=""; msg.style.color="var(--accent2)"; msg.textContent="Deleted successfully"; setTimeout(()=>{msg.textContent="";closeModal('deleteModal');},1200); }); } });
@@ -326,43 +672,30 @@ window.delete_btn=function(){
   },{onlyOnce:true});
 };
 
+// ── Unchanged: nav & modals ───────────────────────────────────────────────────
 window.openNav=function(){ const nav=document.getElementById("mySidenav"),btn=document.getElementById("menuBtn"),isOpen=nav.classList.contains("open"); nav.classList.toggle("open"); btn.classList.toggle("open"); document.getElementById("map").style.marginLeft=isOpen?"0":"var(--sidebar-w)"; };
 window.showUpload=function(){ document.getElementById("uploadModal").classList.add("open"); };
 window.showDelete=function(){ document.getElementById("deleteModal").classList.add("open"); };
 window.closeModal=function(id){ document.getElementById(id).classList.remove("open"); };
-
 document.querySelectorAll(".modal-overlay").forEach(el=>{ el.addEventListener("click",e=>{ if(e.target===el) el.classList.remove("open"); }); });
 
-/* ── Payment ── */
-window.g = function(){
-  // reset state
+// ── Unchanged: payment ────────────────────────────────────────────────────────
+window.g=function(){
   qrGenerated=false; qrVisible=false;
   document.getElementById("payQrCanvas").innerHTML="";
   document.getElementById("qrWrapper").classList.remove("visible");
-  document.getElementById("qrToggleBtn").innerHTML=`
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    Show QR Code`;
+  document.getElementById("qrToggleBtn").innerHTML=`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Show QR Code`;
   document.getElementById("paymentModal").classList.add("open");
 };
-
-window.closePayment = function(){
-  document.getElementById("paymentModal").classList.remove("open");
-};
-
-window.toggleQR = function(){
+window.closePayment=function(){ document.getElementById("paymentModal").classList.remove("open"); };
+window.toggleQR=function(){
   const wrapper=document.getElementById("qrWrapper"), btn=document.getElementById("qrToggleBtn");
-  if(!qrGenerated){
-    new QRCode(document.getElementById("payQrCanvas"),{
-      text:"upi://pay?pa=chintukr32101-1@okhdfcbank&pn=Chintu&cu=INR",
-      width:200, height:200, colorDark:"#000000", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.H
-    });
-    qrGenerated=true;
-  }
+  if(!qrGenerated){ new QRCode(document.getElementById("payQrCanvas"),{text:"upi://pay?pa=chintukr32101-1@okhdfcbank&pn=Chintu&cu=INR",width:200,height:200,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H}); qrGenerated=true; }
   qrVisible=!qrVisible;
   wrapper.classList.toggle("visible",qrVisible);
-  btn.innerHTML = qrVisible
-    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Hide QR Code`
-    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Show QR Code`;
+  btn.innerHTML=qrVisible
+    ?`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Hide QR Code`
+    :`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Show QR Code`;
 };
 </script>
 </body>
