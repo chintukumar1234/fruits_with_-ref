@@ -622,6 +622,7 @@ function nextStatus(){return STATUSES[statusIdx++%STATUSES.length];}
 
 /* ── RENDER ── */
 function render(){
+  if (!list || window.isPaused) return;
   const el=document.getElementById('display_items');
   const arr=list.toArray();
   deliveryPoints=arr;
@@ -1017,6 +1018,7 @@ window.chintu=function(){
     set(r,data).then(()=>{
       ['images','names','numbers','notes_inp'].forEach(id=>{const el=document.getElementById(id);if(el.type==='file')el.value='';else el.value='';});
       msg.style.color='var(--green)';msg.textContent='✓ Delivery point added!';
+      setTimeout(()=>{msg.textContent='';closeModal('uploadModal');},1400);
       toast(name+' added successfully!','success');
     }).catch(()=>{msg.textContent='Failed to save';});
   };
@@ -1040,6 +1042,7 @@ window.delete_btn=function(){
           document.getElementById('nam').value='';
           document.getElementById('amu').value='';
           msg.style.color='var(--green)';msg.textContent='✓ Removed';
+          setTimeout(()=>{msg.textContent='';closeModal('deleteModal');},1400);
           toast(nam+' removed','error');
         });
       }
