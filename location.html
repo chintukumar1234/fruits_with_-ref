@@ -431,6 +431,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 </div>
 
 <!-- MAP -->
+
+<!-- Floating Measure Bar (shown while measuring, replaces modal) -->
+<div id="measureFloatBar" style="display:none;position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:1200;background:rgba(15,20,28,0.97);border:1px solid #a78bfa;border-radius:50px;padding:8px 20px;align-items:center;gap:14px;box-shadow:0 6px 28px rgba(167,139,250,0.25);white-space:nowrap;">
+  <span style="font-size:11px;color:#a78bfa;font-weight:700;letter-spacing:1px;text-transform:uppercase;">📐 MEASURING</span>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.1)"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;">
+    <span style="font-family:Space Mono,monospace;font-size:14px;font-weight:700;color:#00ff88;" id="mfDist">—</span>
+    <span style="font-size:9px;color:#5a6878;letter-spacing:.8px;text-transform:uppercase;">Distance</span>
+  </div>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.1)"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;">
+    <span style="font-family:Space Mono,monospace;font-size:14px;font-weight:700;color:#a78bfa;" id="mfPts">0</span>
+    <span style="font-size:9px;color:#5a6878;letter-spacing:.8px;text-transform:uppercase;">Points</span>
+  </div>
+  <button onclick="window.toggleMeasureActive()" style="height:30px;padding:0 14px;border-radius:20px;border:none;background:#ff4d6d;color:#fff;font-family:DM Sans,sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-left:4px;">Stop ■</button>
+</div>
+
 <div id="map"></div>
 
 <!-- Route bar (route-all summary) -->
@@ -614,7 +631,7 @@ function haversine(lat1,lng1,lat2,lng2){
 }
 
 /* ── Map ── */
-const map=L.map('map',{zoomControl:false,attributionControl:true}).setView([20,0],2);
+window.map=L.map('map',{zoomControl:false,attributionControl:true}).setView([20,0],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 
 // HD Tile layers
@@ -1042,8 +1059,8 @@ window.k=function(id){
 
 /* ── Measure ── */
 const measureDotIcon=L.divIcon({
-  html:`<div style="width:9px;height:9px;border-radius:50%;background:var(--purple);border:2px solid #fff;box-shadow:0 0 5px var(--purple)"></div>`,
-  className:'',iconSize:[9,9],iconAnchor:[4,4]
+  html:`<div style="width:11px;height:11px;border-radius:50%;background:#a78bfa;border:2px solid #fff;box-shadow:0 0 6px #a78bfa"></div>`,
+  className:'',iconSize:[11,11],iconAnchor:[5,5]
 });
 window.openMeasureModal=function(){document.getElementById("measureModal").classList.add("open");};
 window.closeMeasureModal=function(){if(measureActive)stopMeasuring();document.getElementById("measureModal").classList.remove("open");};
@@ -1056,7 +1073,12 @@ function startMeasuring(){
   const btn=document.getElementById("measureToggleBtn");
   btn.className="maction stop"; btn.textContent="■ Stop";
   document.getElementById("measureHintTxt").innerHTML="<b>Active!</b> Click the map to place points.";
-  if(window.innerWidth<768){document.getElementById("mySidenav").classList.remove("open");document.getElementById("menuBtn").classList.remove("open");document.getElementById("map").style.marginLeft="0";}
+  // Hide modal so map clicks are not blocked; show floating status bar instead
+  document.getElementById("measureModal").classList.remove("open");
+  document.getElementById("measureFloatBar").style.display="flex";
+  document.getElementById("mySidenav").classList.remove("open");
+  document.getElementById("menuBtn").classList.remove("open");
+  document.getElementById("map").style.marginLeft="0";
 }
 function stopMeasuring(){
   measureActive=false;
@@ -1065,9 +1087,11 @@ function stopMeasuring(){
   const btn=document.getElementById("measureToggleBtn");
   btn.className="maction start"; btn.textContent="▶ Start";
   document.getElementById("measureHintTxt").innerHTML="Press <b>Start</b> then click points on the map.";
+  document.getElementById("measureFloatBar").style.display="none";
+  // Reopen modal to show results
+  document.getElementById("measureModal").classList.add("open");
 }
 function onMeasureClick(e){
-  if(addMode)return;
   const pt=[e.latlng.lat,e.latlng.lng];
   measurePoints.push(pt);
   measureMarkers.push(L.marker(pt,{icon:measureDotIcon}).addTo(map));
@@ -1085,6 +1109,9 @@ function onMeasureClick(e){
   document.getElementById("mLastSeg").textContent=lastSeg!==null?fmtDist(lastSeg):'—';
   document.getElementById("mPtCount").textContent=n;
   document.getElementById("mAvgSeg").textContent=n>1?fmtDist(total/(n-1)):'—';
+  // update float bar
+  document.getElementById("mfDist").textContent=n>1?fmtDist(total):'—';
+  document.getElementById("mfPts").textContent=n;
   const pl=document.getElementById("measurePtsList"); pl.innerHTML="";
   measurePoints.forEach((p,i)=>{
     const segDist=i>0?haversine(measurePoints[i-1][0],measurePoints[i-1][1],p[0],p[1]):null;
