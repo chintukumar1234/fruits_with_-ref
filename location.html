@@ -276,6 +276,46 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 .click-add-banner.visible{display:block;}
 @keyframes slide-down{from{opacity:0;transform:translateX(-50%) translateY(-12px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
+
+/* ── CATEGORY STYLES ── */
+.cat-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cat-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;letter-spacing:.3px;white-space:nowrap;}
+.cat-section-header{padding:8px 14px 4px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:6px;color:var(--muted);}
+.cat-section-header .cat-dot{width:10px;height:10px;}
+
+/* manage categories modal */
+.cat-modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:24px;width:380px;max-height:88vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:modal-in .25s var(--ease);display:flex;flex-direction:column;gap:14px;}
+.cat-modal .modal-title{margin-bottom:0;}
+.cat-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;}
+.cat-list::-webkit-scrollbar{width:3px;}
+.cat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.cat-row{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;transition:.15s;}
+.cat-row:hover{border-color:var(--border2);}
+.cat-color-swatch{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.2);cursor:pointer;flex-shrink:0;}
+.cat-name-lbl{flex:1;font-size:13px;font-weight:500;color:var(--text);}
+.cat-count-lbl{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface3);border-radius:8px;padding:1px 7px;}
+.cat-del-btn{width:24px;height:24px;border-radius:6px;border:1px solid transparent;background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15px;flex-shrink:0;}
+.cat-del-btn:hover{border-color:var(--danger);color:var(--danger);}
+.new-cat-row{display:flex;gap:6px;align-items:center;}
+.color-picker-wrap{position:relative;}
+.color-thumb{width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s;}
+.color-thumb:hover{border-color:var(--accent);}
+.color-picker-popup{position:absolute;top:38px;left:0;z-index:10;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:8px;display:none;grid-template-columns:repeat(6,1fr);gap:5px;width:160px;box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.color-picker-popup.open{display:grid;}
+.color-swatch-opt{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;}
+.color-swatch-opt:hover,.color-swatch-opt.sel{border-color:#fff;transform:scale(1.15);}
+
+/* group filter tabs */
+.group-filter-bar{padding:6px 12px 8px;min-width:var(--sidebar-w);border-bottom:1px solid var(--border);overflow-x:auto;display:flex;gap:5px;}
+.group-filter-bar::-webkit-scrollbar{display:none;}
+.gftab{font-size:11px;font-weight:600;padding:3px 10px;border-radius:14px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:.2s;white-space:nowrap;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.gftab.active{border-color:currentColor;}
+.gftab:hover:not(.active){border-color:var(--border2);color:var(--text);}
+
+/* assign category in add-point modal */
+.cat-select{height:40px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface2);color:var(--text);padding:0 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;transition:.2s;}
+.cat-select:focus{border-color:var(--accent);}
+
 /* map-crosshair cursor mode */
 .map-measuring,.map-measuring .leaflet-interactive,.map-adding,.map-adding .leaflet-interactive{cursor:crosshair!important;}
 
@@ -375,6 +415,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
     <button class="action-btn route-all" onclick="routeAll()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17V7a2 2 0 0 1 2-2h8"/><polyline points="14 3 18 7 14 11"/></svg>Route All
     </button>
+    <button class="action-btn" onclick="window.openCatModal()" style="--hover-col:var(--purple)" title="Manage categories">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="6" rx="1"/><rect x="9" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/><rect x="2" y="11" width="6" height="6" rx="1"/><rect x="9" y="11" width="6" height="6" rx="1"/><rect x="16" y="11" width="6" height="6" rx="1"/></svg>Groups
+    </button>
     <button class="action-btn measure-btn" onclick="openMeasureModal()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="8" x2="2" y2="16"/><line x1="12" y1="7" x2="12" y2="17"/><line x1="22" y1="8" x2="22" y2="16"/></svg>Measure
     </button>
@@ -396,6 +439,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
     <button class="ftab" onclick="setFilter('nearby',this)">📍 Nearby</button>
   </div>
 
+
+  <!-- Group / Category filter bar -->
+  <div class="group-filter-bar" id="groupFilterBar">
+    <button class="gftab active" style="color:var(--muted2);border-color:var(--border2);" onclick="setGroupFilter('__all__',this)">All Groups</button>
+  </div>
   <div class="nearby-bar" id="nearbyBar">
     <div class="nearby-bar-top">
       <span class="nearby-bar-title">Max distance</span>
@@ -520,6 +568,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
   </div>
 </div>
 
+
+<!-- Manage Categories Modal -->
+<div class="modal-overlay" id="catModal">
+  <div class="cat-modal">
+    <div class="modal-title" style="color:var(--purple)">🗂 MANAGE GROUPS <button class="modal-close" onclick="closeModal('catModal')">✕</button></div>
+
+    <!-- existing categories list -->
+    <div class="cat-list" id="catList"></div>
+
+    <!-- add new category -->
+    <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:4px;">New Group</div>
+    <div class="new-cat-row">
+      <div class="color-picker-wrap">
+        <div class="color-thumb" id="newCatColorThumb" onclick="toggleColorPicker()" style="background:#00d4ff;">
+        </div>
+        <div class="color-picker-popup" id="colorPickerPopup"></div>
+      </div>
+      <input type="text" id="newCatName" class="field-input" style="flex:1" placeholder="Group name e.g. Zone A"/>
+      <button onclick="window.addCategory()" style="height:40px;padding:0 14px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:#000;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Add</button>
+    </div>
+    <div class="modal-msg" id="cat_msg"></div>
+
+    <div style="font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:10px;">
+      Assign groups when adding points via the map. Markers will be color-coded and you can filter by group in the sidebar.
+    </div>
+  </div>
+</div>
+
 <!-- Upload Modal -->
 <div class="modal-overlay" id="uploadModal">
   <div class="modal">
@@ -554,6 +630,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
     <div class="coord-display" id="addPointCoords">—</div>
     <div class="modal-fields">
       <div class="field-group"><div class="field-label">Name</div><input type="text" id="addPointName" class="field-input" placeholder="e.g. Customer #42"/></div>
+      <div class="field-group"><div class="field-label">Category</div><select id="addPointCat" class="cat-select"><option value="">— No category —</option></select></div>
       <div class="modal-msg" id="addpoint_msg"></div>
       <button class="modal-submit" style="background:linear-gradient(135deg,var(--accent2),#00cc66);color:#000;" onclick="saveClickedPoint()">Save Point</button>
     </div>
@@ -606,6 +683,25 @@ let heatLayer=null,heatVisible=false;
 let addMode=false,pendingLatLng=null;
 let currentInfoLat=null,currentInfoLng=null,currentInfoName=null;
 let geocodeTimer=null;
+let currentGroupFilter='__all__';
+
+/* ── Category system ── */
+const PALETTE=['#00d4ff','#00ff88','#ff4d6d','#ffb020','#a78bfa','#f97316','#06b6d4','#84cc16','#ec4899','#8b5cf6','#14b8a6','#f59e0b'];
+let categories=JSON.parse(localStorage.getItem('maptrack_cats')||'[]');
+if(!categories.length){
+  categories=[
+    {id:'cat_1',name:'Priority',color:'#ff4d6d'},
+    {id:'cat_2',name:'Standard',color:'#00d4ff'},
+    {id:'cat_3',name:'Fragile',color:'#ffb020'},
+  ];
+  saveCats();
+}
+let newCatColor=PALETTE[0];
+
+function saveCats(){localStorage.setItem('maptrack_cats',JSON.stringify(categories));}
+function getCat(id){return categories.find(c=>c.id===id)||null;}
+function catColor(id){const c=getCat(id);return c?c.color:'#5a6878';}
+function catName(id){const c=getCat(id);return c?c.name:'Uncategorized';}
 
 /* ── Utils ── */
 window.toast=function(msg,type='info'){
@@ -634,7 +730,6 @@ function haversine(lat1,lng1,lat2,lng2){
 window.map=L.map('map',{zoomControl:false,attributionControl:true}).setView([20,0],2);
 L.control.zoom({position:'bottomright'}).addTo(map);
 
-// HD Tile layers
 const layers={
   street:     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}),
   satellite:  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri — Source: Esri, USGS, NOAA'}),
@@ -660,16 +755,34 @@ window.setLayer=function(name,el){
 const clusterGroup=L.markerClusterGroup({maxClusterRadius:60,spiderfyOnMaxZoom:true,showCoverageOnHover:false,zoomToBoundsOnClick:true});
 map.addLayer(clusterGroup);
 
-const pinIcon=L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/128/9131/9131546.png',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-30]});
 const geocodeIcon=L.icon({iconUrl:'https://cdn-icons-png.flaticon.com/128/9131/9131546.png',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-26]});
 
-function addMarker(name,lat,lng,key){
-  const m=L.marker([lat,lng],{icon:pinIcon})
-    .bindPopup(`<div style="font-family:'DM Sans',sans-serif;font-size:13px;padding:2px;min-width:120px">
-      <b style="color:#00ff88">${name}</b><br>
-      <span style="color:#5a6878;font-size:11px">${lat.toFixed(5)}, ${lng.toFixed(5)}</span>
+/* ── CHANGED: makePinIcon now always receives the color passed in,
+   but addMarker always passes '#ff2222' (red) for the pin icon ── */
+function makePinIcon(color){
+  return L.divIcon({
+    html:`<div style="position:relative;width:28px;height:36px;">
+      <svg viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:36px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))">
+        <path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="${color}"/>
+        <circle cx="14" cy="14" r="6" fill="white" opacity="0.9"/>
+      </svg>
+    </div>`,
+    className:'',iconSize:[28,36],iconAnchor:[14,36],popupAnchor:[0,-36]
+  });
+}
+
+function addMarker(name,lat,lng,key,catId){
+  const color=catColor(catId);
+  const cat=getCat(catId);
+  const catLabel=cat?`<span style="background:${color}22;color:${color};border:1px solid ${color}44;border-radius:8px;font-size:10px;padding:1px 6px;font-weight:700">${cat.name}</span>`:'';
+  /* ── Only change: pin icon is always red (#ff2222) ── */
+  const m=L.marker([lat,lng],{icon:makePinIcon('#ff2222')})
+    .bindPopup(`<div style="font-family:'DM Sans',sans-serif;font-size:13px;padding:2px;min-width:130px">
+      <b style="color:${color}">${name}</b><br>
+      ${catLabel}
+      <br><span style="color:#5a6878;font-size:11px">${lat.toFixed(5)}, ${lng.toFixed(5)}</span>
     </div>`)
-    .on('click',()=>showInfoPanel(name,lat,lng));
+    .on('click',()=>showInfoPanel(name,lat,lng,catId));
   if(key)mapMarkers[key]=m;
   clusterGroup.addLayer(m);
 }
@@ -782,7 +895,8 @@ window.saveClickedPoint=function(){
   const msg=document.getElementById('addpoint_msg');
   if(!name){msg.textContent='Please enter a name';return;}
   if(!pendingLatLng){msg.textContent='No location selected';return;}
-  const data={a:name,c1:pendingLatLng.lat,c2:pendingLatLng.lng};
+  const selCat=document.getElementById('addPointCat').value;
+  const data={a:name,c1:pendingLatLng.lat,c2:pendingLatLng.lng,cat:selCat};
   set(push(ref(db,'submit')),data).then(()=>{
     closeModal('addPointModal');
     pendingLatLng=null;
@@ -791,7 +905,6 @@ window.saveClickedPoint=function(){
   }).catch(()=>{msg.textContent='Failed to save';});
 };
 
-// Escape to cancel add mode
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(addMode){
@@ -805,9 +918,11 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ── Info Panel ── */
-function showInfoPanel(name,lat,lng){
+function showInfoPanel(name,lat,lng,catId){
   currentInfoLat=lat; currentInfoLng=lng; currentInfoName=name;
-  document.getElementById('infoPinName').textContent=name;
+  const cat=getCat(catId);
+  const catBadge=cat?`<span style="margin-left:6px;background:${cat.color}22;color:${cat.color};border:1px solid ${cat.color}55;border-radius:8px;font-size:10px;padding:1px 8px;font-weight:700">${cat.name}</span>`:'';
+  document.getElementById('infoPinName').innerHTML=name+catBadge;
   document.getElementById('infoPinCoords').textContent=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;
   const dist=(userLat&&userLng)?fmtDist(haversine(userLat,userLng,lat,lng)):'Location unavailable';
   document.getElementById('infoDistTxt').textContent=`${dist} from your location`;
@@ -821,10 +936,119 @@ window.infoCopyCoords=function(){
   }
 };
 
+/* ── Category Management ── */
+function buildColorPicker(){
+  const pop=document.getElementById('colorPickerPopup'); pop.innerHTML='';
+  PALETTE.forEach(col=>{
+    const s=document.createElement('div'); s.className='color-swatch-opt'+(col===newCatColor?' sel':'');
+    s.style.background=col;
+    s.onclick=()=>{
+      newCatColor=col;
+      document.getElementById('newCatColorThumb').style.background=col;
+      pop.querySelectorAll('.color-swatch-opt').forEach(x=>x.classList.remove('sel'));
+      s.classList.add('sel');
+      pop.classList.remove('open');
+    };
+    pop.appendChild(s);
+  });
+}
+window.toggleColorPicker=function(){
+  buildColorPicker();
+  document.getElementById('colorPickerPopup').classList.toggle('open');
+};
+document.addEventListener('click',e=>{
+  const pop=document.getElementById('colorPickerPopup');
+  if(pop&&!pop.closest('.color-picker-wrap').contains(e.target)) pop.classList.remove('open');
+});
+
+function buildCatList(){
+  const el=document.getElementById('catList'); el.innerHTML='';
+  if(!categories.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px">No groups yet. Create one below.</div>';return;}
+  categories.forEach(cat=>{
+    const count=allNodes.filter(n=>n.catId===cat.id).length;
+    const row=document.createElement('div'); row.className='cat-row';
+    row.innerHTML=`
+      <div class="cat-color-swatch" style="background:${cat.color}"></div>
+      <span class="cat-name-lbl">${cat.name}</span>
+      <span class="cat-count-lbl">${count} pts</span>
+      <button class="cat-del-btn" onclick="window.deleteCategory('${cat.id}')" title="Delete group">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    el.appendChild(row);
+  });
+}
+
+function buildGroupFilterBar(){
+  const bar=document.getElementById('groupFilterBar'); bar.innerHTML='';
+  const all=document.createElement('button');
+  all.className='gftab'+(currentGroupFilter==='__all__'?' active':'');
+  all.style.color='var(--muted2)'; all.style.borderColor=currentGroupFilter==='__all__'?'var(--muted2)':'var(--border)';
+  all.textContent='All Groups';
+  all.onclick=()=>setGroupFilter('__all__',all);
+  bar.appendChild(all);
+  categories.forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='gftab'+(currentGroupFilter===cat.id?' active':'');
+    btn.style.color=cat.color; if(currentGroupFilter===cat.id) btn.style.borderColor=cat.color;
+    btn.innerHTML=`<span class="cat-dot" style="background:${cat.color}"></span>${cat.name}`;
+    btn.onclick=()=>setGroupFilter(cat.id,btn);
+    bar.appendChild(btn);
+  });
+}
+
+window.setGroupFilter=function(id,el){
+  currentGroupFilter=id;
+  document.querySelectorAll('.gftab').forEach(b=>{b.classList.remove('active');b.style.borderColor='var(--border)';});
+  el.classList.add('active');
+  el.style.borderColor=el.style.color||'var(--muted2)';
+  applyFilter();
+};
+
+function populateCatSelect(){
+  const sel=document.getElementById('addPointCat'); if(!sel) return;
+  sel.innerHTML='<option value="">— No category —</option>';
+  categories.forEach(cat=>{
+    const o=document.createElement('option'); o.value=cat.id; o.textContent=cat.name;
+    sel.appendChild(o);
+  });
+}
+
+window.openCatModal=function(){
+  buildCatList(); buildColorPicker();
+  document.getElementById('cat_msg').textContent='';
+  document.getElementById('newCatName').value='';
+  document.getElementById('colorPickerPopup').classList.remove('open');
+  document.getElementById('catModal').classList.add('open');
+};
+
+window.addCategory=function(){
+  const name=document.getElementById('newCatName').value.trim();
+  const msg=document.getElementById('cat_msg');
+  if(!name){msg.textContent='Please enter a group name';return;}
+  if(categories.find(c=>c.name.toLowerCase()===name.toLowerCase())){msg.textContent='Group already exists';return;}
+  const id='cat_'+Date.now();
+  categories.push({id,name,color:newCatColor});
+  saveCats(); buildCatList(); buildGroupFilterBar(); populateCatSelect();
+  document.getElementById('newCatName').value='';
+  msg.style.color='var(--accent2)'; msg.textContent='Group "'+name+'" added!';
+  setTimeout(()=>msg.textContent='',2000);
+  toast('Group "'+name+'" created','success');
+};
+
+window.deleteCategory=function(id){
+  categories=categories.filter(c=>c.id!==id);
+  saveCats(); buildCatList(); buildGroupFilterBar(); populateCatSelect();
+  if(currentGroupFilter===id){currentGroupFilter='__all__';applyFilter();}
+  toast('Group deleted','info');
+};
+
+buildGroupFilterBar();
+populateCatSelect();
+
 /* ── Export CSV ── */
 window.exportCSV=function(){
   if(!allNodes.length){toast("No data to export","error");return;}
-  const rows=['Name,Latitude,Longitude',...allNodes.map(n=>`${n.data},${n.lat},${n.lng}`)];
+  const rows=['Name,Latitude,Longitude,Category',...allNodes.map(n=>`${n.data},${n.lat},${n.lng},${catName(n.catId)}`)];
   const blob=new Blob([rows.join('\n')],{type:'text/csv'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a'); a.href=url; a.download='delivery_points.csv'; a.click();
@@ -847,10 +1071,10 @@ window.toggleHeatmap=function(btn){
 };
 
 /* ── Linked List ── */
-class Node{constructor(d,id,lat,lng){this.data=d;this.id=id;this.lat=lat;this.lng=lng;this.link=null;}}
+class Node{constructor(d,id,lat,lng,catId){this.data=d;this.id=id;this.lat=lat;this.lng=lng;this.catId=catId||'';this.link=null;}}
 class LinkedList{
   constructor(){this.head=null;}
-  add(v,id,lat,lng){const n=new Node(v,id,lat,lng);n.link=this.head;this.head=n;}
+  add(v,id,lat,lng,catId){const n=new Node(v,id,lat,lng,catId);n.link=this.head;this.head=n;}
   del(id){
     if(!this.head)return;
     if(this.head.id===id){this.head=this.head.link;return;}
@@ -878,15 +1102,21 @@ class LinkedList{
         const pillClass=dist<=2?'':'far';
         distHtml=`<div class="delivery-dist"><span class="dist-pill ${pillClass}">${fmtDist(dist)}</span></div>`;
       }
+      const cat=getCat(c.catId);
+      const color=cat?cat.color:'#5a6878';
+      const catBadge=cat?`<span class="cat-badge" style="background:${color}20;color:${color};border:1px solid ${color}40">${cat.name}</span>`:'';
       const card=document.createElement("div"); card.className="delivery-card";
-      card.onclick=()=>{map.flyTo([c.lat,c.lng],17,{animate:true,duration:1});showInfoPanel(c.data,c.lat,c.lng);};
+      card.style.borderLeft=`3px solid ${color}`;
+      card.onclick=()=>{map.flyTo([c.lat,c.lng],17,{animate:true,duration:1});showInfoPanel(c.data,c.lat,c.lng,c.catId);};
       card.innerHTML=`
-        <div class="delivery-icon">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="delivery-icon" style="background:${color}15;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
         <div style="flex:1;min-width:0;">
           <div class="delivery-name">${c.data}</div>
-          ${distHtml}
+          <div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap;">
+            ${catBadge}${distHtml}
+          </div>
         </div>
         <div class="card-actions" onclick="event.stopPropagation()">
           <button class="icon-btn fly-btn" onclick="map.flyTo([${c.lat},${c.lng}],17,{animate:true,duration:1})" title="Fly to">
@@ -912,8 +1142,8 @@ function loadData(){
   get(ref(db,"submit")).then(snapshot=>{
     snapshot.forEach(child=>{
       const d=child.val();
-      addMarker(d.a,d.c1,d.c2,child.key);
-      list.add(d.a,child.key,d.c1,d.c2);
+      addMarker(d.a,d.c1,d.c2,child.key,d.cat||'');
+      list.add(d.a,child.key,d.c1,d.c2,d.cat||'');
     });
     allNodes=list.toArray(); applyFilter();
     if(heatVisible){
@@ -947,6 +1177,7 @@ window.applyFilter=function(){
   currentSearch=document.getElementById("searchInput").value.trim().toLowerCase();
   let nodes=allNodes;
   if(currentSearch) nodes=nodes.filter(n=>n.data.toLowerCase().includes(currentSearch));
+  if(currentGroupFilter!=='__all__') nodes=nodes.filter(n=>n.catId===currentGroupFilter);
   if(currentFilter==="nearby"){
     if(!userLat||!userLng){
       document.getElementById("display_items").innerHTML=`<div class="empty-state"><p>Waiting for your location…</p></div>`;
@@ -1025,7 +1256,6 @@ window.route=function(tLat,tLng){
     const mins=Math.round(r.summary.totalTime/60);
     document.getElementById("sp-dist").textContent=km+" km";
     document.getElementById("sp-time").textContent=mins>=60?`${Math.floor(mins/60)}h ${mins%60}m`:mins+"m";
-    // build steps
     const sl=document.getElementById("stepsList"); sl.innerHTML="";
     (r.instructions||[]).forEach((step,i)=>{
       const d=document.createElement("div"); d.className="step-item";
@@ -1073,7 +1303,6 @@ function startMeasuring(){
   const btn=document.getElementById("measureToggleBtn");
   btn.className="maction stop"; btn.textContent="■ Stop";
   document.getElementById("measureHintTxt").innerHTML="<b>Active!</b> Click the map to place points.";
-  // Hide modal so map clicks are not blocked; show floating status bar instead
   document.getElementById("measureModal").classList.remove("open");
   document.getElementById("measureFloatBar").style.display="flex";
   document.getElementById("mySidenav").classList.remove("open");
@@ -1088,7 +1317,6 @@ function stopMeasuring(){
   btn.className="maction start"; btn.textContent="▶ Start";
   document.getElementById("measureHintTxt").innerHTML="Press <b>Start</b> then click points on the map.";
   document.getElementById("measureFloatBar").style.display="none";
-  // Reopen modal to show results
   document.getElementById("measureModal").classList.add("open");
 }
 function onMeasureClick(e){
@@ -1109,7 +1337,6 @@ function onMeasureClick(e){
   document.getElementById("mLastSeg").textContent=lastSeg!==null?fmtDist(lastSeg):'—';
   document.getElementById("mPtCount").textContent=n;
   document.getElementById("mAvgSeg").textContent=n>1?fmtDist(total/(n-1)):'—';
-  // update float bar
   document.getElementById("mfDist").textContent=n>1?fmtDist(total):'—';
   document.getElementById("mfPts").textContent=n;
   const pl=document.getElementById("measurePtsList"); pl.innerHTML="";
